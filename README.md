@@ -18,5 +18,12 @@ if [ -f ~/Git/dotfiles/alias/windows ]; then
 fi
 ```
 
+# Pi
+```
+if [ -f ~/Git/dotfiles/alias/pi ]; then
+    source ~/Git/dotfiles/alias/pi
+fi
+```
+
 # Vim
 - In your .vimrc file, add `so ~/Git/dotfiles/vimrc`
