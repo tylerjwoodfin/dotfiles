@@ -1,0 +1,17 @@
+# Aliases common to all devices
+
+# Use Vim as default
+export EDITOR='vim'
+
+# Always ls as list
+alias ls='ls -la --color=auto'
+
+# Directories
+alias cdt='cd ~/Git/Tools'
+
+# ../
+alias b='cd ../'
+
+# Git
+alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
+alias gc="git commit -m"
