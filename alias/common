@@ -12,6 +12,18 @@ alias cdt='cd ~/Git/Tools'
 # ../
 alias b='cd ../'
 
+# ls when cd
+function cd {
+    builtin cd "$@" && ls
+}
+
 # Git
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gc="git commit -m"
+alias gs="git status"
+
+[ -z "$PS1" ] && return
+##
+## Aliases below this line won't be called during interactive sessions (e.g. scripts)
+##
+
