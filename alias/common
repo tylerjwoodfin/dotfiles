@@ -4,7 +4,7 @@
 export EDITOR='vim'
 
 # Always ls as list
-alias ls='ls -la --color=auto'
+alias ls='ls -laG'
 
 # Directories
 alias cdt='cd ~/Git/Tools'
@@ -16,6 +16,15 @@ alias b='cd ../'
 function cd {
     builtin cd "$@" && ls
 }
+
+# enable colors 🎨
+if [ -x /usr/bin/dircolors ]; then
+  	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  	alias ls='ls --color=auto'
+ 	alias grep='grep --color=auto'
+ 	alias fgrep='fgrep --color=auto'
+ 	alias egrep='egrep --color=auto'
+ fi
 
 # Git
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
