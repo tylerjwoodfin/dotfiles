@@ -4,7 +4,7 @@
 export EDITOR='vim'
 
 # Always ls as list
-alias ls='ls -laG'
+alias ls='ls -la'
 
 # Directories
 alias cdt='cd ~/Git/Tools'
