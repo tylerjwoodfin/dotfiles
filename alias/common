@@ -4,7 +4,7 @@
 export EDITOR='vim'
 
 # Always ls as list
-alias ls="ls -al"
+# alias ls="ls -al"
 
 # Directories
 alias cdt='cd ~/Git/dotfiles'
