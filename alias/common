@@ -13,9 +13,9 @@ alias cdt='cd ~/Git/dotfiles'
 alias b='cd ../'
 
 # ls when cd
-function cd {
-    builtin cd "$@" && ls
-}
+# function cd {
+#     builtin cd "$@" && ls
+# }
 
 # enable colors 🎨
 if [ -x /usr/bin/dircolors ]; then
