@@ -27,7 +27,9 @@ if [ -x /usr/bin/dircolors ]; then
 
 # Git
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
-alias gc="git commit -m"
+alias gcm="git commit -m"
+alias gch="git checkout"
+alias gb="git checkout -b"
 alias gs="git status"
 alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d'
 alias gd="git diff"
