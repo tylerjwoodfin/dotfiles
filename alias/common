@@ -34,7 +34,7 @@ alias gs="git status"
 alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d'
 alias gd="git diff"
 alias gdd="git diff develop"
-alias gp-"git pull"
+alias gp="git pull"
 
 [ -z "$PS1" ] && return
 ##
