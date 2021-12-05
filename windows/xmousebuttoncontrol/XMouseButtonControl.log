@@ -1,0 +1,131 @@
+
+*******************************************************************************************************************************************
+05-12-2021 00:10:18.362> X-Mouse Button Control v2.19.2 (x64) Startup. Commandline '/installed /notportable'
+05-12-2021 00:10:18.363> Running in high integrity mode (0x00003000)
+05-12-2021 00:10:18.363> Unable to find the default settings file 'C:\Users\Tyler\Git\dotfiles\XMBCSettings.xml' (Error code 2: The system cannot find the file specified. )
+05-12-2021 00:10:18.363> HookDLL: Unable to load XML settings
+05-12-2021 00:10:18.363> Running on Microsoft Windows 10 Edition (build 19044), 64-bit, Hook Timeout: 1000 ms
+05-12-2021 00:10:18.364> Startup folder: 'C:\Program Files\Highresolution Enterprises\X-Mouse Button Control\'
+05-12-2021 00:10:18.364> Settings (and log) folder: 'C:\Users\Tyler\Git\dotfiles\'
+05-12-2021 00:10:18.495> HookThreadProc[0x5D08]: Using keyboard language 0x04090409
+05-12-2021 00:10:48.239> MultInstance: Sending commandline to an existing instance of X-Mouse Button Control
+05-12-2021 00:10:48.239> MultInstance: Successfully finished communicating with the first instance of X-Mouse Button Control.
+05-12-2021 00:10:48.239> Received 2048 bytes on the IPC named pipe.
+05-12-2021 00:10:48.239> Received message with data 0x80000204 from another instance of X-Mouse Button Control.
+
+05-12-2021 00:10:48.255> CMyMessageWnd::OnSetup   -   Opening setup dialog.
+05-12-2021 00:10:48.268> Unable to find the default settings file 'C:\Users\Tyler\Git\dotfiles\XMBCSettings.xml' (Error code 2: The system cannot find the file specified. )
+05-12-2021 00:10:48.268> SetupDialog: Settings file 'C:\Users\Tyler\Git\dotfiles\XMBCSettings.xml' does not exist!
+05-12-2021 00:10:48.375> GetLayerName: Layer 0 does not exist or has no name!
+05-12-2021 00:10:48.375> GetLayerName: Layer 0 does not exist or has no name!
+05-12-2021 00:10:48.375> GetLayerName: Layer 0 does not exist or has no name!
+05-12-2021 00:10:48.375> GetLayerName: Layer 0 does not exist or has no name!
+05-12-2021 00:10:48.379> GetLayerName: Layer 1 does not exist or has no name!
+05-12-2021 00:10:48.379> GetLayerName: Layer 1 does not exist or has no name!
+05-12-2021 00:10:48.379> GetLayerName: Layer 1 does not exist or has no name!
+05-12-2021 00:10:48.379> GetLayerName: Layer 1 does not exist or has no name!
+05-12-2021 00:11:41.087> Applying changes to X-Mouse Button Control settings...
+05-12-2021 00:11:41.088> Unable to find the default settings file 'C:\Users\Tyler\Git\dotfiles\XMBCSettings.xml' (Error code 2: The system cannot find the file specified. )
+05-12-2021 00:11:41.088> SetupDialog: Settings file 'C:\Users\Tyler\Git\dotfiles\XMBCSettings.xml' does not exist!
+05-12-2021 00:11:41.088> Updating Windows hook timeout: 200
+05-12-2021 00:11:41.088> There is no existing settings file. Attempting to creating a new one.
+05-12-2021 00:11:41.088> GetLayerName: Layer 2 does not exist or has no name!
+05-12-2021 00:11:41.088> GetLayerName: Layer 3 does not exist or has no name!
+05-12-2021 00:11:41.088> GetLayerName: Layer 4 does not exist or has no name!
+05-12-2021 00:11:41.088> GetLayerName: Layer 5 does not exist or has no name!
+05-12-2021 00:11:41.088> GetLayerName: Layer 6 does not exist or has no name!
+05-12-2021 00:11:41.088> GetLayerName: Layer 7 does not exist or has no name!
+05-12-2021 00:11:41.088> GetLayerName: Layer 8 does not exist or has no name!
+05-12-2021 00:11:41.088> GetLayerName: Layer 9 does not exist or has no name!
+05-12-2021 00:11:41.096> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 00:12:18.647> You are using the latest available version of X-Mouse Button Control.
+05-12-2021 00:13:20.897> Applying changes to X-Mouse Button Control settings...
+05-12-2021 00:13:20.898> GetLayerName: Layer 2 does not exist or has no name!
+05-12-2021 00:13:20.898> GetLayerName: Layer 3 does not exist or has no name!
+05-12-2021 00:13:20.898> GetLayerName: Layer 4 does not exist or has no name!
+05-12-2021 00:13:20.898> GetLayerName: Layer 5 does not exist or has no name!
+05-12-2021 00:13:20.898> GetLayerName: Layer 6 does not exist or has no name!
+05-12-2021 00:13:20.898> GetLayerName: Layer 7 does not exist or has no name!
+05-12-2021 00:13:20.898> GetLayerName: Layer 8 does not exist or has no name!
+05-12-2021 00:13:20.898> GetLayerName: Layer 9 does not exist or has no name!
+05-12-2021 00:13:20.904> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 00:55:14.899> Applying changes to X-Mouse Button Control settings...
+05-12-2021 00:55:14.899> GetLayerName: Layer 2 does not exist or has no name!
+05-12-2021 00:55:14.899> GetLayerName: Layer 3 does not exist or has no name!
+05-12-2021 00:55:14.899> GetLayerName: Layer 4 does not exist or has no name!
+05-12-2021 00:55:14.899> GetLayerName: Layer 5 does not exist or has no name!
+05-12-2021 00:55:14.899> GetLayerName: Layer 6 does not exist or has no name!
+05-12-2021 00:55:14.899> GetLayerName: Layer 7 does not exist or has no name!
+05-12-2021 00:55:14.899> GetLayerName: Layer 8 does not exist or has no name!
+05-12-2021 00:55:14.899> GetLayerName: Layer 9 does not exist or has no name!
+05-12-2021 00:55:14.906> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 00:55:53.332> Applying changes to X-Mouse Button Control settings...
+05-12-2021 00:55:53.332> GetLayerName: Layer 2 does not exist or has no name!
+05-12-2021 00:55:53.332> GetLayerName: Layer 3 does not exist or has no name!
+05-12-2021 00:55:53.332> GetLayerName: Layer 4 does not exist or has no name!
+05-12-2021 00:55:53.332> GetLayerName: Layer 5 does not exist or has no name!
+05-12-2021 00:55:53.332> GetLayerName: Layer 6 does not exist or has no name!
+05-12-2021 00:55:53.332> GetLayerName: Layer 7 does not exist or has no name!
+05-12-2021 00:55:53.332> GetLayerName: Layer 8 does not exist or has no name!
+05-12-2021 00:55:53.332> GetLayerName: Layer 9 does not exist or has no name!
+05-12-2021 00:55:53.343> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 00:57:25.447> CMyMessageWnd::OnSetup   -   Setup dialog closed.
+05-12-2021 00:57:25.449> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 00:57:30.446> You are using the latest available version of X-Mouse Button Control.
+
+*******************************************************************************************************************************************
+05-12-2021 11:28:09.886> X-Mouse Button Control v2.19.2 (x64) Startup. Commandline '/notportable /delay'
+05-12-2021 11:28:09.890> Running in high integrity mode (0x00003000)
+05-12-2021 11:28:09.892> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 11:28:09.892> Running on Microsoft Windows 10 Edition (build 19044), 64-bit, Hook Timeout: 200 ms
+05-12-2021 11:28:09.892> Warning: Low Level Hook Timeout is low. If you have problems try increasing this value.
+05-12-2021 11:28:09.892> Startup folder: 'C:\Program Files\Highresolution Enterprises\X-Mouse Button Control\'
+05-12-2021 11:28:09.892> Settings (and log) folder: 'C:\Users\Tyler\Git\dotfiles\'
+05-12-2021 11:28:10.012> HookThreadProc[0x10C0]: Using keyboard language 0x04090409
+05-12-2021 11:30:10.037> You are using the latest available version of X-Mouse Button Control.
+05-12-2021 11:59:38.251> MultInstance: Sending commandline to an existing instance of X-Mouse Button Control
+05-12-2021 11:59:38.252> MultInstance: Successfully finished communicating with the first instance of X-Mouse Button Control.
+05-12-2021 11:59:38.252> Received 2048 bytes on the IPC named pipe.
+05-12-2021 11:59:38.252> Received message with data 0x80000204 from another instance of X-Mouse Button Control.
+
+05-12-2021 11:59:38.267> CMyMessageWnd::OnSetup   -   Opening setup dialog.
+05-12-2021 11:59:38.288> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 11:59:46.540> Applying changes to X-Mouse Button Control settings...
+05-12-2021 11:59:46.548> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 12:19:40.342> CMyMessageWnd::OnSetup   -   Setup dialog closed.
+05-12-2021 12:19:40.343> Unable to find the default settings file 'C:\Users\Tyler\Git\dotfiles\XMBCSettings.xml' (Error code 2: The system cannot find the file specified. )
+05-12-2021 12:19:40.343> HookDLL: Unable to load XML settings
+05-12-2021 12:19:45.354> You are using the latest available version of X-Mouse Button Control.
+
+*******************************************************************************************************************************************
+05-12-2021 12:21:28.332> X-Mouse Button Control v2.19.2 (x64) Startup. Commandline '/installed /notportable'
+05-12-2021 12:21:28.333> Running in high integrity mode (0x00003000)
+05-12-2021 12:21:28.334> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 12:21:28.334> Running on Microsoft Windows 10 Edition (build 19044), 64-bit, Hook Timeout: 1000 ms
+05-12-2021 12:21:28.334> Startup folder: 'C:\Program Files\Highresolution Enterprises\X-Mouse Button Control\'
+05-12-2021 12:21:28.334> Settings (and log) folder: 'C:\Users\Tyler\Git\dotfiles\windows\xmousebuttoncontrol\'
+05-12-2021 12:21:28.440> HookThreadProc[0x6C50]: Using keyboard language 0x04090409
+05-12-2021 12:21:33.399> MultInstance: Sending commandline to an existing instance of X-Mouse Button Control
+05-12-2021 12:21:33.399> MultInstance: Successfully finished communicating with the first instance of X-Mouse Button Control.
+05-12-2021 12:21:33.399> Received 2048 bytes on the IPC named pipe.
+05-12-2021 12:21:33.399> Received message with data 0x80000204 from another instance of X-Mouse Button Control.
+
+05-12-2021 12:21:33.414> CMyMessageWnd::OnSetup   -   Opening setup dialog.
+05-12-2021 12:21:33.428> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 12:21:37.417> CMyMessageWnd::OnSetup   -   Setup dialog closed.
+05-12-2021 12:21:37.420> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 12:21:42.417> You are using the latest available version of X-Mouse Button Control.
+05-12-2021 12:21:55.687> MultInstance: Sending commandline to an existing instance of X-Mouse Button Control
+05-12-2021 12:21:55.687> MultInstance: Successfully finished communicating with the first instance of X-Mouse Button Control.
+05-12-2021 12:21:55.687> Received 2048 bytes on the IPC named pipe.
+05-12-2021 12:21:55.687> Received message with data 0x80000204 from another instance of X-Mouse Button Control.
+05-12-2021 12:21:55.693> CMyMessageWnd::OnSetup   -   Opening setup dialog.
+
+05-12-2021 12:21:55.707> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 12:22:22.311> CMyMessageWnd::OnSetup   -   Setup dialog closed.
+05-12-2021 12:22:22.312> Loaded 0 application specific profiles (0 normal and 0 custom window).
+05-12-2021 12:22:24.839> MultInstance: Sending commandline to an existing instance of X-Mouse Button Control
+05-12-2021 12:22:24.840> MultInstance: Successfully finished communicating with the first instance of X-Mouse Button Control.
+05-12-2021 12:22:24.840> Received message with data 0x80000204 from another instance of X-Mouse Button Control.
+
+05-12-2021 12:22:24.854> CMyMessageWnd::OnSetup   -   Opening setup dialog.
