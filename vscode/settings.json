@@ -3,5 +3,6 @@
     "security.workspace.trust.untrustedFiles": "open",
     "terminal.integrated.defaultProfile.windows": "Git Bash",
     "workbench.editor.untitled.hint": "hidden",
-    "files.defaultLanguage": "No Extension"
+    "files.defaultLanguage": "No Extension",
+    "editor.wordWrap": "wordWrapColumn"
 }
