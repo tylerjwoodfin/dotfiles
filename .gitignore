@@ -1,1 +1,7 @@
 windows/xmousebuttoncontrol/XMouseButtonControl.log
+
+windows/vscode/*
+!windows/vscode/README.md
+!windows/vscode/User
+windows/vscode/User/*
+!windows/vscode/User/settings.json
