@@ -1,3 +1,9 @@
 {
-    "terminal.integrated.defaultProfile.windows": "Git Bash"
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "remote.SSH.remotePlatform": {
+        "192.168.1.123": "linux",
+        "192.168.1.124": "linux"
+    },
+    "workbench.startupEditor": "none",
+    "workbench.editor.untitled.hint": "hidden"
 }
