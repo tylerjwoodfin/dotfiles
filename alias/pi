@@ -5,4 +5,4 @@ shopt -s expand_aliases
 alias browse='pcmanfm $pwd'
 
 # Tasks
-alias tasks="python3 /home/pi/Git/tasks/tasks.py"
+alias tasks="python3 /home/pi/git/tasks/tasks.py"

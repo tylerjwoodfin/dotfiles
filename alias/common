@@ -7,7 +7,8 @@ export EDITOR='vim'
 alias ls="ls -al --color"
 
 # Directories
-alias cdt='cd ~/Git/dotfiles'
+alias cdta='cd ~/git/tasks'
+alias cdto='cd ~/git/tools'
 
 # ../
 alias b='cd ../'
