@@ -1,10 +1,10 @@
 # Aliases common to all devices
 
-# Use Vim as default
-export EDITOR='vim'
-
-# Always ls as list
+# ls options
 alias ls="ls -al --color"
+
+# use vim as default
+export EDITOR='vim'
 
 # Directories
 alias cdta='cd ~/git/tasks'
@@ -21,17 +21,22 @@ if [ -x /usr/bin/dircolors ]; then
  	alias egrep='egrep --color=auto'
  fi
 
-# Git
+# git
+alias cdg="cd ~/git"
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gcm="git commit -m"
 alias gcam="git add -A; git commit -m"
-alias gch="git checkout"
+alias gch="git fetch && git checkout"
 alias gb="git checkout -b"
 alias gs="git status"
-alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d'
+alias gclean="git branch --merged | egrep -v '(^\*|master|dev|main)' | xargs git branch -d"
 alias gd="git diff"
 alias gdd="git diff develop"
 alias gp="git pull"
+
+
+# functions
+cdl() { cd "$a"; ls; }
 
 [ -z "$PS1" ] && return
 ##

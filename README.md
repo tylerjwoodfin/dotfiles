@@ -32,4 +32,4 @@ fi
 
 # vim
 
-- In your .vimrc file, add `so ~/git/dotfiles/vimrc`
+- In your .vimrc file, add `so ~/git/dotfiles/dotfiles.vim`
