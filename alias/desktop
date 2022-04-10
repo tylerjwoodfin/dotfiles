@@ -1,0 +1,1 @@
+alias tasks="ssh -t pi@192.168.1.123 -p 55701 'python3 /home/pi/git/remindmail/main.py'"

@@ -1,29 +1,35 @@
 # dotfiles
+
 Configuration files meant to make my life easier- maybe yours, too!
 
-# Setup- Aliases
+# setup
+
 - Add to .bashrc:
 
-## Common (All devices)
+## common (all devices)
+
 ```
-if [ -f ~/Git/dotfiles/alias/common ]; then
-    source ~/Git/dotfiles/alias/common
+if [ -f ~/git/dotfiles/alias/common ]; then
+    source ~/git/dotfiles/alias/common
 fi
 ```
 
-## Windows
+## desktop
+
 ```
-if [ -f ~/Git/dotfiles/alias/windows ]; then
-    source ~/Git/dotfiles/alias/windows
+if [ -f ~/git/dotfiles/alias/desktop ]; then
+    source ~/git/dotfiles/alias/desktop
 fi
 ```
 
-# Pi
+# pi
+
 ```
-if [ -f ~/Git/dotfiles/alias/pi ]; then
-    source ~/Git/dotfiles/alias/pi
+if [ -f ~/git/dotfiles/alias/pi ]; then
+    source ~/git/dotfiles/alias/pi
 fi
 ```
 
-# Vim
-- In your .vimrc file, add `so ~/Git/dotfiles/vimrc`
+# vim
+
+- In your .vimrc file, add `so ~/git/dotfiles/vimrc`

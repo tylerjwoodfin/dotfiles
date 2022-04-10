@@ -1,8 +1,8 @@
 # enable bashrc with ssh -t
 shopt -s expand_aliases
 
-# Open current directory in file browser
+# open current directory in file browser
 alias browse='pcmanfm $pwd'
 
-# Tasks
-alias tasks="python3 /home/pi/git/tasks/tasks.py"
+# for remindmail
+alias remind="python3 /home/pi/git/remindmail/main.py"
