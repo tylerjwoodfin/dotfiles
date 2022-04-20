@@ -42,7 +42,15 @@ if response == 'y':
         cmd(f"pkg install openssh -y")
 
     print("\n\nIf this was successful, you should see a key above.")
-    print("Copy `id_rsa.pub` and go to your Github Profile -> Settings -> SSH Keys")
+    print("Copy `~/.ssh/id_rsa.pub` and go to your Github Profile -> Settings -> SSH Keys")
+
+    if is_phone == 'y':
+        print("Trying to copy this to your clipboard... one sec")
+        sleep(1)
+        print("pkg install termux-api -y; cat ~/.ssh/id_rsa.pub | termux-clipboard-set")
+        sleep(1)
+        print("It should be in your clipboard. If not, run `cat ~/.ssh/id_rsa.pub` and copy it manually.")
+        print("Paste it in your Github Profile -> Settings -> SSH Keys")
 
 print("At this point, you should have an SSH key from this device added to Github.")
 
