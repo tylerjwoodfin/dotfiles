@@ -2,7 +2,11 @@
 
 Configuration files meant to make my life easier- maybe yours, too!
 
-# setup
+# automatic setup
+
+- run `python3 scripts/setup.py`
+
+# manual setup
 
 - Add to .bashrc:
 
