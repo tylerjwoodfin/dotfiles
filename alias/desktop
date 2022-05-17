@@ -1,3 +1,5 @@
 alias remind="ssh -t pi@192.168.0.123 -p 55701 'python3 /home/pi/git/remindmail/main.py'"
 alias shorten="ssh -t pi@192.168.0.123 -p 55701 'python3 /home/pi/git/tools/shorten.py'"
 alias pi="ssh -t pi@192.168.0.123 -p 55701"
+alias duplicate="./git/dotfiles/display/monitors-duplicate.sh"
+alias extend="./git/dotfiles/display/monitors-extend.sh"
