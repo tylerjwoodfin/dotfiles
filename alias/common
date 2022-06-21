@@ -44,7 +44,11 @@ alias pitest="python3 ~/git/testfolder/test.py"
 alias pibuild="python3 ~/git/tools/build/build.py"
 
 pi() {
-    ssh pi@192.168.0.123 -p 55701 -t bash -ci "'$@'"
+    if [ "$#" -ne 0 ]; then
+        ssh pi@192.168.0.123 -p 55701 -t bash -cil "'$@'"
+    else
+        ssh pi@192.168.0.123 -p 55701
+    fi
 }
 
 [ -z "$PS1" ] && return
