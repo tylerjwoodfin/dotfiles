@@ -1,7 +1,9 @@
 # run on pi - see 'common'
 alias remind="pi remind"
+alias remimd="pi remind"
 alias shorten="pi shorten"
 alias diary="pi diary"
+alias turn="pi turn"
 
 # desktop-specific
 alias duplicate="./git/dotfiles/display/monitors-duplicate.sh"
