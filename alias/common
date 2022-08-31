@@ -6,12 +6,12 @@ alias ls="ls -al --color"
 # use vim as default
 export EDITOR='vim'
 
-# Directories
+# quick navigation
 alias cdta='cd ~/git/tasks'
 alias cdto='cd ~/git/tools'
-
-# ../
 alias b='cd ../'
+alias x='exit'
+
 
 # enable colors 🎨
 if [ -x /usr/bin/dircolors ]; then
