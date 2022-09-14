@@ -44,6 +44,7 @@ alias yt="python3 ~/git/tools/yt/main.py"
 alias pitest="python3 ~/git/testfolder/test.py"
 alias pibuild="python3 ~/git/tools/build/build.py"
 alias turn="python3 ~/git/tools/kasalights/main.py"
+alias notes="python3 ~/git/tools/notes/main.py"
 
 pi() {
     if [ "$#" -ne 0 ]; then
