@@ -1,6 +1,6 @@
 # run on pi - see 'common'
 alias remind="pi remind"
-alias remimd="pi remind"
+alias rmm="pi remind"
 alias shorten="pi shorten"
 alias diary="pi diary"
 alias turn="pi turn"
