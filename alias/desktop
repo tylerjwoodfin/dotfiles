@@ -9,3 +9,4 @@ alias notes="pi notes"
 # desktop-specific
 alias duplicate="./git/dotfiles/display/monitors-duplicate.sh"
 alias extend="./git/dotfiles/display/monitors-extend.sh"
+alias steamdeck="./git/dotfiles/display/monitors-steamdeck.sh"
