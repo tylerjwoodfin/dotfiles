@@ -2,6 +2,8 @@
 alias remind="pi remind"
 alias rmm="pi remind"
 alias rmmt="pi remind tomorrow"
+alias rmmy="pi remind noconfirm"
+alias rmmty="pi remind tomorrow noconfirm"
 alias shorten="pi shorten"
 alias diary="pi diary"
 alias turn="pi turn"
