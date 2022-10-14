@@ -46,11 +46,11 @@ alias pibuild="python3 ~/git/tools/build/build.py"
 alias turn="python3 ~/git/tools/kasalights/main.py"
 alias notes="python3 ~/git/tools/notes/main.py"
 
-pi() {
+drop() {
     if [ "$#" -ne 0 ]; then
-        ssh pi@192.168.0.123 -p 55701 -t bash -cil "'$@'"
+        ssh tyler@192.168.0.123 -p 55701 -t bash -cil "'$@'"
     else
-        ssh pi@192.168.0.123 -p 55701
+        ssh tyler@192.168.0.123 -p 55701
     fi
 }
 

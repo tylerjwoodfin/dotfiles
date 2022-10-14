@@ -1,10 +1,13 @@
 <monitors version="2">
   <configuration>
     <logicalmonitor>
-      <x>0</x>
-      <y>977</y>
+      <x>5120</x>
+      <y>0</y>
       <scale>1.5</scale>
-      <primary>yes</primary>
+      <transform>
+        <rotation>right</rotation>
+        <flipped>no</flipped>
+      </transform>
       <monitor>
         <monitorspec>
           <connector>DP-2</connector>
@@ -20,13 +23,10 @@
       </monitor>
     </logicalmonitor>
     <logicalmonitor>
-      <x>5120</x>
-      <y>0</y>
+      <x>0</x>
+      <y>1163</y>
       <scale>1.5</scale>
-      <transform>
-        <rotation>right</rotation>
-        <flipped>no</flipped>
-      </transform>
+      <primary>yes</primary>
       <monitor>
         <monitorspec>
           <connector>DP-0</connector>
