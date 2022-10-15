@@ -1,95 +1,92 @@
+"""
+setup.py
+
+this is intended to set up any of my devices with proper repos and dotfile aliases
+"""
+
 from os import system as cmd
 from time import sleep
 
-# Setup.py
-#
-# this is intended for setting up any of my devices
-# (phones, laptops, desktops, Pis... anything with a terminal!)
 
-
-def add_alias(str):
+def add_alias(alias):
+    """
+    adds the phone, desktop, or pi aliases to .bashrc
+    """
     response = ""
     while response not in ['y', 'n']:
         response = input(
-            f"Do you want to link the {str} alias to bashrc? y/n\n")
+            f"Do you want to link the {alias} alias to bashrc? y/n\n")
 
         if response == 'y':
-            cmd(
-                f"""printf "\n# added by dotfiles/setup.py\nif [ -f ~/git/dotfiles/alias/{str} ]; then\n    source ~/git/dotfiles/alias/{str}\nfi\n" >> ~/.bashrc """)
+            cmd_bashrc = f"""printf "\n# added by dotfiles/setup.py\n"""\
+                f"""if [ -f ~/git/dotfiles/alias/{alias} ]; then\n"""\
+                f"""    source ~/git/dotfiles/alias/{alias}\nfi\n" >> ~/.bashrc """
+
+            cmd(cmd_bashrc)
             print("Done")
 
 
 print("Welcome! Let's get you set up.\n")
 
 # device type
-is_phone = ""
-while is_phone not in ['y', 'n']:
-    is_phone = input(f"Is this a phone? y/n\n")
+IS_PHONE = ""
+while IS_PHONE not in ['y', 'n']:
+    IS_PHONE = input("Is this a phone? y/n\n")
 
 # create SSH key
-response = ""
-while response not in ['y', 'n']:
-    response = input(
-        f"Do you need an SSH key? (this will overwrite any existing keys!) y/n\n")
+RESPONSE = ""
+while RESPONSE not in ['y', 'n']:
+    RESPONSE = input(
+        "Do you need an SSH key? (this will overwrite any existing keys!) y/n\n")
 
-if response == 'y':
-    if is_phone == 'n':
+if RESPONSE == 'y':
+    if IS_PHONE == 'n':
         cmd("ssh-keygen -f ~/.ssh/id_rsa -N ''")
     else:
         print("Trying `pkg install openssh`...")
         print("You may get a 500 error once or twice. Re-run the script if this happens.\n")
         sleep(5)
-        cmd(f"pkg install openssh -y")
+        cmd("pkg install openssh -y")
 
     print("\n\nIf this was successful, you should see a key above.")
     print("Copy `~/.ssh/id_rsa.pub` and go to your Github Profile -> Settings -> SSH Keys")
 
-    if is_phone == 'y':
+    if IS_PHONE == 'y':
         print("Trying to copy this to your clipboard... one sec")
         sleep(1)
         print("pkg install termux-api -y; cat ~/.ssh/id_rsa.pub | termux-clipboard-set")
         sleep(1)
-        print("It should be in your clipboard. If not, run `cat ~/.ssh/id_rsa.pub` and copy it manually.")
+        print("It should be in your clipboard.")
+        print("If not, run `cat ~/.ssh/id_rsa.pub` and copy it manually.")
         print("Paste it in your Github Profile -> Settings -> SSH Keys")
 
 print("At this point, you should have an SSH key from this device added to Github.")
 
 # clone repos
-response = ""
-while response not in ['y', 'n']:
-    response = input(
-        f"Do you want to clone all public repositories? y/n\n")
+RESPONSE = ""
+while RESPONSE not in ['y', 'n']:
+    RESPONSE = input("Do you want to clone all public repos? y/n\n")
 
-    if response == 'y':
-        command = """
+    if RESPONSE == 'y':
+        CLONE_CMD = """
         CNTX=users; NAME=tylerjwoodfin; PAGE=1
         curl "https://api.github.com/$CNTX/$NAME/repos?page=$PAGE&per_page=100" |
-        grep -e 'clone_url*' |
+        grep -e 'ssh_url*' |
         cut -d \" -f 4 |
         xargs -L1 git clone
         """
 
-        cmd(f"mkdir ~/git; cd ~/git; {command}")
-
-# clone backend
-response = ""
-while response not in ['y', 'n']:
-    response = input(
-        f"Do you want to clone the backend repo? y/n\n")
-
-    if response == 'y':
-        cmd("mkdir ~/git; cd ~/git; git clone https://github.com/tylerjwoodfin/backend.git")
+        cmd(f"mkdir -p ~/git; cd ~/git; {CLONE_CMD}")
 
 # add alias to bashrc:
 for i in ['common', 'desktop', 'pi']:
     add_alias(i)
 
 # add .vimrc
-response = ""
-while response not in ['y', 'n']:
-    response = input(
-        f"Do you want to link dotfiles.vim to .vimrc? y/n\n")
+RESPONSE = ""
+while RESPONSE not in ['y', 'n']:
+    RESPONSE = input("Do you want to link dotfiles.vim to .vimrc? y/n\n")
 
-    if response == 'y':
+    if RESPONSE == 'y':
         cmd("printf \"\n\\\" added by dotfiles/setup.py\nso ~/git/dotfiles/dotfiles.vim\n\" >> ~/.vimrc")
         print("Done")
