@@ -46,14 +46,6 @@ alias pibuild="python3 ~/git/tools/build/build.py"
 alias turn="python3 ~/git/tools/kasalights/main.py"
 alias notes="python3 ~/git/tools/notes/main.py"
 
-drop() {
-    if [ "$#" -ne 0 ]; then
-        ssh tyler@192.168.0.104 -p 55701 -t bash -cil "'$@'"
-    else
-        ssh tyler@192.168.0.104 -p 55701
-    fi
-}
-
 [ -z "$PS1" ] && return
 ##
 ## Aliases below this line won't be called during interactive sessions (e.g. scripts)
