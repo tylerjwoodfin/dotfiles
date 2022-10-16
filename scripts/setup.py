@@ -77,8 +77,7 @@ while RESPONSE not in ['y', 'n']:
         """
 
         cmd("mkdir -p ~/git; cd ~/git")
-        print(
-            "Paste the following after the script has finished:\n\n{CLONE_CMD}")
+        print(f"Paste the following after the script has finished:\n\n{CLONE_CMD}")
 
 # add alias to bashrc:
 for i in ['common', 'desktop', 'pi']:
