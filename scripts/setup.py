@@ -7,6 +7,12 @@ this is intended to set up any of my devices with proper repos and dotfile alias
 from os import system as cmd
 from time import sleep
 
+CMD_CLONE = """
+UserName=tylerjwoodfin; \
+curl -s https://api.github.com/users/$UserName/repos?per_page=1000 |\
+jq -r '.[]|.ssh_url' |\
+xargs -L1 git clone
+"""
 
 def add_alias(alias):
     """
@@ -28,11 +34,6 @@ def add_alias(alias):
 
 print("Welcome! Let's get you set up.\n")
 
-# device type
-IS_PHONE = ""
-while IS_PHONE not in ['y', 'n']:
-    IS_PHONE = input("Is this a phone? y/n\n")
-
 # create SSH key
 RESPONSE = ""
 while RESPONSE not in ['y', 'n']:
@@ -40,6 +41,11 @@ while RESPONSE not in ['y', 'n']:
         "Do you need an SSH key? (this will overwrite any existing keys!) y/n\n")
 
 if RESPONSE == 'y':
+    # device type
+    IS_PHONE = ""
+    while IS_PHONE not in ['y', 'n']:
+        IS_PHONE = input("Is this a phone? This determines how your key is generated. y/n\n")
+        
     if IS_PHONE == 'n':
         cmd("ssh-keygen -f ~/.ssh/id_rsa -N ''")
     else:
@@ -68,16 +74,8 @@ while RESPONSE not in ['y', 'n']:
     RESPONSE = input("Do you want to clone all public repos? y/n\n")
 
     if RESPONSE == 'y':
-        CLONE_CMD = """
-        CNTX=users; NAME=tylerjwoodfin; PAGE=1
-        curl "https://api.github.com/$CNTX/$NAME/repos?page=$PAGE&per_page=100" |
-        grep -e 'ssh_url*' |
-        cut -d \" -f 4 |
-        xargs -L1 git clone
-        """
-
-        cmd("mkdir -p ~/git; cd ~/git")
-        print(f"Paste the following after the script has finished:\n\n{CLONE_CMD}")
+        print("Cloning...")
+        cmd(f"mkdir -p ~/git; cd ~/git; {CMD_CLONE}")
 
 # add alias to bashrc:
 for i in ['common', 'desktop', 'pi']:
