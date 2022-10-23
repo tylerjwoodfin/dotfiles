@@ -1,13 +1,13 @@
-# run on drop - see 'common'
-alias remind="drop remind"
-alias rmm="drop remind"
-alias rmmt="drop remind tomorrow"
-alias rmmy="drop remind noconfirm"
-alias rmmty="drop remind tomorrow noconfirm"
-alias shorten="drop shorten"
-alias diary="drop diary"
-alias turn="drop turn"
-alias notes="drop notes"
+# run on cloud - see 'common'
+alias remind="cloud remind"
+alias rmm="cloud remind"
+alias rmmt="cloud remind tomorrow"
+alias rmmy="cloud remind noconfirm"
+alias rmmty="cloud remind tomorrow noconfirm"
+alias shorten="cloud shorten"
+alias diary="cloud diary"
+alias turn="cloud turn"
+alias notes="cloud notes"
 
 # desktop-specific
 alias duplicate="./git/dotfiles/display/monitors-duplicate.sh"
