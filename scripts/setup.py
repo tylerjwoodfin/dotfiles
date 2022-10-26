@@ -27,7 +27,7 @@ def add_bashconfig(config):
         if response == 'y':
             config_path = f"~/git/dotfiles/bash/{config}"
             if config == 'network':
-                config_path = f"~/syncthing/docs/network/bash"
+                config_path = f"~/syncthing/docs/network/alias"
                 print("\nOK- this requires Tyler's bash config file in syncthing/docs/network.")
 
             cmd_bashrc = f"""printf "\n# added by dotfiles/setup.py\n"""\
@@ -78,7 +78,7 @@ print("At this point, you should have an SSH key from this device added to Githu
 # clone repos
 RESPONSE = ""
 while RESPONSE not in ['y', 'n']:
-    RESPONSE = input("Do you want to clone all public repos? y/n\n")
+    RESPONSE = input("Do you want to clone all public repos? (Make sure you have Git and JQ installed!) y/n\n")
 
     if RESPONSE == 'y':
         print("Cloning...")
