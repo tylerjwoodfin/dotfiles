@@ -1,2 +1,0 @@
-alias browse="pcmanfm $pwd"
-shopt -s expand_aliases

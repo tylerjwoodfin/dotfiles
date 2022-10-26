@@ -1,9 +1,11 @@
+# for all devices that aren't my server
+
 # run on cloud - see 'common'
 alias remind="cloud remind"
-alias rmm="cloud remind"
-alias rmmt="cloud remind tomorrow"
-alias rmmy="cloud remind noconfirm"
-alias rmmty="cloud remind tomorrow noconfirm"
+alias rmm="cloud rmm"
+alias rmmt="cloud rmmt"
+alias rmmy="cloud rmmy"
+alias rmmty="cloud rmmty"
 alias shorten="cloud shorten"
 alias diary="cloud diary"
 alias turn="cloud turn"

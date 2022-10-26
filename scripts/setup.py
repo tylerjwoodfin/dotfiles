@@ -1,7 +1,7 @@
 """
 setup.py
 
-this is intended to set up any of my devices with proper repos and dotfile aliases
+this is intended to set up any of my devices with proper repos and dotfile bash configs
 """
 
 from os import system as cmd
@@ -15,24 +15,24 @@ xargs -L1 git clone
 """
 
 
-def add_alias(alias):
+def add_bashconfig(config):
     """
-    adds the phone, desktop, or pi aliases to .bashrc
+    adds bash configs in ../bash to .bashrc
     """
     response = ""
     while response not in ['y', 'n']:
         response = input(
-            f"Do you want to link the {alias} alias to bashrc? y/n\n")
+            f"Do you want to link the {config} config file to bashrc? y/n\n")
 
         if response == 'y':
-            alias_path = f"~/git/dotfiles/alias/{alias}"
-            if alias == 'network':
-                alias_path = f"~/syncthing/docs/network/alias"
-                print("OK- this requires Tyler's alias file in syncthing/docs/network.")
+            config_path = f"~/git/dotfiles/bash/{config}"
+            if config == 'network':
+                config_path = f"~/syncthing/docs/network/bash"
+                print("\nOK- this requires Tyler's bash config file in syncthing/docs/network.")
 
             cmd_bashrc = f"""printf "\n# added by dotfiles/setup.py\n"""\
-                f"""if [ -f {alias_path} ]; then\n"""\
-                f"""    source {alias_path}\nfi\n" >> ~/.bashrc """
+                f"""if [ -f {config_path} ]; then\n"""\
+                f"""    source {config_path}\nfi\n" >> ~/.bashrc """
 
             cmd(cmd_bashrc)
             print("Done")
@@ -84,9 +84,9 @@ while RESPONSE not in ['y', 'n']:
         print("Cloning...")
         cmd(f"mkdir -p ~/git; cd ~/git; {CMD_CLONE}")
 
-# add alias to bashrc:
-for i in ['common', 'desktop', 'pi', 'network']:
-    add_alias(i)
+# add bash config files to bashrc:
+for i in ['common', 'not-cloud', 'network', 'fff']:
+    add_bashconfig(i)
 
 # add .vimrc
 RESPONSE = ""

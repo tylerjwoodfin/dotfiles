@@ -44,7 +44,13 @@ alias yt="python3 ~/git/tools/yt/main.py"
 alias pitest="python3 ~/git/testfolder/test.py"
 alias pibuild="python3 ~/git/tools/build/build.py"
 alias turn="python3 ~/git/tools/kasalights/main.py"
-alias notes="python3 ~/git/tools/notes/main.py"
+alias notes="fff ~/syncthing/notes"
+
+# for remindmail- see https://github.com/tylerjwoodfin/remindmail
+alias rmm="remind"
+alias rmmt="remind tomorrow"
+alias rmmy="remind noconfirm"
+alias rmmty="remind tomorrow noconfirm"
 
 [ -z "$PS1" ] && return
 ##
