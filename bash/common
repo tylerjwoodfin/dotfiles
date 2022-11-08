@@ -52,6 +52,9 @@ alias rmmt="remind tomorrow"
 alias rmmy="remind noconfirm"
 alias rmmty="remind tomorrow noconfirm"
 
+# weather
+alias weather="curl wttr.in/?2QF"
+
 [ -z "$PS1" ] && return
 ##
 ## Aliases below this line won't be called during interactive sessions (e.g. scripts)
