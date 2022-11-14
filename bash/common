@@ -51,6 +51,9 @@ alias rmm="remind"
 alias rmmt="remind tomorrow"
 alias rmmy="remind noconfirm"
 alias rmmty="remind tomorrow noconfirm"
+alias rmls="remind ls"
+alias rme="remind edit"
+alias rmlse="remind edit"
 
 # weather
 alias weather="curl wttr.in/?2QF"
