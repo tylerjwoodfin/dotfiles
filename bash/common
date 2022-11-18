@@ -7,7 +7,6 @@ alias ls="ls -al --color"
 export EDITOR='vim'
 
 # quick navigation
-alias cdta='cd ~/git/tasks'
 alias cdto='cd ~/git/tools'
 alias b='cd ../'
 alias x='exit'
