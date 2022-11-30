@@ -85,7 +85,7 @@ while RESPONSE not in ['y', 'n']:
         cmd(f"mkdir -p ~/git; cd ~/git; {CMD_CLONE}")
 
 # add bash config files to bashrc:
-for i in ['common', 'not-cloud', 'network', 'fff']:
+for i in ['common', 'not-cloud', 'network', 'phone', 'fff']:
     add_bashconfig(i)
 
 # add .vimrc

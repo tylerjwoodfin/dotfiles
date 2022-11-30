@@ -1,0 +1,3 @@
+# aliases specific to phones
+alias weather="curl wttr.in/?2FQn"
+
