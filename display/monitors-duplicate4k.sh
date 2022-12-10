@@ -1,1 +1,1 @@
-cp ~/git/dotfiles/display/monitors-steamdeck.xml ~/.config/monitors.xml && killall -3 gnome-shell
+cp ~/git/dotfiles/display/monitors-duplicate4k.xml ~/.config/monitors.xml && killall -3 gnome-shell
