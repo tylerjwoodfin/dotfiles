@@ -13,5 +13,6 @@ alias notes="cloud notes"
 
 # desktop-specific
 alias duplicate="./git/dotfiles/display/monitors-duplicate.sh"
+alias duplicate4k="./git/dotfiles/display/monitors-duplicate4k.sh"
 alias extend="./git/dotfiles/display/monitors-extend.sh"
 alias steamdeck="./git/dotfiles/display/monitors-steamdeck.sh"
