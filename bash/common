@@ -44,6 +44,7 @@ alias pitest="python3 ~/git/testfolder/test.py"
 alias pibuild="python3 ~/git/tools/build/build.py"
 alias turn="python3 ~/git/tools/kasalights/main.py"
 alias notes="fff ~/syncthing/notes"
+alias gpt="python3 ~/git/tools/openai/main.py"
 
 # for remindmail- see https://github.com/tylerjwoodfin/remindmail
 alias rmm="remind"
