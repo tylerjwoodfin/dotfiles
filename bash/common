@@ -1,5 +1,12 @@
 # Aliases common to all devices
 
+# aliased folders 
+shopt -s cdable_vars
+export notes=$HOME/syncthing/notes
+export shopping=$notes/shopping.md
+export remind=$notes/remind.md
+export pushups=$notes/pushups.md
+
 # ls options
 alias ls="ls -al --color"
 
