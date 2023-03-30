@@ -8,6 +8,7 @@ export remind=$notes/remind.md
 export pushups=$notes/pushups.md
 export logpath=$HOME/syncthing/log
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
+export cabinet=$HOME/syncthing/cabinet/settings.json
 
 # ls options
 alias ls="ls -al --color"
