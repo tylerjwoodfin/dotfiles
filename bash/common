@@ -62,7 +62,7 @@ function rmmt() {
 }
 
 rmmy() {
-  remind --noconfirm -m "$*"
+  remind --noconfirm -d now -m "$*"
 }
 
 rmmty() {
