@@ -57,13 +57,24 @@ alias notes="fff ~/syncthing/notes"
 alias gpt="python3 ~/git/tools/openai/main.py"
 
 # for remindmail- see https://github.com/tylerjwoodfin/remindmail
-alias rmm="remind"
-alias rmmt="remind tomorrow"
-alias rmmy="remind noconfirm"
-alias rmmty="remind tomorrow noconfirm"
-alias rmmls="remind ls"
-alias rmme="remind edit"
-alias rmmlse="remind edit"
+function rmmt() {
+  remind -d tomorrow -m "$*"
+}
+
+rmmy() {
+  remind --noconfirm -m "$*"
+}
+
+rmmty() {
+  remind -d tomorrow --noconfirm -m "$*"
+}
+
+alias rmmt='rmmt'
+alias rmmy='rmmy'
+alias rmmty='rmmty'
+alias rmmls='remind -ls'
+alias rmme='remind --edit'
+alias rmmlse='remind --edit'
 
 # weather
 alias weather="curl wttr.in/?2QF"
