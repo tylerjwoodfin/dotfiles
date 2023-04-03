@@ -69,6 +69,7 @@ rmmty() {
   remind -d tomorrow --noconfirm -m "$*"
 }
 
+alias rmm='remind'
 alias rmmt='rmmt'
 alias rmmy='rmmy'
 alias rmmty='rmmty'
