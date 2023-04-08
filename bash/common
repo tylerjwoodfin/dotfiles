@@ -13,6 +13,10 @@ export cabinet=$HOME/syncthing/cabinet/settings.json
 # ls options
 alias ls="ls -al --color"
 
+# cal
+alias cal='cal -B1 -A1; echo -e "\nuse ncal to display horizontally"'
+alias ncal='ncal -B1 -A1'
+
 # use vim as default
 export EDITOR='vim'
 
