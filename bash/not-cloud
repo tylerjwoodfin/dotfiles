@@ -1,17 +1,13 @@
 # for all devices that aren't my server
 
-# run on cloud - see 'common'
-alias remind="cloud remind"
-alias rmm="cloud rmm"
-alias rmmt="cloud rmmt"
-alias rmmy="cloud rmmy"
-alias rmmty="cloud rmmty"
-alias shorten="cloud shorten"
-alias diary="cloud diary"
-alias turn="cloud turn"
-alias notes="cloud notes"
+## run on cloud - see 'common'
+cloud_commands=("remind" "rmm" "rmmt" "rmmy" "rmmty" "shorten" "diary" "turn" "notes")
 
-# desktop-specific
+for cmd in "${cloud_commands[@]}"; do
+    alias "$cmd"="cloud $cmd"
+done
+
+## desktop-specific
 alias duplicate="./git/dotfiles/display/monitors-duplicate.sh"
 alias duplicate4k="./git/dotfiles/display/monitors-duplicate4k.sh"
 alias extend="./git/dotfiles/display/monitors-extend.sh"
