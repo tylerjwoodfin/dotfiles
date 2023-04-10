@@ -3,12 +3,40 @@
 # aliased folders 
 shopt -s cdable_vars
 export notes=$HOME/syncthing/notes
-export shopping=$notes/shopping.md
-export remind=$notes/remind.md
-export pushups=$notes/pushups.md
 export logpath=$HOME/syncthing/log
-export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
 export cabinet=$HOME/syncthing/cabinet/settings.json
+export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
+
+# `vn` to edit a file in $notes
+vn() {
+    if [[ -z "${1}" ]]; then
+        echo "Error: no argument provided"
+        return 1
+    fi
+
+	# strip '.md' if necessary
+	filename="${1%%.md}"
+
+    "vim" "${notes}/${filename}.md"
+}
+
+# `n` to retrieve the path of a file in $notes
+# 	example: `echo 500000 > $(n pushups)`
+
+n() {
+    # Check if the argument is provided
+    if [[ -z "${1}" ]]; then
+        echo "Error: no argument provided"
+        return 1
+    fi
+
+    # Set the filename as a variable
+    filename="${notes}/${1}.md"
+
+    # Redirect input to the file
+    echo "$filename"
+}
+
 
 # ls options
 alias ls="ls -al --color"
