@@ -39,7 +39,7 @@ n() {
 
 
 # ls options
-alias ls="ls -al --color"
+alias ls="ls -hal --color"
 
 # cal
 alias cal='cal -B1 -A1; echo -e "\nuse ncal to display horizontally"'
