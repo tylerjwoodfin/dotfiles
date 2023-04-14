@@ -3,6 +3,7 @@
 # aliased folders 
 shopt -s cdable_vars
 export notes=$HOME/syncthing/notes
+export docs=$HOME/syncthing/docs
 export logpath=$HOME/syncthing/log
 export cabinet=$HOME/syncthing/cabinet/settings.json
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
@@ -86,6 +87,7 @@ alias pitest="python3 ~/git/testfolder/test.py"
 alias pibuild="python3 ~/git/tools/build/build.py"
 alias turn="python3 ~/git/tools/kasalights/main.py"
 alias notes="fff ~/syncthing/notes"
+alias docs="fff ~/syncthing/docs"
 alias gpt="python3 ~/git/tools/openai/main.py"
 
 # for remindmail- see https://github.com/tylerjwoodfin/remindmail
