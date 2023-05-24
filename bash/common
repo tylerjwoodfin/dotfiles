@@ -75,7 +75,7 @@ alias gclean="git branch --merged | egrep -v '(^\*|master|dev|main)' | xargs git
 alias gd="git diff"
 alias gdd="git diff develop"
 alias gp="git pull"
-git config --global push.default simple
+git config --global push.default current
 
 gcam() {
     branch=$(git symbolic-ref --short HEAD)
