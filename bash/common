@@ -51,9 +51,10 @@ export EDITOR='vim'
 
 # quick navigation
 alias cdto='cd ~/git/tools'
+alias cddo='cd ~/git/dotfiles'
 alias b='cd ../'
 alias x='exit'
-
+cdl() { cd "$a"; ls; }
 
 # enable colors 🎨
 if [ -x /usr/bin/dircolors ]; then
@@ -67,7 +68,6 @@ if [ -x /usr/bin/dircolors ]; then
 alias cdg="cd ~/git"
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gcm="git commit -m"
-alias gcam="git add -A; git commit -m"
 alias gch="git fetch && git checkout"
 alias gb="git checkout -b"
 alias gs="git status"
@@ -75,9 +75,13 @@ alias gclean="git branch --merged | egrep -v '(^\*|master|dev|main)' | xargs git
 alias gd="git diff"
 alias gdd="git diff develop"
 alias gp="git pull"
+git config --global push.default simple
 
-# functions
-cdl() { cd "$a"; ls; }
+gcam() {
+    branch=$(git symbolic-ref --short HEAD)
+    branch=${branch#*/}
+    git add -A && git commit -m "$branch: $*"
+}
 
 # useful scripts - see https://github.com/tylerjwoodfin
 alias diary="python3 ~/git/tools/diary/main.py"
@@ -108,6 +112,7 @@ alias rmm='remind'
 alias rmmt='rmmt'
 alias rmmy='rmmy'
 alias rmmty='rmmty'
+alias rmml='remind -ls'
 alias rmmls='remind -ls'
 alias rmme='remind --edit'
 alias rmmlse='remind --edit'
