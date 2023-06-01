@@ -116,6 +116,7 @@ alias rmml='remind -ls'
 alias rmmls='remind -ls'
 alias rmme='remind --edit'
 alias rmmlse='remind --edit'
+alias rmmst='remind --show-tomorrow'
 
 # weather
 alias weather="curl wttr.in/?2QF"
