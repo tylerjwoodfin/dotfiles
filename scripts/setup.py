@@ -27,7 +27,7 @@ def add_bashconfig(config):
         if response == 'y':
             config_path = f"~/git/dotfiles/bash/{config}"
             if config == 'network':
-                config_path = f"~/syncthing/docs/network/alias"
+                config_path = "~/syncthing/docs/network/alias"
                 print("\nOK- this requires Tyler's bash config file in syncthing/docs/network.")
 
             cmd_bashrc = f"""printf "\n# added by dotfiles/setup.py\n"""\
@@ -96,3 +96,14 @@ while RESPONSE not in ['y', 'n']:
     if RESPONSE == 'y':
         cmd("printf \"\n\\\" added by dotfiles/setup.py\nso ~/git/dotfiles/dotfiles.vim\n\" >> ~/.vimrc")
         print("Done")
+
+# install Pihole
+RESPONSE = ""
+while RESPONSE not in ['y', 'n']:
+    RESPONSE = input("Do you want to install Pihole? y/n\n")
+
+    if RESPONSE == 'y':
+        cmd("curl -sSL https://install.pi-hole.net | bash")
+        print("Done")
+
+print("\n\nComplete! See ~/syncthing/ubuntu/setup.md for next steps.")
