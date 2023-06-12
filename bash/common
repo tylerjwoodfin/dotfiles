@@ -1,6 +1,6 @@
-# Aliases common to all devices
+#!/bin/sh
 
-# aliased folders 
+# Set common folder paths as aliases
 shopt -s cdable_vars
 export notes=$HOME/syncthing/notes
 export docs=$HOME/syncthing/docs
@@ -8,48 +8,44 @@ export logpath=$HOME/syncthing/log
 export cabinet=$HOME/syncthing/cabinet/settings.json
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
 
-# `vn` to edit a file in $notes
+# Function: Edit a file in $notes with vim
 vn() {
-    if [[ -z "${1}" ]]; then
-        echo "Error: no argument provided"
+    if [[ -z "$1" ]]; then
+        echo "Error: No argument provided"
         return 1
     fi
 
-	# strip '.md' if necessary
-	filename="${1%%.md}"
+    # Strip '.md' if necessary
+    filename="${1%%.md}"
 
-    "vim" "${notes}/${filename}.md"
+    vim "$notes/$filename.md"
 }
 
-# `n` to retrieve the path of a file in $notes
-# 	example: `echo 500000 > $(n pushups)`
-
+# Function: Retrieve the path of a file in $notes
 n() {
-    # Check if the argument is provided
-    if [[ -z "${1}" ]]; then
-        echo "Error: no argument provided"
+    if [[ -z "$1" ]]; then
+        echo "Error: No argument provided"
         return 1
     fi
 
     # Set the filename as a variable
-    filename="${notes}/${1}.md"
+    filename="$notes/$1.md"
 
-    # Redirect input to the file
+    # Return the file path
     echo "$filename"
 }
 
+# Set ls options
+alias ls='ls -hal --color'
 
-# ls options
-alias ls="ls -hal --color"
-
-# cal
-alias cal='cal -B1 -A1; echo -e "\nuse ncal to display horizontally"'
+# Show calendar
+alias cal='cal -B1 -A1; echo -e "\nUse ncal to display horizontally"'
 alias ncal='ncal -B1 -A1'
 
-# use vim as default
+# Use vim as default editor
 export EDITOR='vim'
 
-# quick navigation
+# Quick navigation aliases
 alias cdto='cd ~/git/tools'
 alias cddo='cd ~/git/dotfiles'
 alias b='cd ../'
@@ -57,25 +53,25 @@ alias x='exit'
 alias cc='clear'
 cdl() { cd "$a"; ls; }
 
-# enable colors 🎨
+# Enable Colors 🎨
 if [ -x /usr/bin/dircolors ]; then
-  	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
- 	alias grep='grep --color=auto'
- 	alias fgrep='fgrep --color=auto'
- 	alias egrep='egrep --color=auto'
- fi
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
 
-# git
-alias cdg="cd ~/git"
-alias glog="git log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
-alias gcm="git commit -m"
-alias gch="git fetch && git checkout"
-alias gb="git checkout -b"
-alias gs="git status"
-alias gclean="git branch --merged | egrep -v '(^\*|master|dev|main)' | xargs git branch -d"
-alias gd="git diff"
-alias gdd="git diff develop"
-alias gp="git pull"
+# Git aliases
+alias cdg='cd ~/git'
+alias glog='git log --graph --pretty=format:"%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset" --abbrev-commit --date=relative'
+alias gcm='git commit -m'
+alias gch='git fetch && git checkout'
+alias gb='git checkout -b'
+alias gs='git status'
+alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d'
+alias gd='git diff'
+alias gdd='git diff develop'
+alias gp='git pull'
 git config --global push.default current
 
 gcam() {
@@ -84,29 +80,29 @@ gcam() {
     git add -A && git commit -m "$branch: $*"
 }
 
-# useful scripts - see https://github.com/tylerjwoodfin
-alias diary="python3 ~/git/tools/diary/main.py"
-alias shorten="python3 ~/git/tools/shorten.py"
-alias yt="python3 ~/git/tools/yt/main.py"
-alias pitest="python3 ~/git/testfolder/test.py"
-alias pibuild="python3 ~/git/tools/build/build.py"
-alias turn="python3 ~/git/tools/kasalights/main.py"
-alias notes="fff ~/syncthing/notes"
-alias docs="fff ~/syncthing/docs"
-alias gpt="python3 ~/git/tools/openai/main.py"
-alias lofi="bash ~/git/tools/lofi.sh"
+# Useful scripts - see https://github.com/tylerjwoodfin
+alias diary='python3 ~/git/tools/diary/main.py'
+alias shorten='python3 ~/git/tools/shorten.py'
+alias yt='python3 ~/git/tools/yt/main.py'
+alias pitest='python3 ~/git/testfolder/test.py'
+alias pibuild='python3 ~/git/tools/build/build.py'
+alias turn='python3 ~/git/tools/kasalights/main.py'
+alias notes='fff ~/syncthing/notes'
+alias docs='fff ~/syncthing/docs'
+alias gpt='python3 ~/git/tools/openai/main.py'
+alias lofi='bash ~/git/tools/lofi.sh'
 
-# for remindmail- see https://github.com/tylerjwoodfin/remindmail
-function rmmt() {
-  remind -d tomorrow -m "$*"
+# remindmail - see https://github.com/tylerjwoodfin/remindmail
+rmmt() {
+    remind -d tomorrow -m "$*"
 }
 
 rmmy() {
-  remind --noconfirm -d now -m "$*"
+    remind --noconfirm -d now -m "$*"
 }
 
 rmmty() {
-  remind -d tomorrow --noconfirm -m "$*"
+    remind -d tomorrow --noconfirm -m "$*"
 }
 
 alias rmm='remind'
@@ -120,11 +116,9 @@ alias rmmlse='remind --edit'
 alias rmmst='remind --show-tomorrow'
 alias rmmj='remind --jira'
 
-# weather
-alias weather="curl wttr.in/?2QF"
+# Check weather
+alias weather='curl wttr.in/?2QF'
 
 [ -z "$PS1" ] && return
-##
-## Aliases below this line won't be called during interactive sessions (e.g. scripts)
-##
 
+# Aliases below this line won't be called during interactive sessions (e.g., scripts)
