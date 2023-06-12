@@ -54,6 +54,7 @@ alias cdto='cd ~/git/tools'
 alias cddo='cd ~/git/dotfiles'
 alias b='cd ../'
 alias x='exit'
+alias cc='clear'
 cdl() { cd "$a"; ls; }
 
 # enable colors 🎨
