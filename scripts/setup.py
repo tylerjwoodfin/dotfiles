@@ -134,6 +134,19 @@ def install_pihole():
         print("Done")
 
 
+def apply_pre_push():
+    """
+    Runs apply_pre-push.sh
+    """
+    response = validate_yes_no_input(
+        "Do you want to apply pre-push hooks to all repos? (y/n)\n")
+
+    if response == 'y':
+        subprocess.run(
+            "bash ~/git/tools/githooks/apply_pre-push.sh", shell=True, check=True)
+        print("Done")
+
+
 def main():
     """
     Main entry point of the script.
@@ -149,6 +162,7 @@ def main():
 
     link_vimrc()
     install_pihole()
+    apply_pre_push()
 
     print("\n\nComplete! See ~/syncthing/ubuntu/setup.md for next steps.")
 
