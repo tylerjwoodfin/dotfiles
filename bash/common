@@ -115,6 +115,11 @@ alias rmme='remind --edit'
 alias rmmlse='remind --edit'
 alias rmmst='remind --show-tomorrow'
 alias rmmj='remind --jira'
+alias rmmti='remind -ti'
+alias rmmtit='remind -ti --board Shopping --list-name Tyler'
+alias rmmta='remind -ta'
+alias rmmtai='remind -ta --board Shopping --list-name Tyler --item-name'
+alias rmmtais='remind -ta --board Shopping --list-name Shared --item-name'
 
 # Check weather
 alias weather='curl wttr.in/?2QF'
