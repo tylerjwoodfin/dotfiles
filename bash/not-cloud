@@ -1,7 +1,7 @@
 # for all devices that aren't my server
 
 ## run on cloud - see 'common'
-cloud_commands=("remind" "rmm" "rmmt" "rmmy" "rmmty" "shorten" "diary" "turn" "notes" "docs" "vn" "n")
+cloud_commands=("remind" "rmm" "rmmt" "rmmy" "rmmty" "shorten" "diary" "turn" "notes" "docs" "vn" "n", "v")
 
 for cmd in "${cloud_commands[@]}"; do
     alias "$cmd"="cloud $cmd"

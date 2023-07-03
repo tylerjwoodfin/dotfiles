@@ -89,8 +89,8 @@ alias pibuild='python3 ~/git/tools/build/build.py'
 alias turn='python3 ~/git/tools/kasalights/main.py'
 alias notes='fff ~/syncthing/notes'
 alias docs='fff ~/syncthing/docs'
-alias gpt='python3 ~/git/tools/openai/main.py'
 alias lofi='bash ~/git/tools/lofi.sh'
+alias v='python3 ~/git/tools/voicegpt/main.py'
 
 # remindmail - see https://github.com/tylerjwoodfin/remindmail
 rmmt() {
