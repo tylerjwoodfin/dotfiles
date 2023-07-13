@@ -80,7 +80,7 @@ def create_ssh_key():
         subprocess.run("cat ~/.ssh/id_rsa.pub", shell=True, check=True)
         print("\n\nIf this was successful, you should see a key above.")
         print(
-            "Copy the key above (from `~/.ssh/id_rsa.pub`) and go to your Github Profile -> Settings -> SSH Keys")
+            "Copy the public key above and go to your Github Profile -> Settings -> SSH Keys")
 
         if is_phone == 'y':
             print("Trying to copy this to your clipboard... one sec")
@@ -145,12 +145,12 @@ def install_cabinet_remindmail():
     response = validate_yes_no_input("Do you want to install Cabinet? (y/n)\n")
 
     if response == 'y':
-        subprocess.run("pip install cabinet", shell=True)
+        subprocess.run("pip install cabinet", shell=True, check=True)
 
     response = validate_yes_no_input("Do you want to install RemindMail? (y/n)\n")
 
     if response == 'y':
-        subprocess.run("pip install remindmail", shell=True)
+        subprocess.run("pip install remindmail", shell=True, check=True)
 
 
 def apply_pre_push():
