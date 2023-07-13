@@ -51,6 +51,8 @@ def add_bashconfig(config):
             subprocess.run(cmd_bashrc, shell=True, check=True)
             print("Done")
             break
+        if response == 'n':
+            break
 
 
 def create_ssh_key():
@@ -74,9 +76,11 @@ def create_ssh_key():
             time.sleep(5)
             subprocess.run("pkg install openssh -y", shell=True, check=True)
 
+        print("\n")
+        subprocess.run("cat ~/.ssh/id_rsa.pub", shell=True, check=True)
         print("\n\nIf this was successful, you should see a key above.")
         print(
-            "Copy `~/.ssh/id_rsa.pub` and go to your Github Profile -> Settings -> SSH Keys")
+            "Copy the key above (from `~/.ssh/id_rsa.pub`) and go to your Github Profile -> Settings -> SSH Keys")
 
         if is_phone == 'y':
             print("Trying to copy this to your clipboard... one sec")
@@ -132,6 +136,21 @@ def install_pihole():
         subprocess.run(
             "curl -sSL https://install.pi-hole.net | bash", shell=True, check=True)
         print("Done")
+
+def install_cabinet_remindmail():
+    """
+    Installs cabinet and remindmail from Pip
+    """
+
+    response = validate_yes_no_input("Do you want to install Cabinet? (y/n)\n")
+
+    if response == 'y':
+        subprocess.run("pip install cabinet", shell=True)
+
+    response = validate_yes_no_input("Do you want to install RemindMail? (y/n)\n")
+
+    if response == 'y':
+        subprocess.run("pip install remindmail", shell=True)
 
 
 def apply_pre_push():
