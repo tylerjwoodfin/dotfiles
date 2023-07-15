@@ -67,6 +67,7 @@ def create_ssh_key():
             "Is this a phone? This determines how your key is generated. (y/n)\n")
 
         if is_phone == 'n':
+            subprocess.run('sudo apt install qrencode', shell=True, check=True)
             subprocess.run("ssh-keygen -f ~/.ssh/id_rsa -N ''",
                            shell=True, check=True)
         else:
@@ -78,6 +79,10 @@ def create_ssh_key():
 
         print("\n")
         subprocess.run("cat ~/.ssh/id_rsa.pub", shell=True, check=True)
+
+        print("QR Code of public key:\n")
+        subprocess.run(
+            'qrencode -t ANSI "$(cat ~/.ssh/id_rsa.pub)"', shell=True, check=True)
         print("\n\nIf this was successful, you should see a key above.")
         print(
             "Copy the public key above and go to your Github Profile -> Settings -> SSH Keys")
@@ -137,6 +142,7 @@ def install_pihole():
             "curl -sSL https://install.pi-hole.net | bash", shell=True, check=True)
         print("Done")
 
+
 def install_cabinet_remindmail():
     """
     Installs cabinet and remindmail from Pip
@@ -147,7 +153,8 @@ def install_cabinet_remindmail():
     if response == 'y':
         subprocess.run("pip install cabinet", shell=True, check=True)
 
-    response = validate_yes_no_input("Do you want to install RemindMail? (y/n)\n")
+    response = validate_yes_no_input(
+        "Do you want to install RemindMail? (y/n)\n")
 
     if response == 'y':
         subprocess.run("pip install remindmail", shell=True, check=True)
@@ -166,6 +173,41 @@ def apply_pre_push():
         print("Done")
 
 
+def apply_hostname():
+    """
+    Changes the system name to the user input
+    """
+
+    response = validate_yes_no_input(
+        "Do you want to rename your system? (y/n)\n")
+
+    if response == 'y':
+        new_hostname = input("Enter the new computer name:\n")
+
+        # Update hostname in /etc/hostname
+        subprocess.run(['sudo', 'hostnamectl', 'set-hostname',
+                       new_hostname], check=True)
+
+        # Update hostname in /etc/hosts
+        with open('/etc/hosts', 'r', encoding='utf-8') as hosts_file:
+            hosts_lines = hosts_file.readlines()
+
+        new_hosts_lines = []
+        for line in hosts_lines:
+            if '127.0.1.1' in line:
+                line_parts = line.split()
+                line_parts[1] = new_hostname
+                new_line = ' '.join(line_parts) + '\n'
+                new_hosts_lines.append(new_line)
+            else:
+                new_hosts_lines.append(line)
+
+        with open('/etc/hosts', 'w', encoding='utf-8') as hosts_file:
+            hosts_file.writelines(new_hosts_lines)
+
+        print("Saved; please reboot afterwards.")
+
+
 def main():
     """
     Main entry point of the script.
@@ -182,6 +224,7 @@ def main():
     link_vimrc()
     install_pihole()
     apply_pre_push()
+    apply_hostname()
 
     print("\n\nComplete! See ~/syncthing/ubuntu/setup.md for next steps.")
 
