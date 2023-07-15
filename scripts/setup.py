@@ -55,6 +55,8 @@ def add_bashconfig(config):
             break
 
 
+import requests
+
 def create_ssh_key():
     """
     Creates an SSH key.
@@ -78,14 +80,24 @@ def create_ssh_key():
             subprocess.run("pkg install openssh -y", shell=True, check=True)
 
         print("\n")
-        subprocess.run("cat ~/.ssh/id_rsa.pub", shell=True, check=True)
+        ssh_key = subprocess.check_output("cat ~/.ssh/id_rsa.pub", shell=True, text=True)
+        print(ssh_key)
 
-        print("QR Code of public key:\n")
-        subprocess.run(
-            'qrencode -t ANSI "$(cat ~/.ssh/id_rsa.pub)"', shell=True, check=True)
-        print("\n\nIf this was successful, you should see a key above.")
-        print(
-            "Copy the public key above and go to your Github Profile -> Settings -> SSH Keys")
+        # Create a short URL using a reputable URL shortening service
+        url = 'https://api.shorturl.com/shorten'  # Replace with the appropriate API endpoint
+        payload = {
+            'url': ssh_key
+        }
+        response = requests.post(url, json=payload, timeout=10)
+
+        if response.status_code == 200:
+            short_url = response.json().get('short_url')
+            print("Short URL of your public key:")
+            print(short_url)
+            print("\nCopy the short URL and visit it on the device where you want to transfer the key.")
+            print("Follow the instructions to add the SSH key to the destination device.")
+        else:
+            print("Error creating short URL. Please copy the public key manually.")
 
         if is_phone == 'y':
             print("Trying to copy this to your clipboard... one sec")
@@ -98,6 +110,7 @@ def create_ssh_key():
             print("Paste it in your Github Profile -> Settings -> SSH Keys")
 
     print("At this point, you should have an SSH key from this device added to Github.")
+
 
 
 def clone_repos():
