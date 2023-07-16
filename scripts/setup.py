@@ -8,7 +8,6 @@ This script sets up devices with proper repos and dotfile bash configurations.
 
 import subprocess
 import time
-import requests
 
 CMD_CLONE = """
 UserName=tylerjwoodfin; \
@@ -55,6 +54,7 @@ def add_bashconfig(config):
         if response == 'n':
             break
 
+
 def create_ssh_key():
     """
     Creates an SSH key.
@@ -64,10 +64,11 @@ def create_ssh_key():
 
     if response == 'y':
         is_phone = validate_yes_no_input(
-            "Is this a phone? This determines how your key is generated. (y/n)\n")
+            "Is this an Android phone? This determines how your key is generated. (y/n)\n")
 
         if is_phone == 'n':
-            subprocess.run('sudo apt install qrencode', shell=True, check=True)
+            subprocess.run('sudo apt install git', shell=True, check=True)
+            subprocess.run('sudo apt install jq', shell=True, check=True)
             subprocess.run("ssh-keygen -f ~/.ssh/id_rsa -N ''",
                            shell=True, check=True)
         else:
@@ -78,25 +79,9 @@ def create_ssh_key():
             subprocess.run("pkg install openssh -y", shell=True, check=True)
 
         print("\n")
-        ssh_key = subprocess.check_output("cat ~/.ssh/id_rsa.pub", shell=True, text=True)
+        ssh_key = subprocess.check_output(
+            "cat ~/.ssh/id_rsa.pub", shell=True, text=True)
         print(ssh_key)
-
-        # Upload the SSH key to ufile.io
-        url = 'https://api.ufile.io/upload-file'
-        payload = {
-            'expiry': '1h',  # Set the expiry time for the file
-        }
-        files = {
-            'file': ssh_key.encode('utf-8')
-        }
-        response = requests.post(url, params=payload, files=files, timeout=10)
-
-        if response.status_code == 200:
-            short_url = response.json().get('url')
-            print("URL to download your public key:")
-            print(short_url)
-        else:
-            print("Error uploading the SSH key. Please copy the public key manually.")
 
         if is_phone == 'y':
             print("Trying to copy this to your clipboard... one sec")
@@ -106,11 +91,9 @@ def create_ssh_key():
             time.sleep(1)
             print("It should be in your clipboard.")
             print("If not, run `cat ~/.ssh/id_rsa.pub` and copy it manually.")
-            print("Paste it in your Github Profile -> Settings -> SSH Keys")
+        print("Paste this in your Github Profile -> Settings -> SSH Keys")
 
     print("At this point, you should have an SSH key from this device added to Github.")
-
-
 
 
 def clone_repos():
@@ -118,7 +101,8 @@ def clone_repos():
     Clones all public repos.
     """
     response = validate_yes_no_input(
-        "Do you want to clone all public repos? (Make sure you have Git and JQ installed!) (y/n)\n")
+        ("Do you want to clone all public repos? (y/n)\n",
+         "Do not press 'y' if the SSH key is not linked to your Github account)\n"))
 
     if response == 'y':
         print("Cloning...")
