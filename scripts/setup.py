@@ -8,6 +8,7 @@ This script sets up devices with proper repos and dotfile bash configurations.
 
 import subprocess
 import time
+import requests
 
 CMD_CLONE = """
 UserName=tylerjwoodfin; \
@@ -54,9 +55,6 @@ def add_bashconfig(config):
         if response == 'n':
             break
 
-
-import requests
-
 def create_ssh_key():
     """
     Creates an SSH key.
@@ -83,21 +81,22 @@ def create_ssh_key():
         ssh_key = subprocess.check_output("cat ~/.ssh/id_rsa.pub", shell=True, text=True)
         print(ssh_key)
 
-        # Create a short URL using a reputable URL shortening service
-        url = 'https://api.shorturl.com/shorten'  # Replace with the appropriate API endpoint
+        # Upload the SSH key to ufile.io
+        url = 'https://api.ufile.io/upload-file'
         payload = {
-            'url': ssh_key
+            'expiry': '1h',  # Set the expiry time for the file
         }
-        response = requests.post(url, json=payload, timeout=10)
+        files = {
+            'file': ssh_key.encode('utf-8')
+        }
+        response = requests.post(url, params=payload, files=files, timeout=10)
 
         if response.status_code == 200:
-            short_url = response.json().get('short_url')
-            print("Short URL of your public key:")
+            short_url = response.json().get('url')
+            print("URL to download your public key:")
             print(short_url)
-            print("\nCopy the short URL and visit it on the device where you want to transfer the key.")
-            print("Follow the instructions to add the SSH key to the destination device.")
         else:
-            print("Error creating short URL. Please copy the public key manually.")
+            print("Error uploading the SSH key. Please copy the public key manually.")
 
         if is_phone == 'y':
             print("Trying to copy this to your clipboard... one sec")
@@ -110,6 +109,7 @@ def create_ssh_key():
             print("Paste it in your Github Profile -> Settings -> SSH Keys")
 
     print("At this point, you should have an SSH key from this device added to Github.")
+
 
 
 
