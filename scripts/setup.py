@@ -101,14 +101,106 @@ def clone_repos():
     Clones all public repos.
     """
     response = validate_yes_no_input(
-        ("Do you want to clone all public repos? (y/n)\n",
-         "Do not press 'y' if the SSH key is not linked to your Github account)\n"))
+        "Do you want to clone all public repos? (y/n)\n"
+        "Do not press 'y' if the SSH key is not linked to your Github account)\n")
 
     if response == 'y':
         print("Cloning...")
         subprocess.run(
             f"mkdir -p ~/git; cd ~/git; {CMD_CLONE}", shell=True, check=True)
         print("Done")
+
+
+def install_tools():
+    """
+    Install universal tools
+    """
+
+    brave_browser = """
+sudo apt install curl
+sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+sudo apt update
+sudo apt install brave-browser
+"""
+
+    # brave browser
+    response = validate_yes_no_input(
+        "Do you want to install Brave Browser? (y/n)\n")
+    if response == 'y':
+        subprocess.run("mkdir -p ~/git && cd ~/git", shell=True, check=True)
+        subprocess.run(
+            brave_browser, shell=True, check=True)
+
+    # fff
+    response = validate_yes_no_input("Do you want to install fff? (y/n)\n")
+    if response == 'y':
+        subprocess.run("mkdir -p ~/git && cd ~/git", shell=True, check=True)
+        subprocess.run(
+            "git clone https://github.com/dylanaraps/fff.git", shell=True, check=True)
+        subprocess.run("cd fff && make install && rm -rf .",
+                       shell=True, check=True)
+
+    # syncthing
+    response = validate_yes_no_input(
+        "Do you want to install syncthing? (y/n)\n")
+    if response == 'y':
+        subprocess.run("sudo apt install apt-transport-https",
+                       shell=True, check=True)
+        signed_by = "signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg"
+        command = (
+            "curl -s https://syncthing.net/release-key.txt | "
+            "gpg --dearmor | "
+            "sudo tee /usr/share/keyrings/syncthing-archive-keyring.gpg >/dev/null |"
+            f'echo "deb [{signed_by}] https://apt.syncthing.net/ syncthing stable" |'
+            'sudo tee /etc/apt/sources.list.d/syncthing.list | '
+            "sudo apt update && sudo apt install syncthing"
+        )
+        subprocess.run(command, shell=True, check=True)
+
+        print("\nTo complete Syncthing setup:")
+        print("visit: https://pimylifeup.com/raspberry-pi-syncthing/\n")
+
+    # input-remapper
+    response = validate_yes_no_input(
+        "Do you want to install input-remapper? (y/n)\n")
+    if response == 'y':
+        commands = [
+            "sudo apt install git python3-setuptools gettext",
+            "git clone https://github.com/sezanzeb/input-remapper.git",
+            "cd input-remapper && ./scripts/build.sh",
+            "sudo apt install -f ./dist/input-remapper-2.0.0.deb"
+        ]
+
+    # signal
+    response = validate_yes_no_input(
+        "Do you want to install Signal? (y/n)\n")
+    if response == 'y':
+        commands = [
+            "wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg",
+            "cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null",
+            "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' |\\",
+            "sudo tee /etc/apt/sources.list.d/signal-xenial.list",
+            "sudo apt update && sudo apt install signal-desktop"
+        ]
+
+        for command in commands:
+            subprocess.run(command, shell=True, check=True)
+
+    # copyq
+    response = validate_yes_no_input(
+        "Do you want to install CopyQ (clipboard manager)? (y/n)"
+    )
+
+    if response == 'y':
+        commands = [
+            "sudo add-apt-repository ppa:hluk/copyq",
+            "sudo apt update",
+            "sudo apt install copyq"
+        ]
+
+    for command in commands:
+        subprocess.run(command, shell=True, check=True)
 
 
 def link_vimrc():
@@ -170,41 +262,6 @@ def apply_pre_push():
         print("Done")
 
 
-def apply_hostname():
-    """
-    Changes the system name to the user input
-    """
-
-    response = validate_yes_no_input(
-        "Do you want to rename your system? (y/n)\n")
-
-    if response == 'y':
-        new_hostname = input("Enter the new computer name:\n")
-
-        # Update hostname in /etc/hostname
-        subprocess.run(['sudo', 'hostnamectl', 'set-hostname',
-                       new_hostname], check=True)
-
-        # Update hostname in /etc/hosts
-        with open('/etc/hosts', 'r', encoding='utf-8') as hosts_file:
-            hosts_lines = hosts_file.readlines()
-
-        new_hosts_lines = []
-        for line in hosts_lines:
-            if '127.0.1.1' in line:
-                line_parts = line.split()
-                line_parts[1] = new_hostname
-                new_line = ' '.join(line_parts) + '\n'
-                new_hosts_lines.append(new_line)
-            else:
-                new_hosts_lines.append(line)
-
-        with open('/etc/hosts', 'w', encoding='utf-8') as hosts_file:
-            hosts_file.writelines(new_hosts_lines)
-
-        print("Saved; please reboot afterwards.")
-
-
 def main():
     """
     Main entry point of the script.
@@ -219,9 +276,9 @@ def main():
         add_bashconfig(config)
 
     link_vimrc()
+    install_tools()
     install_pihole()
     apply_pre_push()
-    apply_hostname()
 
     print("\n\nComplete! See ~/syncthing/ubuntu/setup.md for next steps.")
 
