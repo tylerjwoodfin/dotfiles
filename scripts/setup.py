@@ -268,6 +268,7 @@ def main():
     """
     print("Welcome! Let's get you set up.\n")
 
+    install_tools()
     create_ssh_key()
     clone_repos()
 
@@ -276,7 +277,6 @@ def main():
         add_bashconfig(config)
 
     link_vimrc()
-    install_tools()
     install_pihole()
     apply_pre_push()
 

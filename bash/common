@@ -1,7 +1,8 @@
-#!/bin/sh
-
 # Set common folder paths as aliases
-shopt -s cdable_vars
+if [ -n "$BASH_VERSION" ]; then
+    shopt -s cdable_vars
+fi
+
 export notes=$HOME/syncthing/notes
 export docs=$HOME/syncthing/docs
 export logpath=$HOME/syncthing/log
