@@ -124,7 +124,7 @@ def install_tools():
     """
 
     # Check if user is on Ubuntu.
-    if platform.system() != 'Linux' or 'ubuntu' not in platform.platform().lower():
+    if platform.system() != 'Linux':
         print("Skipping tool installation (requires Linux)...")
         return
 
