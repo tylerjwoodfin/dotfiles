@@ -111,96 +111,77 @@ def clone_repos():
         print("Done")
 
 
+import subprocess
+import platform
+
+def validate_yes_no_input(message):
+    # Your validation function logic here.
+    pass
+
 def install_tools():
     """
     Install universal tools
     """
 
-    brave_browser = """
-sudo apt install curl
-sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
-sudo apt update
-sudo apt install brave-browser
-"""
+    # Check if user is on Ubuntu.
+    if platform.system() != 'Linux' or 'ubuntu' not in platform.platform().lower():
+        print("Skipping tool installation (requires Linux)...")
+        return
 
-    # brave browser
-    response = validate_yes_no_input(
-        "Do you want to install Brave Browser? (y/n)\n")
-    if response == 'y':
-        subprocess.run("mkdir -p ~/git && cd ~/git", shell=True, check=True)
-        subprocess.run(
-            brave_browser, shell=True, check=True)
-
-    # fff
-    response = validate_yes_no_input("Do you want to install fff? (y/n)\n")
-    if response == 'y':
-        subprocess.run("mkdir -p ~/git && cd ~/git", shell=True, check=True)
-        subprocess.run(
-            "git clone https://github.com/dylanaraps/fff.git", shell=True, check=True)
-        subprocess.run("cd fff && make install && rm -rf .",
-                       shell=True, check=True)
-
-    # syncthing
-    response = validate_yes_no_input(
-        "Do you want to install syncthing? (y/n)\n")
-    if response == 'y':
-        subprocess.run("sudo apt install apt-transport-https",
-                       shell=True, check=True)
-        signed_by = "signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg"
-        command = (
-            "curl -s https://syncthing.net/release-key.txt | "
-            "gpg --dearmor | "
-            "sudo tee /usr/share/keyrings/syncthing-archive-keyring.gpg >/dev/null |"
-            f'echo "deb [{signed_by}] https://apt.syncthing.net/ syncthing stable" |'
-            'sudo tee /etc/apt/sources.list.d/syncthing.list | '
-            "sudo apt update && sudo apt install syncthing"
-        )
-        subprocess.run(command, shell=True, check=True)
-
-        print("\nTo complete Syncthing setup:")
-        print("visit: https://pimylifeup.com/raspberry-pi-syncthing/\n")
-
-    # input-remapper
-    response = validate_yes_no_input(
-        "Do you want to install input-remapper? (y/n)\n")
-    if response == 'y':
-        commands = [
+    installers = {
+        "Make": [
+            "sudo apt install -y make"
+        ],
+        "Brave Browser": [
+            """
+            sudo apt install curl
+            sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+            echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+            sudo apt update
+            sudo apt install brave-browser
+            """
+        ],
+        "fff": [
+            "mkdir -p ~/git && cd ~/git",
+            "git clone https://github.com/dylanaraps/fff.git",
+            "cd fff && make install && rm -rf .",
+        ],
+        "syncthing": [
+            "sudo apt install apt-transport-https",
+            """
+            curl -s https://syncthing.net/release-key.txt | gpg --dearmor | sudo tee /usr/share/keyrings/syncthing-archive-keyring.gpg >/dev/null;
+            echo "deb [signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list;
+            sudo apt update;
+            sudo apt install syncthing
+            """
+        ],
+        "input-remapper": [
             "sudo apt install git python3-setuptools gettext",
             "git clone https://github.com/sezanzeb/input-remapper.git",
             "cd input-remapper && ./scripts/build.sh",
             "sudo apt install -f ./dist/input-remapper-2.0.0.deb"
-        ]
-
-    # signal
-    response = validate_yes_no_input(
-        "Do you want to install Signal? (y/n)\n")
-    if response == 'y':
-        commands = [
-            "wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg",
-            "cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null",
-            "echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' |\\",
-            "sudo tee /etc/apt/sources.list.d/signal-xenial.list",
-            "sudo apt update && sudo apt install signal-desktop"
-        ]
-
-        for command in commands:
-            subprocess.run(command, shell=True, check=True)
-
-    # copyq
-    response = validate_yes_no_input(
-        "Do you want to install CopyQ (clipboard manager)? (y/n)"
-    )
-
-    if response == 'y':
-        commands = [
+        ],
+        "Signal": [
+            """
+            wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg;
+            cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null;
+            echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' | sudo tee /etc/apt/sources.list.d/signal-xenial.list;
+            sudo apt update;
+            sudo apt install signal-desktop
+            """
+        ],
+        "CopyQ (clipboard manager)": [
             "sudo add-apt-repository ppa:hluk/copyq",
             "sudo apt update",
             "sudo apt install copyq"
         ]
+    }
 
-    for command in commands:
-        subprocess.run(command, shell=True, check=True)
+    for tool, commands in installers.items():
+        response = validate_yes_no_input(f"Do you want to install {tool}? (y/n)\n")
+        if response == 'y':
+            for command in commands:
+                subprocess.run(command, shell=True, check=True)
 
 
 def link_vimrc():
