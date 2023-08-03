@@ -4,7 +4,7 @@
 cloud_commands=("remind" "rmm" "rmmt" "rmmy" "rmmty" "shorten" "diary" "turn" "notes" "docs" "vn" "n", "v")
 
 for cmd in "${cloud_commands[@]}"; do
-    alias "$cmd"="rainbow $cmd"
+    alias "$cmd"="cloud $cmd"
 done
 
 ## desktop-specific
