@@ -1,7 +1,75 @@
-windows/xmousebuttoncontrol/XMouseButtonControl.log
+# set this as your global .gitignore:
+# git config --global core.excludesfile /path/to/this/.gitignore
 
-windows/vscode/*
-!windows/vscode/README.md
-!windows/vscode/User
-windows/vscode/User/*
-!windows/vscode/User/settings.json
+# node dependencies
+/node_modules
+/node_modules
+/.pnp
+.pnp.js
+
+# build outputs
+/coverage
+/build
+/dist/
+/src/*.egg-info
+*.egg-info
+
+# environment files
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+public/*.log
+public/LOG_*
+public/log_*
+log/*
+
+# python cache
+__pycache__/
+__pycache__/
+*.pyc
+*.pyclisted
+
+# machine-specific
+settings.json
+database.json
+cache.json
+*.vscode/*
+
+# miscellaneous
+/temp
+/tmp
+/.sass-cache
+/.next
+/out
+/.nuxt
+/dist/
+
+# compiled output
+*.o
+*.so
+*.dll
+*.exe
+*.out
+*.app
+
+# testing
+/.jest
+/cypress/
+/test_coverage/
+
+# security
+*.pem
+*.key
+*.cert
+*.gpg
+
+# ide
+.vs/
+*.code-workspace
