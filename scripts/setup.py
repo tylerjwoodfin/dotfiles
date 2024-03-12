@@ -27,30 +27,112 @@ def get_user_os():
     os_type = input("Are you running this on (M)acOS, (L)inux, or a (P)hone? ").lower().strip()
     return os_type
 
-def install_things():
+def install_things(user_os):
     """
     Installs selected software from a set of options.
     """
 
     install_options = {
-        "install Pihole": "curl -sSL https://install.pi-hole.net | bash",
-        "install Cabinet": "pip install cabinet",
-        "install RemindMail": "pip install remindmail",
-        "apply Pre-push hooks": "bash ~/git/tools/githooks/apply_pre-push.sh",
-        "link Syncthing's authorized_keys file to your SSH": 
-            "ln ~/syncthing/docs/network/authorized_keys.md ~/.ssh/authorized_keys",
-        "link dotfiles.vim to .vimrc": 'printf "\n\\" added by dotfiles/setup.py\nso \
-~/git/dotfiles/dotfiles.vim\n" >> ~/.vimrc',
-        "link global .gitignore to your Git configuration":
+        "(Linux) install syncthing": [
+            "sudo apt install apt-transport-https",
+            """
+            curl -s https://syncthing.net/release-key.txt | gpg --dearmor |
+            sudo tee /usr/share/keyrings/syncthing-archive-keyring.gpg >/dev/null;
+            echo "deb [signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg] 
+            https://apt.syncthing.net/ syncthing stable" | 
+            sudo tee /etc/apt/sources.list.d/syncthing.list;
+            sudo apt update;
+            sudo apt install syncthing
+            """
+        ],
+        "(MacOS) install syncthing": [
+            "brew install syncthing"
+        ],
+        "clone all repos (Exit if the SSH key is not linked to your Github account)": [
+            f"mkdir -p ~/git && cd ~/git && {CMD_CLONE}"
+        ],
+        "set Git email defaults": [
+            "git config --global user.email \"14207553+tylerjwoodfin@users.noreply.github.com\"",
+            "git config --global user.name \"Tyler Woodfin\""
+        ],
+        "install fff": [
+            "mkdir -p ~/git && cd ~/git",
+            "rm -rf fff && git clone https://github.com/dylanaraps/fff.git",
+            "cd fff && make install && cd ../ && rm -rf fff",
+        ],
+        "install Pihole": [
+            "curl -sSL https://install.pi-hole.net | bash"
+        ],
+        "install Cabinet": [
+            "pip install cabinet"
+        ],
+        "install RemindMail": [
+            "pip install remindmail"
+        ],
+        "apply Pre-push hooks": [
+            "bash ~/git/tools/githooks/apply_pre-push.sh"
+        ],
+        "link Syncthing's authorized_keys file to this device's": [
+            "ln ~/syncthing/docs/network/authorized_keys.md ~/.ssh/authorized_keys"
+        ],
+        "link dotfiles.vim to .vimrc": [
+            'printf "\n\\" added by dotfiles\nso ~/git/dotfiles/dotfiles.vim\n" >> ~/.vimrc'
+        ],
+        "link global .gitignore to your Git configuration": [
             "git config --global core.excludesfile ~/git/dotfiles/.gitignore"
+        ],
+        "(Linux) install CopyQ (clipboard manager)": [
+            "sudo add-apt-repository ppa:hluk/copyq",
+            "sudo apt update",
+            "sudo apt install copyq"
+        ],
+        "(Linux) install Net Tools (for ifconfig)": [
+            "sudo apt install net-tools"
+        ],
+        "(Linux) install Chrome Gnome Shell (for Gnome Extensions": [
+            "sudo apt-get install chrome-gnome-shell"
+        ],
+        "(Linux) install input-remapper": [
+            "sudo apt install git python3-setuptools gettext",
+            "git -C 'input-remapper' pull || \
+            git clone https://github.com/sezanzeb/input-remapper.git",
+            "cd input-remapper && ./scripts/build.sh",
+            "cd input-remapper/dist && sudo apt install '?name(input-remapper.*)'"
+        ],
+        "(Linux) fix the path issue on .bashrc": [
+            "printf \"\n\\\" added by dotfiles/setup.py\n\
+                export PATH=\r$PATH:/home/tyler/.local/bin\n\" >> /home/tyler/.bashrc"
+        ],
     }
 
-    for option, command in install_options.items():
-        response = ask(f"Do you want to install {option}")
+    for option, commands in install_options.items():
+        if user_os != "l" and option.startswith("(Linux)"):
+            continue
+        if user_os != "m" and option.startswith("(MacOS)"):
+            continue
+        response = ask(f"Do you want to {option}?")
 
         if response == "y":
-            subprocess.run(command, shell=True, check=True)
-            print(f"{option} installation complete.")
+            for command in commands:
+                subprocess.run(command, shell=True, check=True)
+            print("✅ Done\n")
+
+    # open links to download the rest
+    cmd_open = "open"
+    if user_os == "l":
+        cmd_open = "xdg-open"
+
+    apps = [
+        "https://spotify.com/download",
+        "https://obsidian.md/download",
+        "https://code.visualstudio.com/download",
+        "https://www.realvnc.com/en/connect/download/vnc/",
+        "https://arc.net/"
+    ]
+
+    print("Opening links to download the rest...\n")
+    for app in apps:
+        subprocess.run(f"{cmd_open} {app}", shell=True, check=True)
 
 def apply_hostname():
     """
@@ -156,7 +238,7 @@ def create_ssh_key(user_os):
         if is_phone == 'n':
             subprocess.run(f'{cmd_install} install git', shell=True, check=True)
             subprocess.run(f'{cmd_install} install jq', shell=True, check=True)
-            subprocess.run("ssh-keygen -f /home/tyler/.ssh/id_rsa -N ''",
+            subprocess.run("ssh-keygen -f ~/.ssh/id_rsa -N ''",
                             shell=True, check=True)
         else:
             print("Trying `pkg install openssh`...")
@@ -166,7 +248,7 @@ def create_ssh_key(user_os):
             subprocess.run("pkg install openssh -y", shell=True, check=True)
 
         print("\n")
-        ssh_key_path = "~/.ssh/id_rsa.pub" if user_os == "m" else "/home/tyler/.ssh/id_rsa.pub"
+        ssh_key_path = "~/.ssh/id_rsa.pub"
         ssh_key = subprocess.check_output(f"cat {ssh_key_path}", shell=True, text=True)
         print(ssh_key)
 
@@ -191,7 +273,6 @@ def main():
         user_os = get_user_os().lower()
 
     print("Welcome! Let's get you set up.\n")
-    print("Before running, make sure you've installed Syncthing")
 
     if user_os == "m":
         # check environment
@@ -218,7 +299,7 @@ def main():
         apply_hostname()
 
     create_ssh_key(user_os)
-    install_things()
+    install_things(user_os)
 
     # Add bash config files to bashrc or bash_profile depending on the OS:
     configs = ['common', 'not-cloud', 'network', 'phone', 'fff']
