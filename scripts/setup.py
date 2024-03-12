@@ -7,7 +7,6 @@ This script sets up devices with proper repos and dotfile bash configurations.
 """
 
 import subprocess
-import platform
 import time
 import os
 
@@ -19,38 +18,198 @@ xargs -L1 git clone
 """
 
 if os.geteuid() != 0:
-    print("\n\n\nWARNING: this script should be run with 'sudo'.")
+    print("\n\n\nWARNING: this script should be run with 'sudo' (not applicable on MacOS).")
 
-def validate_yes_no_input(prompt):
+def get_user_os():
+    """
+    Asks the user for their operating system.
+    """
+    os_type = input("Are you running this on (M)acOS, (L)inux, or a (P)hone? ").lower().strip()
+    return os_type
+
+def install_things(user_os):
+    """
+    Installs selected software from a set of options.
+    """
+
+    install_options = {
+        "(Linux) install syncthing": [
+            "sudo apt install apt-transport-https",
+            """
+            curl -s https://syncthing.net/release-key.txt | gpg --dearmor |
+            sudo tee /usr/share/keyrings/syncthing-archive-keyring.gpg >/dev/null;
+            echo "deb [signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg] 
+            https://apt.syncthing.net/ syncthing stable" | 
+            sudo tee /etc/apt/sources.list.d/syncthing.list;
+            sudo apt update;
+            sudo apt install syncthing
+            """
+        ],
+        "(MacOS) install syncthing": [
+            "brew install syncthing"
+        ],
+        "clone all repos (Exit if the SSH key is not linked to your Github account)": [
+            f"mkdir -p ~/git && cd ~/git && {CMD_CLONE}"
+        ],
+        "set Git email defaults": [
+            "git config --global user.email \"14207553+tylerjwoodfin@users.noreply.github.com\"",
+            "git config --global user.name \"Tyler Woodfin\""
+        ],
+        "install fff": [
+            "mkdir -p ~/git && cd ~/git",
+            "rm -rf fff && git clone https://github.com/dylanaraps/fff.git",
+            "cd fff && make install && cd ../ && rm -rf fff",
+        ],
+        "install Pihole": [
+            "curl -sSL https://install.pi-hole.net | bash"
+        ],
+        "install Cabinet": [
+            "pip install cabinet"
+        ],
+        "install RemindMail": [
+            "pip install remindmail"
+        ],
+        "apply Pre-push hooks": [
+            "bash ~/git/tools/githooks/apply_pre-push.sh"
+        ],
+        "link Syncthing's authorized_keys file to this device's": [
+            "ln ~/syncthing/docs/network/authorized_keys.md ~/.ssh/authorized_keys"
+        ],
+        "link dotfiles.vim to .vimrc": [
+            'printf "\n\\" added by dotfiles\nso ~/git/dotfiles/dotfiles.vim\n" >> ~/.vimrc'
+        ],
+        "link global .gitignore to your Git configuration": [
+            "git config --global core.excludesfile ~/git/dotfiles/.gitignore"
+        ],
+        "(Linux) install CopyQ (clipboard manager)": [
+            "sudo add-apt-repository ppa:hluk/copyq",
+            "sudo apt update",
+            "sudo apt install copyq"
+        ],
+        "(Linux) install Net Tools (for ifconfig)": [
+            "sudo apt install net-tools"
+        ],
+        "(Linux) install Chrome Gnome Shell (for Gnome Extensions": [
+            "sudo apt-get install chrome-gnome-shell"
+        ],
+        "(Linux) install input-remapper": [
+            "sudo apt install git python3-setuptools gettext",
+            "git -C 'input-remapper' pull || \
+            git clone https://github.com/sezanzeb/input-remapper.git",
+            "cd input-remapper && ./scripts/build.sh",
+            "cd input-remapper/dist && sudo apt install '?name(input-remapper.*)'"
+        ],
+        "(Linux) fix the path issue on .bashrc": [
+            "printf \"\n\\\" added by dotfiles/setup.py\n\
+                export PATH=\r$PATH:/home/tyler/.local/bin\n\" >> /home/tyler/.bashrc"
+        ],
+    }
+
+    for option, commands in install_options.items():
+        if user_os != "l" and option.startswith("(Linux)"):
+            continue
+        if user_os != "m" and option.startswith("(MacOS)"):
+            continue
+        response = ask(f"Do you want to {option}?")
+
+        if response == "y":
+            for command in commands:
+                subprocess.run(command, shell=True, check=True)
+            print("✅ Done\n")
+
+    # open links to download the rest
+    cmd_open = "open"
+    if user_os == "l":
+        cmd_open = "xdg-open"
+
+    apps = [
+        "https://spotify.com/download",
+        "https://obsidian.md/download",
+        "https://code.visualstudio.com/download",
+        "https://www.realvnc.com/en/connect/download/vnc/",
+        "https://arc.net/"
+    ]
+
+    print("Opening links to download the rest...\n")
+    for app in apps:
+        subprocess.run(f"{cmd_open} {app}", shell=True, check=True)
+
+def apply_hostname():
+    """
+    Changes the system name to the user input
+    """
+    response = ask("Do you want to rename your system")
+    err_permission = "Permission denied when trying to update /etc/hosts. Run the script with sudo."
+
+    if response == "y":
+        new_hostname = input("Enter the new computer name:\n").strip()
+
+        if os.name == 'posix':
+            current_os = os.uname().sysname.lower()
+            if 'darwin' in current_os:
+                # MacOS
+                subprocess.run(f"sudo scutil --set ComputerName '{new_hostname}'",
+                               shell=True, check=True)
+                subprocess.run(f"sudo scutil --set HostName '{new_hostname}'",
+                               shell=True, check=True)
+                subprocess.run(f"sudo scutil --set LocalHostName '{new_hostname}'",
+                               shell=True, check=True)
+                print(f"System name changed to {new_hostname} on MacOS.")
+            else:
+                # Assuming Linux or other UNIX-like OS
+                try:
+                    with open("/etc/hostname", "w", encoding="utf-8") as hostname_file:
+                        hostname_file.write(new_hostname + "\n")
+                    subprocess.run(f"sudo hostnamectl set-hostname {new_hostname}",
+                                   shell=True, check=True)
+                    print(f"System name changed to {new_hostname}.")
+                except PermissionError:
+                    print("Permission denied. Try running the script with sudo.")
+
+            # Update hostname in /etc/hosts, common for Unix-like systems including MacOS
+            try:
+                with open("/etc/hosts", "r", encoding="utf-8") as hosts_file:
+                    hosts_lines = hosts_file.readlines()
+
+                with open("/etc/hosts", "w", encoding="utf-8") as hosts_file:
+                    for line in hosts_lines:
+                        if "localhost" in line:
+                            hosts_file.write(line)
+                        else:
+                            hosts_file.write(line.replace(os.uname().nodename, new_hostname))
+                print("Hostname in /etc/hosts updated.")
+            except PermissionError:
+                print(err_permission)
+
+def ask(prompt):
     """
     Validates user input for yes/no questions.
     """
     while True:
-        response = input(prompt).lower()
+        response = input(f"{prompt}? (y/n)\n").lower()
         if response in ['y', 'n']:
             return response
         print("Invalid input. Please enter 'y' or 'n'.")
 
-
-def add_bashconfig(config):
+def add_bashconfig(config, user_os):
     """
     Adds bash configs in ../bash to .bashrc.
     """
+
+    config_path_prefix = "/Users/tyler" if user_os == "m" else "/home/tyler"
     while True:
-        response = validate_yes_no_input(
-            f"Do you want to link the {config} config file to bashrc? (y/n)\n"
-        )
+        response = ask(f"Do you want to link the {config} config file to .bashrc")
 
         if response == 'y':
-            config_path = f"/home/tyler/git/dotfiles/bash/{config}"
+            config_path = f"{config_path_prefix}/git/dotfiles/bash/{config}"
             if config == 'network':
-                config_path = "/home/tyler/syncthing/docs/network/alias"
+                config_path = f"{config_path_prefix}/syncthing/docs/network/alias"
                 print(
-                    "\nOK, this requires Tyler's bash config file in syncthing/docs/network.")
+                    "\nOK, this requires Tyler's bash config file in ~/syncthing/docs/network.")
 
             cmd_bashrc = f"""printf "\n# added by dotfiles/setup.py\n""" \
                 f"""if [ -f {config_path} ]; then\n""" \
-                f"""    source {config_path}\nfi\n" >> /home/tyler/.bashrc """
+                f"""    source {config_path}\nfi\n" >> {config_path_prefix}/.bashrc """
 
             subprocess.run(cmd_bashrc, shell=True, check=True)
             print("Done")
@@ -59,22 +218,28 @@ def add_bashconfig(config):
             break
 
 
-def create_ssh_key():
+def create_ssh_key(user_os):
     """
     Creates an SSH key.
     """
-    response = validate_yes_no_input(
-        "Do you need an SSH key? (this will overwrite any existing keys!) (y/n)\n")
+    response = ask(
+        "Do you need an SSH key? (this will overwrite any existing keys!)")
 
     if response == 'y':
-        is_phone = validate_yes_no_input(
+        subprocess.run('ssh-keygen -f ~/.ssh/id_rsa -N ""', shell=True, check=True)
+
+        cmd_install = "sudo apt"
+        if user_os == "m":
+            cmd_install = "brew"
+
+        is_phone = ask(
             "Is this an Android phone? This determines how your key is generated. (y/n)\n")
 
         if is_phone == 'n':
-            subprocess.run('sudo apt install git', shell=True, check=True)
-            subprocess.run('sudo apt install jq', shell=True, check=True)
-            subprocess.run("ssh-keygen -f /home/tyler/.ssh/id_rsa -N ''",
-                           shell=True, check=True)
+            subprocess.run(f'{cmd_install} install git', shell=True, check=True)
+            subprocess.run(f'{cmd_install} install jq', shell=True, check=True)
+            subprocess.run("ssh-keygen -f ~/.ssh/id_rsa -N ''",
+                            shell=True, check=True)
         else:
             print("Trying `pkg install openssh`...")
             print(
@@ -83,11 +248,11 @@ def create_ssh_key():
             subprocess.run("pkg install openssh -y", shell=True, check=True)
 
         print("\n")
-        ssh_key = subprocess.check_output(
-            "cat /home/tyler/.ssh/id_rsa.pub", shell=True, text=True)
+        ssh_key_path = "~/.ssh/id_rsa.pub"
+        ssh_key = subprocess.check_output(f"cat {ssh_key_path}", shell=True, text=True)
         print(ssh_key)
 
-        if is_phone == 'y':
+        if user_os != "m" and is_phone == 'y':
             print("Trying to copy this to your clipboard... one sec")
             time.sleep(1)
             print(
@@ -99,137 +264,49 @@ def create_ssh_key():
 
     print("\nAt this point, you should have an SSH key from this device added to Github.")
 
-
-def install_tools():
-    """
-    Install universal tools
-    """
-
-    # Check if user is on Ubuntu.
-    if platform.system() != 'Linux':
-        print("Skipping tool installation (requires Linux)...")
-        return
-
-    installers = {
-        "install Pip": [
-            "sudo apt install python3-pip"
-        ],
-        "install npm": [
-            "sudo apt-get install npm"
-        ],
-        "install Make": [
-            "sudo apt install -y make"
-        ],
-        "clone all repos (Do not press 'y' if the SSH key is not linked to your Github account)": [
-            f"mkdir -p /home/tyler/git; cd /home/tyler/git; {CMD_CLONE}"
-        ],
-        "set Git email defaults": [
-            "git config --global user.email \"14207553+tylerjwoodfin@users.noreply.github.com\"",
-            "git config --global user.name \"Tyler Woodfin\""
-        ],
-        "install Brave Browser": [
-            """
-            sudo apt install curl
-            sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-            echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
-            sudo apt update
-            sudo apt install brave-browser
-            """
-        ],
-        "install fff": [
-            "mkdir -p /home/tyler/git && cd /home/tyler/git",
-            "rm -rf fff && git clone https://github.com/dylanaraps/fff.git",
-            "cd fff && make install && cd ../ && rm -rf fff",
-        ],
-        "install syncthing": [
-            "sudo apt install apt-transport-https",
-            """
-            curl -s https://syncthing.net/release-key.txt | gpg --dearmor | sudo tee /usr/share/keyrings/syncthing-archive-keyring.gpg >/dev/null;
-            echo "deb [signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list;
-            sudo apt update;
-            sudo apt install syncthing
-            """
-        ],
-        "install input-remapper": [
-            "sudo apt install git python3-setuptools gettext",
-            "git -C 'input-remapper' pull || git clone https://github.com/sezanzeb/input-remapper.git",
-            "cd input-remapper && ./scripts/build.sh",
-            "cd input-remapper/dist && sudo apt install '?name(input-remapper.*)'"
-        ],
-        "install Signal": [
-            """
-            wget -O- https://updates.signal.org/desktop/apt/keys.asc | gpg --dearmor > signal-desktop-keyring.gpg;
-            cat signal-desktop-keyring.gpg | sudo tee /usr/share/keyrings/signal-desktop-keyring.gpg > /dev/null;
-            echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/signal-desktop-keyring.gpg] https://updates.signal.org/desktop/apt xenial main' | sudo tee /etc/apt/sources.list.d/signal-xenial.list;
-            sudo apt update;
-            sudo apt install signal-desktop
-            """
-        ],
-        "install CopyQ (clipboard manager)": [
-            "sudo add-apt-repository ppa:hluk/copyq",
-            "sudo apt update",
-            "sudo apt install copyq"
-        ],
-        "install Net Tools (for ifconfig)": [
-            "sudo apt install net-tools"
-        ],
-        "install Chrome Gnome Shell (for Gnome Extensions": [
-            "sudo apt-get install chrome-gnome-shell"
-        ],
-        "install openssh-server (required for enabling SSH)": [
-            "sudo apt install openssh-server"
-        ],
-        "install Pihole": [
-            "curl -sSL https://install.pi-hole.net | bash"
-        ],
-        "fix the path issue on .bashrc": [
-            "printf \"\n\\\" added by dotfiles/setup.py\nexport PATH=\$PATH:/home/tyler/.local/bin\n\" >> /home/tyler/.bashrc"
-        ],
-        "install Cabinet": [
-            "pip install pymongo && pip install cabinet"
-        ],
-        "install RemindMail": [
-            "curl https://raw.githubusercontent.com/tylerjwoodfin/remindmail/main/requirements.md | pip install -r /dev/stdin && pip install remindmail"
-        ],
-        "setup Dashboard": [
-            "sudo npm install -g forever",
-            "rm -rf /var/www/html/dashboard",
-            "ln -s /home/tyler/git/dashboard /var/www/html/dashboard",
-            "npm install"
-        ],
-        "link dotfiles.vim to .vimrc": [
-            "printf \"\n\\\" added by dotfiles/setup.py\nso /home/tyler/git/dotfiles/dotfiles.vim\n\" >> /home/tyler/.vimrc"
-        ],
-        "apply pre-push hooks to all repos (requires repos to exist first)": [
-            "bash /home/tyler/git/tools/githooks/apply_pre-push.sh"
-        ],
-        "link Syncthing's authorized keys to this device's": [
-            "ln /home/tyler/syncthing/network/ssh/authorized_keys /home/tyler/.ssh/authorized_keys"
-        ]
-
-    }
-
-    for tool, commands in installers.items():
-        response = validate_yes_no_input(f"Do you want to {tool}? (y/n)\n")
-        if response == 'y':
-            for command in commands:
-                subprocess.run(command, shell=True, check=True)
-                print("Done\n")
-
 def main():
     """
     Main entry point of the script.
     """
+    user_os = ""
+    while user_os not in ['l', 'm', 'p']:
+        user_os = get_user_os().lower()
+
     print("Welcome! Let's get you set up.\n")
 
-    create_ssh_key()
-    install_tools()
+    if user_os == "m":
+        # check environment
+        shell_env = os.environ.get("SHELL")
+        if shell_env:
+            if "bash" in shell_env:
+                print("Bash is the default shell.")
+            elif "zsh" in shell_env:
+                # sets shell to bash
+                os.system("chsh -s /bin/bash")
+                print("Bash is now the default shell. Please re-run this script.")
+                exit()
 
-    # Add bash config files to bashrc:
-    for config in ['common', 'not-cloud', 'network', 'phone', 'fff']:
-        add_bashconfig(config)    
+        # check if homebrew is installed
+        if not os.path.exists("/usr/local/bin/brew"):
+            print("Installing Brew...")
+            brew_install_cmd = (
+                '/bin/bash -c "$(curl -fsSL '
+                'https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+            )
+            os.system(brew_install_cmd)
+            exit()
+    else:
+        apply_hostname()
 
-    print("\n\nComplete! See /home/tyler/syncthing/docs/ubuntu/setup.md for next steps.")
+    create_ssh_key(user_os)
+    install_things(user_os)
+
+    # Add bash config files to bashrc or bash_profile depending on the OS:
+    configs = ['common', 'not-cloud', 'network', 'phone', 'fff']
+    for config in configs:
+        add_bashconfig(config, user_os)
+
+    print("\n\nComplete! See ~/syncthing/docs for next steps.")
 
 
 if __name__ == "__main__":
