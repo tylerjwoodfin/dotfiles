@@ -7,6 +7,7 @@ set shiftwidth=4
 set ignorecase
 set hls
 set diffopt+=vertical
+set linebreak
 
 " remind.md syntax highlight
 syntax match dateTokenMatch /\[\zs.\{-}\ze\]/ containedin=ALL contains=dateTokenCommandMatch,dateTokenDeleteMatch
