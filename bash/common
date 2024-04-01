@@ -4,6 +4,7 @@
 shopt -s cdable_vars
 export notes=$HOME/syncthing/notes
 export docs=$HOME/syncthing/docs
+export work=$HOME/syncthing/work
 export logpath=$HOME/syncthing/log
 export cabinet=$HOME/syncthing/cabinet/settings.json
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
