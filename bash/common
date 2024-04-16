@@ -104,7 +104,7 @@ rmmy() {
 }
 
 rmmty() {
-    remind -d tomorrow --noconfirm -m "$*"
+    remind --title "$*" --when "tomorrow" --save
 }
 
 alias rmm='remind'
