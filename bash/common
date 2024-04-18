@@ -96,11 +96,11 @@ alias v='python3 ~/git/voicegpt/main.py'
 
 # remindmail - see https://github.com/tylerjwoodfin/remindmail
 rmmt() {
-    remind -d tomorrow -m "$*"
+    remind --title "$*" --when "tomorrow"
 }
 
 rmmy() {
-    remind --noconfirm -d now -m "$*"
+    remind --title "$*" --when "now" --save
 }
 
 rmmty() {
