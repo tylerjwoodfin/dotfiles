@@ -123,6 +123,7 @@ alias rmmtit='remind -ti --board Shopping --list-name Tyler'
 alias rmmta='remind -ta'
 alias rmmtai='remind -ta --board Shopping --list-name Tyler --item-name'
 alias rmmtais='remind -ta --board Shopping --list-name Shared --item-name'
+alias one-more-hour='python3 /home/tyler/git/tools/pihole/one_more_hour.py'
 
 # Check weather
 alias weather='curl wttr.in/?2QF'
