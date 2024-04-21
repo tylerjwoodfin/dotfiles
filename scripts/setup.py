@@ -3,7 +3,7 @@
 """
 setup.py
 
-This script sets up devices with proper repos and dotfile bash configurations.
+This script sets up devices with proper repos and dotfile zsh configurations.
 """
 
 import subprocess
@@ -70,7 +70,7 @@ def install_things(user_os):
             "pip install remindmail"
         ],
         "apply Pre-push hooks": [
-            "bash ~/git/tools/githooks/apply_pre-push.sh"
+            "zsh ~/git/tools/githooks/apply_pre-push.sh"
         ],
         "link Syncthing's authorized_keys file to this device's": [
             "ln ~/syncthing/docs/network/authorized_keys.md ~/.ssh/authorized_keys"
@@ -99,9 +99,9 @@ def install_things(user_os):
             "cd input-remapper && ./scripts/build.sh",
             "cd input-remapper/dist && sudo apt install '?name(input-remapper.*)'"
         ],
-        "(Linux) fix the path issue on .bashrc": [
+        "(Linux) fix the path issue on .zshrc": [
             "printf \"\n\\\" added by dotfiles/setup.py\n\
-                export PATH=\r$PATH:/home/tyler/.local/bin\n\" >> /home/tyler/.bashrc"
+                export PATH=\r$PATH:/home/tyler/.local/bin\n\" >> /home/tyler/.zshrc"
         ],
     }
 
@@ -191,27 +191,27 @@ def ask(prompt):
             return response
         print("Invalid input. Please enter 'y' or 'n'.")
 
-def add_bashconfig(config, user_os):
+def add_zshconfig(config, user_os):
     """
-    Adds bash configs in ../bash to .bashrc.
+    Adds zsh configs in ../zsh to .zshrc.
     """
 
     config_path_prefix = "/Users/tyler" if user_os == "m" else "/home/tyler"
     while True:
-        response = ask(f"Do you want to link the {config} config file to .bashrc")
+        response = ask(f"Do you want to link the {config} config file to .zshrc")
 
         if response == 'y':
-            config_path = f"{config_path_prefix}/git/dotfiles/bash/{config}"
+            config_path = f"{config_path_prefix}/git/dotfiles/zsh/{config}"
             if config == 'network':
                 config_path = f"{config_path_prefix}/syncthing/docs/network/alias"
                 print(
-                    "\nOK, this requires Tyler's bash config file in ~/syncthing/docs/network.")
+                    "\nOK, this requires Tyler's zsh config file in ~/syncthing/docs/network.")
 
-            cmd_bashrc = f"""printf "\n# added by dotfiles/setup.py\n""" \
+            cmd_zshrc = f"""printf "\n# added by dotfiles/setup.py\n""" \
                 f"""if [ -f {config_path} ]; then\n""" \
-                f"""    source {config_path}\nfi\n" >> {config_path_prefix}/.bashrc """
+                f"""    source {config_path}\nfi\n" >> {config_path_prefix}/.zshrc """
 
-            subprocess.run(cmd_bashrc, shell=True, check=True)
+            subprocess.run(cmd_zshrc, shell=True, check=True)
             print("Done")
             break
         if response == 'n':
@@ -278,19 +278,19 @@ def main():
         # check environment
         shell_env = os.environ.get("SHELL")
         if shell_env:
-            if "bash" in shell_env:
-                print("Bash is the default shell.")
+            if "zsh" in shell_env:
+                print("zsh is the default shell.")
             elif "zsh" in shell_env:
-                # sets shell to bash
-                os.system("chsh -s /bin/bash")
-                print("Bash is now the default shell. Please re-run this script.")
+                # sets shell to zsh
+                os.system("chsh -s /bin/zsh")
+                print("zsh is now the default shell. Please re-run this script.")
                 exit()
 
         # check if homebrew is installed
         if not os.path.exists("/usr/local/bin/brew"):
             print("Installing Brew...")
             brew_install_cmd = (
-                '/bin/bash -c "$(curl -fsSL '
+                '/bin/zsh -c "$(curl -fsSL '
                 'https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
             )
             os.system(brew_install_cmd)
@@ -301,10 +301,10 @@ def main():
     create_ssh_key(user_os)
     install_things(user_os)
 
-    # Add bash config files to bashrc or bash_profile depending on the OS:
+    # Add zsh config files to zshrc or zsh_profile depending on the OS:
     configs = ['common', 'not-cloud', 'network', 'phone', 'fff']
     for config in configs:
-        add_bashconfig(config, user_os)
+        add_zshconfig(config, user_os)
 
     print("\n\nComplete! See ~/syncthing/docs for next steps.")
 
