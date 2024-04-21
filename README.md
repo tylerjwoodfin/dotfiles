@@ -8,29 +8,29 @@ Configuration files meant to make my life easier- maybe yours, too!
 
 # manual setup
 
-- Add to .bashrc:
+- Add to .zshrc:
 
 ## common (all devices)
 
 ```
-if [ -f ~/git/dotfiles/alias/common ]; then
-    source ~/git/dotfiles/alias/common
+if [ -f ~/git/dotfiles/zsh/common ]; then
+    source ~/git/dotfiles/zsh/common
 fi
 ```
 
 ## desktop
 
 ```
-if [ -f ~/git/dotfiles/alias/desktop ]; then
-    source ~/git/dotfiles/alias/desktop
+if [ -f ~/git/dotfiles/zsh/desktop ]; then
+    source ~/git/dotfiles/zsh/desktop
 fi
 ```
 
 # pi
 
 ```
-if [ -f ~/git/dotfiles/alias/pi ]; then
-    source ~/git/dotfiles/alias/pi
+if [ -f ~/git/dotfiles/zsh/pi ]; then
+    source ~/git/dotfiles/zsh/pi
 fi
 ```
 
