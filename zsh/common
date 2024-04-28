@@ -112,12 +112,13 @@ rmm() {
     eval $cmd
 }
 
-alias rmmy='rmm --save'
-
 rmmt() {
     remind --title "$*" --when "tomorrow"
 }
 
+rmmy() {
+    remind --title "$*" --when "now" --save
+}
 
 rmmty() {
     remind --title "$*" --when "tomorrow" --save
