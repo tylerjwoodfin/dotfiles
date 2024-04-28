@@ -95,19 +95,34 @@ alias lofi='bash ~/git/tools/lofi.sh'
 alias v='python3 ~/git/voicegpt/main.py'
 
 # remindmail - see https://github.com/tylerjwoodfin/remindmail
+rmm() {
+    local save=""
+    if [[ "$1" == "--save" ]]; then
+        save="--save"
+        shift
+    fi
+
+    local input="$*"
+    local parts=("${(@s/,/)input}")
+
+    local when=$(echo "${parts[1]}" | xargs)
+    local title=$(echo "${parts[2]}" | xargs)
+    local cmd="remind --title '$title' --when '$when' $save"
+
+    eval $cmd
+}
+
+alias rmmy='rmm --save'
+
 rmmt() {
     remind --title "$*" --when "tomorrow"
 }
 
-rmmy() {
-    remind --title "$*" --when "now" --save
-}
 
 rmmty() {
     remind --title "$*" --when "tomorrow" --save
 }
 
-alias rmm='remind'
 alias rmmt='rmmt'
 alias rmmy='rmmy'
 alias rmmty='rmmty'
