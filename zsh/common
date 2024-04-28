@@ -123,7 +123,6 @@ rmmty() {
     remind --title "$*" --when "tomorrow" --save
 }
 
-# alias rmm='remind'
 alias rmmt='rmmt'
 alias rmmy='rmmy'
 alias rmmty='rmmty'
