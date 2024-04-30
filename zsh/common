@@ -5,6 +5,7 @@ setopt cdablevars
 export notes=$HOME/syncthing/notes
 export docs=$HOME/syncthing/docs
 export work=$HOME/syncthing/work
+export workt=$HOME/syncthing/work/todo.md
 export logpath=$HOME/syncthing/log
 export cabinet=$HOME/syncthing/cabinet/settings.json
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
@@ -129,13 +130,33 @@ rmmt() {
 }
 
 rmmy() {
-    remind --title "$*" --when "now" --save
+    rmm --save "$@"
 }
 
 rmmty() {
     remind --title "$*" --when "tomorrow" --save
 }
 
+worka() {
+    # adds to work todo list
+    local file_path="$HOME/syncthing/work/todo.md"
+    local new_task="- [ ] # $*"
+    
+    # insert the new task below the "## to do" header
+    awk -v task="$new_task" '
+    BEGIN {added = 0} # Flag to check if task is added
+    {
+        if ($0 ~ /^## to do/ && added == 0) { # Find the "## to do" header
+            print $0 # Print the header
+            print task # Print the new task right after the header
+            added = 1 # Set the flag to avoid adding task again
+        } else {
+            print $0 # Print other lines as they are
+        }
+    }' "$file_path" > tmpfile && mv tmpfile "$file_path"
+}
+
+alias worka='worka'
 alias rmmt='rmmt'
 alias rmmy='rmmy'
 alias rmmty='rmmty'
