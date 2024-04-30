@@ -105,9 +105,21 @@ rmm() {
     local input="$*"
     local parts=("${(@s/,/)input}")
 
-    local when=$(echo "${parts[1]}" | xargs)
-    local title=$(echo "${parts[2]}" | xargs)
-    local cmd="remind --title '$title' --when '$when' $save"
+    local when=""
+    local title=""
+
+    if [[ ${#parts[@]} -eq 1 ]]; then
+        # Only one part present, treat it as title
+        title=$(echo "${parts[1]}" | xargs)
+    else
+        # More than one part, assume the first is 'when' and second is 'title'
+        when=$(echo "${parts[1]}" | xargs)
+        title=$(echo "${parts[2]}" | xargs)
+    fi
+
+    local cmd="remind --title '$title'"
+    [[ -n $when ]] && cmd+=" --when '$when'"
+    [[ -n $save ]] && cmd+=" $save"
 
     eval $cmd
 }
