@@ -137,6 +137,10 @@ rmmty() {
     remind --title "$*" --when "tomorrow" --save
 }
 
+rmml() {
+    remind --title "$*" --when "later"
+}
+
 worka() {
     # adds to work todo list
     local file_path="$HOME/syncthing/work/todo.md"
@@ -160,10 +164,9 @@ alias worka='worka'
 alias rmmt='rmmt'
 alias rmmy='rmmy'
 alias rmmty='rmmty'
-alias rmml='remind -ls'
-alias rmmls='remind -ls'
+alias rmml='rmml'
+alias rmmsl='rmm --later'
 alias rmme='remind --edit'
-alias rmmlse='remind --edit'
 alias rmmst='remind --show-tomorrow'
 alias rmmsw='remind --show-week'
 alias rmmj='remind --jira'
