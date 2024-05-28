@@ -73,7 +73,7 @@ def install_things(user_os):
             "zsh ~/git/tools/githooks/apply_pre-push.sh"
         ],
         "link Syncthing's authorized_keys file to this device's": [
-            "ln ~/syncthing/docs/network/authorized_keys.md ~/.ssh/authorized_keys"
+            "ln ~/syncthing/md/docs/network/authorized_keys.md ~/.ssh/authorized_keys"
         ],
         "link dotfiles.vim to .vimrc": [
             'printf "\n\\" added by dotfiles\nso ~/git/dotfiles/dotfiles.vim\n" >> ~/.vimrc'
@@ -203,9 +203,9 @@ def add_zshconfig(config, user_os):
         if response == 'y':
             config_path = f"{config_path_prefix}/git/dotfiles/zsh/{config}"
             if config == 'network':
-                config_path = f"{config_path_prefix}/syncthing/docs/network/alias"
+                config_path = f"{config_path_prefix}/syncthing/md/docs/network/alias"
                 print(
-                    "\nOK, this requires Tyler's zsh config file in ~/syncthing/docs/network.")
+                    "\nOK, this requires Tyler's zsh config file in ~/syncthing/md/docs/network.")
 
             cmd_zshrc = f"""printf "\n# added by dotfiles/setup.py\n""" \
                 f"""if [ -f {config_path} ]; then\n""" \
@@ -306,7 +306,7 @@ def main():
     for config in configs:
         add_zshconfig(config, user_os)
 
-    print("\n\nComplete! See ~/syncthing/docs for next steps.")
+    print("\n\nComplete! See ~/syncthing/md/docs for next steps.")
 
 
 if __name__ == "__main__":

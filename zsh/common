@@ -2,10 +2,10 @@
 
 # Set common folder paths as aliases
 setopt cdablevars
-export notes=$HOME/syncthing/notes
-export docs=$HOME/syncthing/docs
-export work=$HOME/syncthing/work
-export workt=$HOME/syncthing/work/todo.md
+export notes=$HOME/syncthing/md/notes
+export docs=$HOME/syncthing/md/docs
+export work=$HOME/syncthing/md/work
+export workt=$HOME/syncthing/md/work/todo.md
 export logpath=$HOME/syncthing/log
 export cabinet=$HOME/syncthing/cabinet/settings.json
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
@@ -89,9 +89,9 @@ alias yt='python3 ~/git/tools/yt/main.py'
 alias pitest='python3 ~/git/testfolder/test.py'
 alias pibuild='python3 ~/git/tools/build/build.py'
 alias turn='python3 ~/git/tools/kasalights/main.py'
-alias notes='fff ~/syncthing/notes'
-alias docs='fff ~/syncthing/docs'
-alias work='fff ~/syncthing/work'
+alias notes='fff ~/syncthing/md/notes'
+alias docs='fff ~/syncthing/md/docs'
+alias work='fff ~/syncthing/md/work'
 alias lofi='bash ~/git/tools/lofi.sh'
 alias v='python3 ~/git/voicegpt/main.py'
 
@@ -143,7 +143,7 @@ rmml() {
 
 worka() {
     # adds to work todo list
-    local file_path="$HOME/syncthing/work/todo.md"
+    local file_path="$HOME/syncthing/md/work/todo.md"
     local new_task="- [ ] # $*"
     
     # insert the new task below the "## to do" header
