@@ -51,6 +51,13 @@ def install_things(user_os):
         "clone all repos (Exit if the SSH key is not linked to your Github account)": [
             f"mkdir -p ~/git && cd ~/git && {CMD_CLONE}"
         ],
+        "(MacOS) run mac.sh to set defaults (must have ~/git/dotfiles/mac.sh)": [
+            "zsh ~/git/dotfiles/mac.sh"
+        ],
+        "set Borg passphrase": [
+            r'read -s -p "Enter Borg passphrase: " BORG_PASSPHRASE && echo \
+                "export BORG_PASSPHRASE=\'$BORG_PASSPHRASE\'" >> ~/.zshrc && source ~/.zshrc'
+        ],
         "set Git email defaults": [
             "git config --global user.email \"14207553+tylerjwoodfin@users.noreply.github.com\"",
             "git config --global user.name \"Tyler Woodfin\""
