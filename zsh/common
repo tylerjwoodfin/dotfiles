@@ -47,6 +47,10 @@ alias ncal='ncal -B1 -A1'
 # Use vim as default editor
 export EDITOR='vim'
 
+# fff config
+export FFF_KEY_CHILD2="off"
+export FFF_KEY_PARENT2="off"
+
 # Quick navigation aliases
 alias cdto='cd ~/git/tools'
 alias cddo='cd ~/git/dotfiles'
