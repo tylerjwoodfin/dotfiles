@@ -76,7 +76,8 @@ def install_things(user_os):
             "ln ~/syncthing/md/docs/network/authorized_keys.md ~/.ssh/authorized_keys"
         ],
         "link dotfiles.vim to .vimrc": [
-            'printf "\n\\" added by dotfiles\nso ~/git/dotfiles/dotfiles.vim\n" >> ~/.vimrc'
+            'printf "\n\\" added by dotfiles\nso ~/git/dotfiles/dotfiles.vim\n" >> ~/.vimrc',
+           "mkdir -p ~/.config/nvim && cp ~/.vimrc ~/.config/nvim/init.vim" 
         ],
         "link global .gitignore to your Git configuration": [
             "git config --global core.excludesfile ~/git/dotfiles/.gitignore"
