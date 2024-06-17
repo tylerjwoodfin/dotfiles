@@ -48,6 +48,12 @@ def install_things(user_os):
         "(MacOS) install syncthing": [
             "brew install syncthing"
         ],
+        "(MacOS) install neovim": [
+            "brew install neovim"
+        ],
+        "(Linux) install neovim": [
+          "sudo apt install neovim"  
+        ],
         "clone all repos (Exit if the SSH key is not linked to your Github account)": [
             f"mkdir -p ~/git && cd ~/git && {CMD_CLONE}"
         ],
@@ -75,7 +81,7 @@ def install_things(user_os):
         "link Syncthing's authorized_keys file to this device's": [
             "ln ~/syncthing/md/docs/network/authorized_keys.md ~/.ssh/authorized_keys"
         ],
-        "link dotfiles.vim to .vimrc": [
+        "link dotfiles.vim to .vimrc and ~/.config/nvim/init.vim": [
             'printf "\n\\" added by dotfiles\nso ~/git/dotfiles/dotfiles.vim\n" >> ~/.vimrc',
            "mkdir -p ~/.config/nvim && cp ~/.vimrc ~/.config/nvim/init.vim" 
         ],
