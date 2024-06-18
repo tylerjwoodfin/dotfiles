@@ -10,7 +10,7 @@ export logpath=$HOME/syncthing/log
 export cabinet=$HOME/syncthing/cabinet/settings.json
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
 
-# Function: Edit a file in $notes with vim
+# Function: Edit a file in $notes with nvim
 vn() {
     if [[ -z "$1" ]]; then
         echo "Error: No argument provided"
@@ -20,7 +20,7 @@ vn() {
     # Strip '.md' if necessary
     filename="${1%%.md}"
 
-    vim "$notes/$filename.md"
+    nvim "$notes/$filename.md"
 }
 
 # Function: Retrieve the path of a file in $notes
@@ -44,8 +44,9 @@ alias ls='ls -hal --color'
 alias cal='cal -B1 -A1; echo -e "\nUse ncal to display horizontally"'
 alias ncal='ncal -B1 -A1'
 
-# Use vim as default editor
-export EDITOR='vim'
+# Use nvim as default editor
+export EDITOR='nvim'
+alias vim='nvim'
 
 # fff config
 export FFF_KEY_CHILD2="off"
