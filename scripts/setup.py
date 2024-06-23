@@ -298,7 +298,9 @@ def main():
 
         sudoers_entry = "tyler ALL=(ALL) NOPASSWD: ALL"
         check_command = f"grep -q '{sudoers_entry}' /etc/sudoers"
-        add_command = f"echo '{sudoers_entry}' | sudo EDITOR='tee -a' visudo"
+        add_command = f"echo '{sudoers_entry}' >> /etc/sudoers"
+
+        os.system(f"{check_command} || {add_command}")
 
         os.system(f"{check_command} || {add_command}")
     if shell_env:
