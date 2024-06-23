@@ -30,11 +30,14 @@ xargs -I {} git clone {}
 
         print("Welcome! Let's get you set up.\n")
 
+        if self.user_os == 'p':
+            print("For iOS devices, please run this from 'root' in iSH.\n")
+
         # check environment
         shell_env = os.environ.get("SHELL")
 
         if self.user_os == "p":
-            packages = ["zsh", "vim", "curl", "neovim", "openssh", "git", "jq"]
+            packages = ["zsh", "vim", "curl", "neovim", "openssh", "git", "jq", "make"]
             for package in packages:
                 if os.system(f"apk info -e {package}") != 0:
                     os.system(f"apk add {package}")
@@ -42,8 +45,6 @@ xargs -I {} git clone {}
             sudoers_entry = "tyler ALL=(ALL) NOPASSWD: ALL"
             check_command = f"grep -q '{sudoers_entry}' /etc/sudoers"
             add_command = f"echo '{sudoers_entry}' >> /etc/sudoers"
-
-            os.system(f"{check_command} || {add_command}")
 
             os.system(f"{check_command} || {add_command}")
         if shell_env:
@@ -187,7 +188,7 @@ xargs -I {} git clone {}
                 continue
             if self.user_os != "m" and option.startswith("(MacOS)"):
                 continue
-            response = self.ask(f"Do you want to {option}?")
+            response = self.ask(f"Do you want to {option}")
 
             if response == "y":
                 for command in commands:
@@ -203,13 +204,14 @@ xargs -I {} git clone {}
             "https://spotify.com/download",
             "https://obsidian.md/download",
             "https://code.visualstudio.com/download",
-            "https://www.realvnc.com/en/connect/download/vnc/",
+            "https://github.com/rustdesk/rustdesk/releases"
             "https://arc.net/"
         ]
 
-        print("Opening links to download the rest...\n")
-        for app in apps:
-            subprocess.run(f"{cmd_open} {app}", shell=True, check=True)
+        if self.user_os != 'p':
+            print("Opening links to download the rest...\n")
+            for app in apps:
+                subprocess.run(f"{cmd_open} {app}", shell=True, check=True)
 
     def apply_hostname(self):
         """
