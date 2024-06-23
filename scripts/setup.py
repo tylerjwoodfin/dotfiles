@@ -299,14 +299,20 @@ xargs -L1 git clone
         """
         Creates an SSH key.
         """
+        ssh_dir = os.path.expanduser(f"{self.config_path_prefix}/.ssh")
+        if not os.path.exists(ssh_dir):
+            os.makedirs(ssh_dir)
+            print(f"Created directory: {ssh_dir}")
+
         response = self.ask(
-            ("Do you need an SSH key?",
-             f"(this will overwrite any existing keys in {self.config_path_prefix}!)"))
+            "Do you need an SSH key? "
+            f"(this will overwrite any existing keys in {self.config_path_prefix}/.ssh!)"
+        )
 
         if response == 'y':
             subprocess.run(f'ssh-keygen -f {self.config_path_prefix}/.ssh/id_rsa -N ""',
-                           shell=True,
-                           check=True)
+                        shell=True,
+                        check=True)
 
             cmd_install = "sudo apt"
             if self.user_os == "m":
