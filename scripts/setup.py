@@ -15,7 +15,7 @@ class Setup:
 UserName=tylerjwoodfin; \
 curl -s https://api.github.com/users/$UserName/repos?per_page=1000 | \
 jq -r '.[]|.ssh_url' | \
-xargs -L1 git clone
+xargs -I {} git clone {}
 """
     user_os = ""
     config_path_prefix = "/home/tyler"
