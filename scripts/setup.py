@@ -288,18 +288,29 @@ def main():
 
     print("Welcome! Let's get you set up.\n")
 
-    if user_os == "m":
-        # check environment
-        shell_env = os.environ.get("SHELL")
-        if shell_env:
-            if "zsh" in shell_env:
-                print("zsh is the default shell.")
-            elif "zsh" in shell_env:
-                # sets shell to zsh
-                os.system("chsh -s /bin/zsh")
-                print("zsh is now the default shell. Please re-run this script.")
-                exit()
+    # check environment
+    shell_env = os.environ.get("SHELL")
 
+    if user_os == "p":
+        packages = ["zsh", "vim", "curl", "neovim", "openssh"]
+        for package in packages:
+            os.system(f"apk add {package}")
+
+        sudoers_entry = "tyler ALL=(ALL) NOPASSWD: ALL"
+        check_command = f"grep -q '{sudoers_entry}' /etc/sudoers"
+        add_command = f"echo '{sudoers_entry}' | sudo EDITOR='tee -a' visudo"
+
+        os.system(f"{check_command} || {add_command}")
+    if shell_env:
+        if "zsh" in shell_env:
+            print("zsh is the default shell.")
+        elif "zsh" in shell_env:
+            # sets shell to zsh
+            os.system("chsh -s /bin/zsh")
+            print("zsh is now the default shell. Please re-run this script.")
+            exit()
+
+    if user_os == "m":
         # check if homebrew is installed
         if not os.path.exists("/usr/local/bin/brew"):
             print("Installing Brew...")
