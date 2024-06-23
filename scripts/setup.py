@@ -34,9 +34,10 @@ xargs -L1 git clone
         shell_env = os.environ.get("SHELL")
 
         if self.user_os == "p":
-            packages = ["zsh", "vim", "curl", "neovim", "openssh", "git"]
+            packages = ["zsh", "vim", "curl", "neovim", "openssh", "git", "jq"]
             for package in packages:
-                os.system(f"apk add {package}")
+                if os.system(f"apk info -e {package}") != 0:
+                    os.system(f"apk add {package}")
 
             sudoers_entry = "tyler ALL=(ALL) NOPASSWD: ALL"
             check_command = f"grep -q '{sudoers_entry}' /etc/sudoers"
@@ -93,6 +94,7 @@ xargs -L1 git clone
         Installs selected software from a set of options.
         """
 
+        git = f"{self.config_path_prefix}/git"
         install_options = {
             "(Linux) install syncthing": [
                 "sudo apt install apt-transport-https",
@@ -116,10 +118,10 @@ xargs -L1 git clone
             "sudo apt install neovim"  
             ],
             "clone all repos (Exit if the SSH key is not linked to your Github account)": [
-                f"mkdir -p ~/git && cd ~/git && {self.cmd_clone}"
+                f"mkdir -p {git} && cd {git} && {self.cmd_clone}"
             ],
-            "(MacOS) run mac.sh to set defaults (must have ~/git/dotfiles/mac.sh)": [
-                "zsh ~/git/dotfiles/mac.sh"
+            "(MacOS) run mac.sh to set defaults (must have {git}/dotfiles/mac.sh)": [
+                f"zsh {git}/dotfiles/mac.sh"
             ],
             "set Borg passphrase": [
                 r'read -s -p "Enter Borg passphrase: " BORG_PASSPHRASE && echo \
@@ -130,7 +132,7 @@ xargs -L1 git clone
                 "git config --global user.name \"Tyler Woodfin\""
             ],
             "install fff": [
-                "mkdir -p ~/git && cd ~/git",
+                f"mkdir -p {git} && cd {git}",
                 "rm -rf fff && git clone https://github.com/dylanaraps/fff.git",
                 "cd fff && make install && cd ../ && rm -rf fff",
             ],
@@ -144,17 +146,17 @@ xargs -L1 git clone
                 "pip install remindmail"
             ],
             "apply Pre-push hooks": [
-                "zsh ~/git/tools/githooks/apply_pre-push.sh"
+                f"zsh {git}/tools/githooks/apply_pre-push.sh"
             ],
             "link Syncthing's authorized_keys file to this device's": [
                 "ln ~/syncthing/md/docs/network/authorized_keys.md ~/.ssh/authorized_keys"
             ],
             "link dotfiles.vim to .vimrc and ~/.config/nvim/init.vim": [
-                'printf "\n\\" added by dotfiles\nso ~/git/dotfiles/dotfiles.vim\n" >> ~/.vimrc',
+                f'printf "\n\\" added by dotfiles\nso {git}/dotfiles/dotfiles.vim\n" >> ~/.vimrc',
             "mkdir -p ~/.config/nvim && cp ~/.vimrc ~/.config/nvim/init.vim" 
             ],
             "link global .gitignore to your Git configuration": [
-                "git config --global core.excludesfile ~/git/dotfiles/.gitignore"
+                f"git config --global core.excludesfile {git}/dotfiles/.gitignore"
             ],
             "(Linux) install CopyQ (clipboard manager)": [
                 "sudo add-apt-repository ppa:hluk/copyq",
