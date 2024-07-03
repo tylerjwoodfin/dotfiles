@@ -3,9 +3,6 @@
 # show hidden files
 export FFF_HIDDEN=1
 
-# editor
-export EDITOR="vim"
-
 # bookmarks
 export FFF_FAV1=~/git
 export FFF_FAV2=~/syncthing
