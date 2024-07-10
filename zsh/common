@@ -37,6 +37,14 @@ n() {
     echo "$filename"
 }
 
+# cheat
+function cheat() {
+  local query="$*"
+  local encoded_query=$(echo "$query" | sed 's/ /%20/g')
+  curl "cheat.sh/$encoded_query"
+}
+
+
 # Set ls options
 alias ls='ls -hal --color'
 
