@@ -193,6 +193,12 @@ alias one-more-hour='python3 /home/tyler/git/tools/pihole/one_more_hour.py'
 # Check weather
 alias weather='curl wttr.in/?2QF'
 
+# ollama
+function llama() {
+  local input="$*"
+  ollama run llama3:latest "$input"
+}
+
 [ -z "$PS1" ] && return
 
 # Aliases below this line won't be called during interactive sessions (e.g., scripts)

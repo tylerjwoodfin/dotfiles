@@ -1,4 +1,5 @@
 # aliases specific to phones
 alias weather="curl wttr.in/?2FQn"
-alias gpt="rainbow gpt"
-alias cal="rainbow cal"
+alias gpt="cloud gpt"
+alias cal="cloud cal"
+alias llama="cloud llama"
