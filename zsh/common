@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Set common folder paths as aliases
+# folders
 setopt cdablevars
 export notes=$HOME/syncthing/md/notes
 export docs=$HOME/syncthing/md/docs
@@ -9,6 +9,8 @@ export workt=$HOME/syncthing/md/work/todo.md
 export logpath=$HOME/syncthing/log
 export cabinet=$HOME/syncthing/cabinet/settings.json
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
+export sprint=$(find "$HOME/syncthing/md/docs/sprints" -type f -name "sprint [0-9]*.md" | sort -V | tail -n 1)
+export sprints=$HOME/syncthing/md/docs/sprints
 
 # Function: Edit a file in $notes with nvim
 vn() {
