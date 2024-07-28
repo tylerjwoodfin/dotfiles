@@ -34,6 +34,6 @@ if [ -f ~/git/dotfiles/zsh/pi ]; then
 fi
 ```
 
-# vim
+# neovim
 
-- In your .vimrc file, add `so ~/git/dotfiles/dotfiles.vim`
+- In your `~/.config/nvim/init.lua` file, add `so ~/git/dotfiles/vim.lua`

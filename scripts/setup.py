@@ -152,9 +152,9 @@ xargs -I {} git clone {}
             "link Syncthing's authorized_keys file to this device's": [
                 "ln ~/syncthing/md/docs/network/authorized_keys.md ~/.ssh/authorized_keys"
             ],
-            "link dotfiles.vim to .vimrc and ~/.config/nvim/init.vim": [
-                f'printf "\n\\" added by dotfiles\nso {git}/dotfiles/dotfiles.vim\n" >> ~/.vimrc',
-            "mkdir -p ~/.config/nvim && cp ~/.vimrc ~/.config/nvim/init.vim" 
+            "link vim.lua to .vimrc and ~/.config/nvim/init.lua": [
+                f'printf "\n\\" added by dotfiles\nso {git}/dotfiles/vim.lua\n" >> ~/.vimrc',
+            "mkdir -p ~/.config/nvim && cp ~/.vimrc ~/.config/nvim/init.lua" 
             ],
             "link global .gitignore to your Git configuration": [
                 f"git config --global core.excludesfile {git}/dotfiles/.gitignore"
