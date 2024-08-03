@@ -10,9 +10,6 @@
 # Disable the warning when changing a file extension
 /usr/bin/defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
-# Hide desktop icons completely
-/usr/bin/defaults write com.apple.finder CreateDesktop -bool false
-
 # Disable .DS_Store files
 /usr/bin/defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
