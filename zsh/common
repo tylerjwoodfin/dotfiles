@@ -179,6 +179,10 @@ worka() {
     }' "$file_path" > tmpfile && mv tmpfile "$file_path"
 }
 
+plex() {
+    python3 ~/git/tools/yt/main.py video "$@" -d ~/syncthing/video/YouTube
+}
+
 alias worka='worka'
 alias rmmt='rmmt'
 alias rmmy='rmmy'
