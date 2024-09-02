@@ -90,6 +90,7 @@ xargs -I {} git clone {}
             self.config_path_prefix = '/Users/tyler'
         return os_type
 
+    # pylint: disable=line-too-long
     def install_things(self):
         """
         Installs selected software from a set of options.
@@ -149,8 +150,13 @@ xargs -I {} git clone {}
             "apply Pre-push hooks": [
                 f"zsh {git}/tools/githooks/apply_pre-push.sh"
             ],
-            "link Syncthing's authorized_keys file to this device's": [
-                "ln ~/syncthing/md/docs/network/authorized_keys.md ~/.ssh/authorized_keys"
+            "apply the shared authorized_keys file": [
+                "sudo sed -i '/^AuthorizedKeysFile/d' /etc/ssh/sshd_config echo 'AuthorizedKeysFile %h/.ssh/authorized_keys /home/tyler/docs/network/authorized_keys.md' | sudo tee -a /etc/ssh/sshd_config",
+                "echo -e "# this file is empty.\n# authorized public keys are stored in ~/syncthing/md/docs/network/authorized_keys.md. For instructions, see ~/syncthing/md/docs/network/ssh for instructions." > ~/.ssh/authorized_keys",
+                "chmod 644 ~/.ssh/authorized_keys",
+                "find /home/tyler -type d -exec chmod 700 {} +",
+                "find /home/tyler -type d -exec chown tyler:tyler {} +",
+                "sudo systemctl restart sshd"
             ],
             "link vim.lua to ~/.config/nvim/init.lua": [
                 f'printf "\\n-- added by dotfiles\\n"'

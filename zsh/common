@@ -113,6 +113,7 @@ alias docs='fff ~/syncthing/md/docs'
 alias work='fff ~/syncthing/md/work'
 alias lofi='bash ~/git/tools/lofi.sh'
 alias v='python3 ~/git/voicegpt/main.py'
+alias bike='python3 ~/git/tools/bike/price_calculator.py'
 
 # remindmail - see https://github.com/tylerjwoodfin/remindmail
 rmm() {
@@ -208,6 +209,7 @@ function llama() {
   local input="$*"
   ollama run llama3:latest "$input"
 }
+
 
 [ -z "$PS1" ] && return
 
