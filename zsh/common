@@ -123,27 +123,46 @@ rmm() {
         shift
     fi
 
-    local input="$*"
-    local parts=("${(@s/,/)input}")
-
     local when=""
     local title=""
+    local extra_args=()
 
-    if [[ ${#parts[@]} -eq 1 ]]; then
-        # Only one part present, treat it as title
-        title=$(echo "${parts[1]}" | xargs)
-    else
-        # More than one part, assume the first is 'when' and second is 'title'
-        when=$(echo "${parts[1]}" | xargs)
-        title=$(echo "${parts[2]}" | xargs)
+    # Check if the first argument contains a comma, indicating a `when` clause
+    if [[ "$1" == *,* ]]; then
+        # Split the first argument by comma to separate `when` and `title`
+        when="${1%,*}"
+        title="${1#*,}"
+        shift
     fi
 
+    # Collect the rest of the title if `when` is set, or start building title otherwise
+    while [[ $# -gt 0 ]]; do
+        if [[ "$1" == --* ]]; then
+            break
+        else
+            title+="$1 "
+            shift
+        fi
+    done
+
+    # Trim leading/trailing spaces for both `when` and `title`
+    when="${when#" "}"
+    when="${when%" "}"
+    title="${title%" "}"
+
+    # Collect remaining arguments as additional options
+    extra_args=("$@")
+
+    # Build the command
     local cmd="remind --title '$title'"
     [[ -n $when ]] && cmd+=" --when '$when'"
     [[ -n $save ]] && cmd+=" $save"
+    cmd+=" ${extra_args[@]}"
 
     eval $cmd
 }
+
+
 
 rmmt() {
     remind --title "$*" --when "tomorrow"
