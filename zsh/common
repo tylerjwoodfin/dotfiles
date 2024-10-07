@@ -162,8 +162,6 @@ rmm() {
     eval $cmd
 }
 
-
-
 rmmt() {
     remind --title "$*" --when "tomorrow"
 }
