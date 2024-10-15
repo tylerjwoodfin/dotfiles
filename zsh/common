@@ -126,38 +126,48 @@ rmm() {
     local when=""
     local title=""
     local extra_args=()
+    local title_words=()
 
-    # Check if the first argument contains a comma, indicating a `when` clause
-    if [[ "$1" == *,* ]]; then
-        # Split the first argument by comma to separate `when` and `title`
-        when="${1%,*}"
-        title="${1#*,}"
-        shift
+    # Join all arguments into a single string
+    local full_input="$*"
+
+    # Check if the input contains a comma
+    if [[ "$full_input" == *,* ]]; then
+        # Split the input by the first comma
+        when="${full_input%%,*}"
+        title="${full_input#*,}"
+    else
+        # If no comma, treat everything as title
+        title="$full_input"
     fi
 
-    # Collect the rest of the title if `when` is set, or start building title otherwise
-    while [[ $# -gt 0 ]]; do
-        if [[ "$1" == --* ]]; then
-            break
+    # Process the title and extra args
+    local in_extra_args=false
+    for word in $title; do
+        if [[ "$word" == --* ]]; then
+            in_extra_args=true
+            extra_args+=("$word")
+        elif $in_extra_args; then
+            extra_args+=("$word")
         else
-            title+="$1 "
-            shift
+            title_words+=("$word")
         fi
     done
 
-    # Trim leading/trailing spaces for both `when` and `title`
-    when="${when#" "}"
-    when="${when%" "}"
-    title="${title%" "}"
+    # Join title words
+    title="${title_words[*]}"
 
-    # Collect remaining arguments as additional options
-    extra_args=("$@")
+    # Trim leading/trailing spaces for both `when` and `title`
+    when="${when#"${when%%[![:space:]]*}"}"
+    when="${when%"${when##*[![:space:]]}"}"
+    title="${title#"${title%%[![:space:]]*}"}"
+    title="${title%"${title##*[![:space:]]}"}"
 
     # Build the command
     local cmd="remind --title '$title'"
     [[ -n $when ]] && cmd+=" --when '$when'"
     [[ -n $save ]] && cmd+=" $save"
-    cmd+=" ${extra_args[@]}"
+    [[ ${#extra_args[@]} -gt 0 ]] && cmd+=" ${extra_args[*]}"
 
     eval $cmd
 }
