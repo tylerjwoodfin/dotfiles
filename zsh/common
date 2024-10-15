@@ -190,7 +190,6 @@ rmm() {
         cmd+=" '$arg'"
     done
 
-    echo "Running: $cmd"
     eval $cmd
 }
 
