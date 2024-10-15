@@ -126,49 +126,71 @@ rmm() {
     local when=""
     local title=""
     local extra_args=()
-    local title_words=()
-
-    # Join all arguments into a single string
+    
+    # Capture the full input
     local full_input="$*"
 
-    # Check if the input contains a comma
+    # If there's a comma, separate 'when' and remaining input
     if [[ "$full_input" == *,* ]]; then
-        # Split the input by the first comma
         when="${full_input%%,*}"
-        title="${full_input#*,}"
-    else
-        # If no comma, treat everything as title
-        title="$full_input"
+        full_input="${full_input#*,}"
     fi
 
-    # Process the title and extra args
-    local in_extra_args=false
-    for word in $title; do
-        if [[ "$word" == --* ]]; then
-            in_extra_args=true
-            extra_args+=("$word")
-        elif $in_extra_args; then
-            extra_args+=("$word")
+    # Initialize flags to capture title and extra arguments
+    local is_reading_title=true
+    local current_arg=""
+
+    # Read words in full_input and process each
+    for word in ${(z)full_input}; do
+        if $is_reading_title; then
+            # Detect start of extra arguments
+            if [[ "$word" == --* ]]; then
+                is_reading_title=false
+                extra_args+=("$word")
+            else
+                # Append word to title
+                title+="$word "
+            fi
         else
-            title_words+=("$word")
+            # Process extra arguments
+            if [[ "$word" == --* ]]; then
+                # Start a new argument in extra_args
+                if [[ -n "$current_arg" ]]; then
+                    extra_args+=("${current_arg% }")
+                fi
+                current_arg="$word"
+            else
+                # Append to the current extra argument
+                current_arg+=" $word"
+            fi
         fi
     done
 
-    # Join title words
-    title="${title_words[*]}"
+    # Add the last accumulated extra argument if any
+    if [[ -n "$current_arg" ]]; then
+        extra_args+=("${current_arg% }")
+    fi
 
-    # Trim leading/trailing spaces for both `when` and `title`
+    # Trim spaces from when and title
     when="${when#"${when%%[![:space:]]*}"}"
     when="${when%"${when##*[![:space:]]}"}"
     title="${title#"${title%%[![:space:]]*}"}"
     title="${title%"${title##*[![:space:]]}"}"
 
     # Build the command
-    local cmd="remind --title '$title'"
+    local cmd="remind"
+    [[ -n $title ]] && cmd+=" --title '$title'"
     [[ -n $when ]] && cmd+=" --when '$when'"
     [[ -n $save ]] && cmd+=" $save"
-    [[ ${#extra_args[@]} -gt 0 ]] && cmd+=" ${extra_args[*]}"
 
+    # Add each extra argument to the command, quoted
+    for arg in "${extra_args[@]}"; do
+        arg="${arg#"${arg%%[![:space:]]*}"}"
+        arg="${arg%"${arg##*[![:space:]]}"}"
+        cmd+=" '$arg'"
+    done
+
+    echo "Running: $cmd"
     eval $cmd
 }
 
