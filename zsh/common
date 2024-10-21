@@ -9,8 +9,13 @@ export workt=$HOME/syncthing/md/work/todo.md
 export logpath=$HOME/syncthing/log
 export cabinet=$HOME/syncthing/cabinet/settings.json
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
-export sprint=$(find "$HOME/syncthing/md/docs/sprints" -type f -name "sprint [0-9]*.md" | sort -V | tail -n 1)
 export sprints=$HOME/syncthing/md/docs/sprints
+
+# `sprint` is the latest sprint file
+if [ -d "$HOME/syncthing/md/docs/sprints" ]; then
+  export sprint=$(find "$HOME/syncthing/md/docs/sprints" -type f -name "sprint [0-9]*.md" | sort -V | tail -n 1)
+fi
+
 
 # Function: Edit a file in $notes with nvim
 vn() {
@@ -22,7 +27,12 @@ vn() {
     # Strip '.md' if necessary
     filename="${1%%.md}"
 
-    nvim "$notes/$filename.md"
+    # Check if the input starts with '/'
+    if [[ "$filename" == /* ]]; then
+        nvim "$filename.md"
+    else
+        nvim "$notes/$filename.md"
+    fi
 }
 
 # Function: Retrieve the path of a file in $notes
