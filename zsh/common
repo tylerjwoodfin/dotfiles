@@ -21,7 +21,7 @@ fi
 vn() {
     if [[ -z "$1" ]]; then
         echo "Error: No argument provided"
-        return 1
+        return
     fi
 
     # Strip '.md' if necessary
@@ -33,20 +33,6 @@ vn() {
     else
         nvim "$notes/$filename.md"
     fi
-}
-
-# Function: Retrieve the path of a file in $notes
-n() {
-    if [[ -z "$1" ]]; then
-        echo "Error: No argument provided"
-        return 1
-    fi
-
-    # Set the filename as a variable
-    filename="$notes/$1.md"
-
-    # Return the file path
-    echo "$filename"
 }
 
 # cheat
