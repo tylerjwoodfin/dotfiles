@@ -80,6 +80,19 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # Git aliases
+
+# block the --no-verify flag (we're doing things the right way)
+function git() {
+    for arg in "$@"; do
+        if [[ "$arg" == "--no-verify" ]]; then
+            echo "The --no-verify flag is blocked."
+            return 1
+        fi
+    done
+
+    command git "$@"
+}
+
 alias glog='git log --graph --pretty=format:"%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset" --abbrev-commit --date=relative'
 alias gcm='git commit -m'
 alias gch='git fetch && git checkout'
