@@ -253,9 +253,6 @@ addshopping() {
     atlasman --trello --add-card "shopping" "$*"
 }
 
-# Check weather
-alias weather='curl wttr.in/?2QF'
-
 # ollama
 function llama() {
   local input="$*"
