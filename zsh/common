@@ -259,7 +259,26 @@ alias one-more-hour='python3 /home/tyler/git/tools/pihole/one_more_hour.py'
 
 # atlas-man
 addjira() {
-    atlasman --jira --add-issue "$*"
+    # Initialize arrays for the title and for additional arguments
+    local title_args=()
+    local extra_args=()
+
+    # Loop through each argument
+    for arg in "$@"; do
+        if [[ "$arg" == -* ]]; then
+            # If the argument starts with - or --, treat it as an extra argument
+            extra_args+=("$arg")
+        else
+            # Otherwise, treat it as part of the title
+            title_args+=("$arg")
+        fi
+    done
+
+    # Join title arguments into a single string
+    local title="${title_args[*]}"
+
+    # Call atlasman with the title and extra arguments
+    atlasman --jira --add-issue "$title" "${extra_args[@]}"
 }
 
 addshopping() {
