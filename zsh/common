@@ -19,17 +19,22 @@ fi
 
 # Function: Edit a file in $notes with nvim
 vn() {
-    if [[ -z "$1" ]]; then
-        echo "Error: No argument provided"
-        return
+    [[ $# -eq 0 ]] && return
+
+    filename="$*"
+
+    if [[ "$(uname)" == "Darwin" ]]; then
+        home_prefix_to_replace="/home/"
+        home_prefix_replacement="/Users/"
+    else
+        home_prefix_to_replace="/Users/"
+        home_prefix_replacement="/home/"
     fi
 
-    # Strip '.md' if necessary
-    filename="${1%%.md}"
-
-    # Check if the input starts with '/'
+    filename="${filename%%.md}"
+    
     if [[ "$filename" == /* ]]; then
-        nvim "$filename.md"
+        nvim "${filename/$home_prefix_to_replace/$home_prefix_replacement}.md"
     else
         nvim "$notes/$filename.md"
     fi
