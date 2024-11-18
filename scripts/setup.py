@@ -73,7 +73,7 @@ xargs -I {} git clone {}
         self.install_things()
 
         # Add zsh config files to zshrc or zsh_profile depending on the OS:
-        configs = ['common', 'not-cloud', 'network', 'phone', 'fff']
+        configs = ['common', 'not-cloud', 'network', 'phone', 'nnn']
         for config in configs:
             self.add_zshconfig(config)
 
@@ -133,10 +133,8 @@ xargs -I {} git clone {}
                 f"git config --global user.email \"{self.git_addr}\"",
                 "git config --global user.name \"Tyler Woodfin\""
             ],
-            "install fff": [
-                f"mkdir -p {git} && cd {git}",
-                "rm -rf fff && git clone https://github.com/dylanaraps/fff.git",
-                "cd fff && make install && cd ../ && rm -rf fff",
+            "install nnn": [
+                "sudo apt install nnn",
             ],
             "install Pihole": [
                 "curl -sSL https://install.pi-hole.net | bash"
