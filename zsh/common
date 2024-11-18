@@ -91,10 +91,6 @@ alias ncal='ncal -B1 -A1'
 export EDITOR='nvim'
 alias vim='nvim'
 
-# fff config
-export FFF_KEY_CHILD2="off"
-export FFF_KEY_PARENT2="off"
-
 # Quick navigation aliases
 alias cdh='cd ~'
 alias cdg='cd ~/git'
@@ -154,9 +150,9 @@ alias yt='python3 ~/git/tools/yt/main.py'
 alias pitest='python3 ~/git/testfolder/test.py'
 alias pibuild='python3 ~/git/tools/build/build.py'
 alias turn='python3 ~/git/tools/kasalights/main.py'
-alias notes='fff ~/syncthing/md/notes'
-alias docs='fff ~/syncthing/md/docs'
-alias work='fff ~/syncthing/md/work'
+alias notes='nnn ~/syncthing/md/notes'
+alias docs='nnn ~/syncthing/md/docs'
+alias work='nnn ~/syncthing/md/work'
 alias lofi='bash ~/git/tools/lofi.sh'
 alias v='python3 ~/git/voicegpt/main.py'
 alias bike='python3 ~/git/tools/bike/price_calculator.py'
