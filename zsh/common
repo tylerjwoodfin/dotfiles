@@ -298,8 +298,8 @@ addjira() {
 
     # Loop through each argument
     for arg in "$@"; do
-        if [[ "$arg" == -* ]]; then
-            # If the argument starts with - or --, treat it as an extra argument
+        if [[ "$arg" =~ ^-[a-zA-Z] ]]; then
+            # If the argument starts with a dash followed by a letter, treat it as an extra argument
             extra_args+=("$arg")
         else
             # Otherwise, treat it as part of the title
