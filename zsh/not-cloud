@@ -4,7 +4,7 @@
 cloud_commands=(
     "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
     "diary" "turn" "notes" "docs" "work" "vn" "n" "v" "one-more-hour" \
-    "plex" "bike" "addjira" "addshopping"
+    "plex" "bike" "addjira" "addshopping" "bluesky"
 )
 
 for cmd in "${cloud_commands[@]}"; do

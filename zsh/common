@@ -156,6 +156,7 @@ alias work='nnn ~/syncthing/md/work'
 alias lofi='bash ~/git/tools/lofi.sh'
 alias v='python3 ~/git/voicegpt/main.py'
 alias bike='python3 ~/git/tools/bike/price_calculator.py'
+alias bluesky='python3 ~/git/tools/bluesky/main.py'
 
 # remindmail - see https://github.com/tylerjwoodfin/remindmail
 rmm() {
