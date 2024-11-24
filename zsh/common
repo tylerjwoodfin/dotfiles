@@ -273,7 +273,7 @@ worka() {
 }
 
 plex() {
-    python3 ~/git/tools/yt/main.py video "$@" -d ~/syncthing/video/YouTube
+    python3 ~/git/tools/youtube/main.py video "$@" -d ~/syncthing/video/YouTube
 }
 
 alias worka='worka'
