@@ -4,6 +4,7 @@
 setup.py
 """
 
+from textwrap import dedent
 import subprocess
 import os
 
@@ -20,6 +21,7 @@ xargs -I {} git clone {}
     user_os = ""
     config_path_prefix = "/home/tyler"
     git_addr: str = "14207553+tylerjwoodfin@users.noreply.github.com"
+    today_date = subprocess.check_output("date +'%Y-%m-%d'", shell=True, text=True).strip()
 
     def __init__(self):
         if os.geteuid() != 0:
@@ -157,7 +159,7 @@ xargs -I {} git clone {}
                 "sudo systemctl restart sshd"
             ],
             "link vim.lua to ~/.config/nvim/init.lua": [
-                f'printf "\\n-- added by dotfiles\\n"'
+                f'printf "\\n-- added by dotfiles on {self.today_date}\\n"'
                 f'\\ndofile(\'{git}/dotfiles/vim.lua\')\\n" >> ~/.config/nvim/init.lua'
             ],
             "link global .gitignore to your Git configuration": [
@@ -182,7 +184,7 @@ xargs -I {} git clone {}
                 "cd input-remapper/dist && sudo apt install '?name(input-remapper.*)'"
             ],
             "(Linux) fix the path issue on .zshrc": [
-                "printf \"\n\\\" added by dotfiles/setup.py\n\
+                f"printf \"\n\\\" added by dotfiles/setup.py on {self.today_date}\n\
                     export PATH=\r$PATH:/home/tyler/.local/bin\n\" >> /home/tyler/.zshrc"
             ],
         }
@@ -281,6 +283,7 @@ xargs -I {} git clone {}
         """
         Adds zsh configs in ../zsh to .zshrc.
         """
+
         while True:
             response = self.ask(f"Do you want to link the {config} config file to .zshrc")
 
@@ -292,9 +295,12 @@ xargs -I {} git clone {}
                     print(
                         f"\nOK, this requires Tyler's zsh config file in {syncthing_path}.")
 
-                cmd_zshrc = f"""printf "\n# added by dotfiles/setup.py\n""" \
-                    f"""if [ -f {config_path} ]; then\n""" \
-                    f"""    source {config_path}\nfi\n" >> {self.config_path_prefix}/.zshrc """
+                cmd_zshrc = dedent(f"""
+                    printf "\n# added by dotfiles/setup.py on {self.today_date}\n\
+                    if [ -f {config_path} ]; then\n\
+                        source {config_path}\n\
+                    fi\n" >> {self.config_path_prefix}/.zshrc
+                    """)
 
                 subprocess.run(cmd_zshrc, shell=True, check=True)
                 print("Done")
