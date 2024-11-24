@@ -101,7 +101,7 @@ xargs -I {} git clone {}
         git = f"{self.config_path_prefix}/git"
         install_options = {
             "(Linux) install syncthing": [
-                "sudo apt install apt-transport-https",
+                "sudo apt-get install apt-transport-https",
                 """
                 curl -s https://syncthing.net/release-key.txt | gpg --dearmor |
                 sudo tee /usr/share/keyrings/syncthing-archive-keyring.gpg >/dev/null;
@@ -109,7 +109,7 @@ xargs -I {} git clone {}
                 https://apt.syncthing.net/ syncthing stable" | 
                 sudo tee /etc/apt/sources.list.d/syncthing.list;
                 sudo apt update;
-                sudo apt install syncthing
+                sudo apt-get install syncthing
                 """
             ],
             "(MacOS) install syncthing": [
@@ -119,7 +119,18 @@ xargs -I {} git clone {}
                 "brew install neovim"
             ],
             "(Linux) install neovim": [
-            "sudo apt install neovim"  
+            "sudo apt-get install neovim"  
+            ],
+            "(Linux) install and configure zsh": [
+                "sudo apt-get install zsh",
+                "chsh -s $(which zsh)",
+                "chsh -s $(which zsh) tyler"
+            ],
+            "(Linux) install jq (required for git)": [
+                "sudo apt-get install jq"
+            ],
+            "(Linux) install git": [
+                "sudo apt-get install jq"
             ],
             "clone all repos (Exit if the SSH key is not linked to your Github account)": [
                 f"mkdir -p {git} && cd {git} && {self.cmd_clone}"
@@ -136,16 +147,16 @@ xargs -I {} git clone {}
                 "git config --global user.name \"Tyler Woodfin\""
             ],
             "install nnn": [
-                "sudo apt install nnn",
+                "sudo apt-get install nnn",
             ],
             "install Pihole": [
                 "curl -sSL https://install.pi-hole.net | bash"
             ],
             "install Cabinet": [
-                "pip install cabinet"
+                "python3 -m pip install cabinet --break-system-package"
             ],
             "install RemindMail": [
-                "pip install remindmail"
+                "python3 -m pip install remindmail --break-system-package"
             ],
             "apply Pre-push hooks": [
                 f"zsh {git}/tools/githooks/apply_pre-push.sh"
@@ -168,20 +179,20 @@ xargs -I {} git clone {}
             "(Linux) install CopyQ (clipboard manager)": [
                 "sudo add-apt-repository ppa:hluk/copyq",
                 "sudo apt update",
-                "sudo apt install copyq"
+                "sudo apt-get install copyq"
             ],
             "(Linux) install Net Tools (for ifconfig)": [
-                "sudo apt install net-tools"
+                "sudo apt-get install net-tools"
             ],
             "(Linux) install Chrome Gnome Shell (for Gnome Extensions)": [
                 "sudo apt-get install chrome-gnome-shell"
             ],
             "(Linux) install input-remapper": [
-                "sudo apt install git python3-setuptools gettext",
+                "sudo apt-get install git python3-setuptools gettext",
                 "git -C 'input-remapper' pull || \
                 git clone https://github.com/sezanzeb/input-remapper.git",
                 "cd input-remapper && ./scripts/build.sh",
-                "cd input-remapper/dist && sudo apt install '?name(input-remapper.*)'"
+                "cd input-remapper/dist && sudo apt-get install '?name(input-remapper.*)'"
             ],
             "(Linux) fix the path issue on .zshrc": [
                 f"printf \"\n\\\" added by dotfiles/setup.py on {self.today_date}\n\
@@ -328,13 +339,7 @@ xargs -I {} git clone {}
                         shell=True,
                         check=True)
 
-            cmd_install = "sudo apt"
-            if self.user_os == "m":
-                cmd_install = "brew"
-
             if self.user_os != 'p':
-                subprocess.run(f'{cmd_install} install git', shell=True, check=True)
-                subprocess.run(f'{cmd_install} install jq', shell=True, check=True)
                 subprocess.run(f"ssh-keygen -f {self.config_path_prefix}/.ssh/id_rsa -N ''",
                                 shell=True, check=True)
 
