@@ -14,11 +14,11 @@ class Setup:
     """
     config_path_prefix = "/home/tyler"
     cmd_clone = """
-    UserName=tylerjwoodfin; \
-    sudo -u tyler GIT_SSH_COMMAND='ssh -i /home/tyler/.ssh/id_rsa' curl -s \
+    UserName=tylerjwoodfin
+    sudo -u tyler sh -c 'GIT_SSH_COMMAND="ssh -i /home/tyler/.ssh/id_rsa" curl -s \
         https://api.github.com/users/$UserName/repos?per_page=1000 | \
-    jq -r '.[]|.ssh_url' | \
-    xargs -I {{}} git clone {{}}
+        jq -r ".[].ssh_url" | \
+        while read repo; do git clone "$repo"; done'
     """
     user_os = ""
     git_addr: str = "14207553+tylerjwoodfin@users.noreply.github.com"
