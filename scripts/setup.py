@@ -16,8 +16,8 @@ class Setup:
     cmd_clone = """
     UserName=tylerjwoodfin
     sudo -u tyler sh -c 'GIT_SSH_COMMAND="ssh -i /home/tyler/.ssh/id_rsa" curl -s \
-        https://api.github.com/users/$UserName/repos?per_page=1000 | \
-        jq -r ".[].ssh_url" | \
+        "https://api.github.com/users/$UserName/repos?per_page=1000" | \
+        jq -r ".[].clone_url" | \
         while read repo; do git clone "$repo"; done'
     """
     user_os = ""
