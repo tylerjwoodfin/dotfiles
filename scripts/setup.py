@@ -13,9 +13,9 @@ class Setup:
     This script sets up devices with proper repos and dotfile zsh configurations.
     """
     config_path_prefix = "/home/tyler"
-    cmd_clone = f"""
+    cmd_clone = """
     UserName=tylerjwoodfin; \
-    GIT_SSH_COMMAND='ssh -i {config_path_prefix}/.ssh/id_rsa' curl -s \
+    sudo -u tyler GIT_SSH_COMMAND='ssh -i /home/tyler/.ssh/id_rsa' curl -s \
         https://api.github.com/users/$UserName/repos?per_page=1000 | \
     jq -r '.[]|.ssh_url' | \
     xargs -I {{}} git clone {{}}
