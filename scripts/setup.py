@@ -205,6 +205,10 @@ xargs -I {} git clone {}
                 continue
             if self.user_os != "m" and option.startswith("(MacOS)"):
                 continue
+
+            # remove the OS from the option
+            option = option.replace("(Linux) ", "").replace("(MacOS) ", "")
+
             response = self.ask(f"Do you want to {option}")
 
             if response == "y":
