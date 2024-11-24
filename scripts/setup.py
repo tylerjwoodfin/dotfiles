@@ -12,14 +12,15 @@ class Setup:
     """
     This script sets up devices with proper repos and dotfile zsh configurations.
     """
-    cmd_clone = """
-UserName=tylerjwoodfin; \
-curl -s https://api.github.com/users/$UserName/repos?per_page=1000 | \
-jq -r '.[]|.ssh_url' | \
-xargs -I {} git clone {}
-"""
-    user_os = ""
     config_path_prefix = "/home/tyler"
+    cmd_clone = f"""
+    UserName=tylerjwoodfin; \
+    GIT_SSH_COMMAND='ssh -i {config_path_prefix}/.ssh/id_rsa' curl -s \
+        https://api.github.com/users/$UserName/repos?per_page=1000 | \
+    jq -r '.[]|.ssh_url' | \
+    xargs -I {{}} git clone {{}}
+    """
+    user_os = ""
     git_addr: str = "14207553+tylerjwoodfin@users.noreply.github.com"
     today_date = subprocess.check_output("date +'%Y-%m-%d'", shell=True, text=True).strip()
 
@@ -162,11 +163,11 @@ xargs -I {} git clone {}
                 f"zsh {git}/tools/githooks/apply_pre-push.sh"
             ],
             "apply the shared authorized_keys file": [
-                "sudo sed -i '/^AuthorizedKeysFile/d' /etc/ssh/sshd_config echo 'AuthorizedKeysFile %h/.ssh/authorized_keys /home/tyler/docs/network/authorized_keys.md' | sudo tee -a /etc/ssh/sshd_config",
+                f"sudo sed -i '/^AuthorizedKeysFile/d' /etc/ssh/sshd_config echo 'AuthorizedKeysFile %h/.ssh/authorized_keys {self.config_path_prefix}/docs/network/authorized_keys.md' | sudo tee -a /etc/ssh/sshd_config",
                 "echo -e "# this file is empty.\n# authorized public keys are stored in ~/syncthing/md/docs/network/authorized_keys.md. For instructions, see ~/syncthing/md/docs/network/ssh for instructions." > ~/.ssh/authorized_keys",
                 "chmod 644 ~/.ssh/authorized_keys",
-                "find /home/tyler -type d -exec chmod 700 {} +",
-                "find /home/tyler -type d -exec chown tyler:tyler {} +",
+                f"find {self.config_path_prefix} -type d -exec chmod 700 {{}} +",
+                f"find {self.config_path_prefix} -type d -exec chown tyler:tyler {{}} +",
                 "sudo systemctl restart sshd"
             ],
             "link vim.lua to ~/.config/nvim/init.lua": [
@@ -196,7 +197,7 @@ xargs -I {} git clone {}
             ],
             "(Linux) fix the path issue on .zshrc": [
                 f"printf \"\n\\\" added by dotfiles/setup.py on {self.today_date}\n\
-                    export PATH=\r$PATH:/home/tyler/.local/bin\n\" >> /home/tyler/.zshrc"
+                    export PATH=\r$PATH:{self.config_path_prefix}/.local/bin\n\" >> {self.config_path_prefix}/.zshrc"
             ],
         }
 
