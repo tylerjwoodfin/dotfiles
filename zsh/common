@@ -115,15 +115,56 @@ fi
 
 # Git aliases
 
-# block the --no-verify flag (we're doing things the right way)
+# Block certain flags and patterns in git commands
 function git() {
-    for arg in "$@"; do
-        if [[ "$arg" == "--no-verify" ]]; then
-            echo "The --no-verify flag is blocked."
-            return 1
-        fi
-    done
+    # Check for blocked flags
+    function check_flags() {
+        for arg in "$@"; do
+            if [[ "$arg" == "--no-verify" ]]; then
+                echo "The --no-verify flag is blocked."
+                return 1
+            fi
+        done
+        return 0
+    }
 
+    # Check for prohibited patterns in files being committed
+    function check_commit_files() {
+        if [[ "$1" == "commit" ]]; then
+            # Determine if -a flag is used
+            local has_a_flag=false
+            for arg in "$@"; do
+                if [[ "$arg" == "-a" ]]; then
+                    has_a_flag=true
+                    break
+                fi
+            done
+
+            # Get files that would be committed
+            if $has_a_flag; then
+                # Check all modified and staged files (includes -a behavior)
+                files_to_check=$(git diff --name-only)
+            else
+                # Check only staged files
+                files_to_check=$(git diff --cached --name-only)
+            fi
+
+            # Check each file for "# DEBUG" or "# debug"
+            for file in $files_to_check; do
+                if grep -qE '^\s*# DEBUG|^\s*# debug' "$file"; then
+                    echo "Commit blocked: '$file' contains '# DEBUG' or '# debug'."
+                    return 1
+                fi
+            done
+        fi
+        return 0
+    }
+
+    # Run all checks
+    check_flags "$@" || return 1
+    check_commit_files "$@" || return 1
+
+    # Execute the actual git command
     command git "$@"
 }
 
