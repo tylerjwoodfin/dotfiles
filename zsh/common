@@ -339,17 +339,35 @@ addjira() {
     # Initialize arrays for the title and for additional arguments
     local title_args=()
     local extra_args=()
+    local reading_flag_value=false
+    local current_flag=""
 
     # Loop through each argument
-    for arg in "$@"; do
-        if [[ "$arg" =~ ^-[a-zA-Z] ]]; then
-            # If the argument starts with a dash followed by a letter, treat it as an extra argument
-            extra_args+=("$arg")
+    while [[ $# -gt 0 ]]; do
+        if $reading_flag_value; then
+            # This is a value for a flag
+            extra_args+=("$current_flag" "$1")
+            reading_flag_value=false
+            current_flag=""
+        elif [[ "$1" =~ ^-[-]?[a-zA-Z] ]]; then
+            # If argument starts with - or --, it's a flag
+            if [[ "$current_flag" != "" ]]; then
+                # Previous flag had no value, add it alone
+                extra_args+=("$current_flag")
+            fi
+            current_flag="$1"
+            reading_flag_value=true
         else
-            # Otherwise, treat it as part of the title
-            title_args+=("$arg")
+            # Not a flag or flag value, add to title
+            title_args+=("$1")
         fi
+        shift
     done
+
+    # Handle any remaining flag
+    if [[ "$current_flag" != "" ]]; then
+        extra_args+=("$current_flag")
+    fi
 
     # Join title arguments into a single string
     local title="${title_args[*]}"
