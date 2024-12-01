@@ -211,71 +211,76 @@ rmm() {
     local when=""
     local title=""
     local extra_args=()
-    
-    # Capture the full input
-    local full_input="$*"
+    local current_flag=""
 
-    # If there's a comma, separate 'when' and remaining input
-    if [[ "$full_input" == *,* ]]; then
-        when="${full_input%%,*}"
-        full_input="${full_input#*,}"
+    # Process --when flag explicitly
+    if [[ "$1" == "--when" ]]; then
+        when="$2"
+        shift 2
     fi
 
     # Initialize flags to capture title and extra arguments
     local is_reading_title=true
-    local current_arg=""
 
-    # Read words in full_input and process each
-    for word in ${(z)full_input}; do
+    # Read remaining arguments and process each
+    while [[ $# -gt 0 ]]; do
         if $is_reading_title; then
             # Detect start of extra arguments
-            if [[ "$word" == --* ]]; then
+            if [[ "$1" == --* ]]; then
                 is_reading_title=false
-                extra_args+=("$word")
+                current_flag="$1"
             else
                 # Append word to title
-                title+="$word "
+                title+="$1 "
             fi
         else
-            # Process extra arguments
-            if [[ "$word" == --* ]]; then
-                # Start a new argument in extra_args
-                if [[ -n "$current_arg" ]]; then
-                    extra_args+=("${current_arg% }")
+            if [[ "$1" == --* ]]; then
+                # If we had a previous flag with content, add it
+                if [[ -n "$current_flag" ]]; then
+                    extra_args+=("$current_flag")
                 fi
-                current_arg="$word"
+                current_flag="$1"
             else
-                # Append to the current extra argument
-                current_arg+=" $word"
+                # If this is the first value after a flag, add both
+                if [[ "$current_flag" ]]; then
+                    extra_args+=("$current_flag" "\"$1\"")
+                    current_flag=""
+                else
+                    # Append to the last argument if no new flag
+                    extra_args[-1]="${extra_args[-1]%\"} $1\""
+                fi
             fi
         fi
+        shift
     done
 
-    # Add the last accumulated extra argument if any
-    if [[ -n "$current_arg" ]]; then
-        extra_args+=("${current_arg% }")
+    # Add the last flag if it exists
+    if [[ -n "$current_flag" ]]; then
+        extra_args+=("$current_flag")
     fi
 
-    # Trim spaces from when and title
-    when="${when#"${when%%[![:space:]]*}"}"
-    when="${when%"${when##*[![:space:]]}"}"
+    # Trim spaces from title
     title="${title#"${title%%[![:space:]]*}"}"
     title="${title%"${title##*[![:space:]]}"}"
 
-    # Build the command
-    local cmd="remind"
-    [[ -n $title ]] && cmd+=" --title '$title'"
-    [[ -n $when ]] && cmd+=" --when '$when'"
-    [[ -n $save ]] && cmd+=" $save"
+    # Build the command with explicit quoting for multi-word arguments
+    local cmd=("remind")
+    [[ -n $save ]] && cmd+=("$save")
+    [[ -n $when ]] && cmd+=("--when" "\"$when\"")
+    [[ -n $title ]] && cmd+=("--title" "\"$title\"")
 
-    # Add each extra argument to the command, quoted
-    for arg in "${extra_args[@]}"; do
-        arg="${arg#"${arg%%[![:space:]]*}"}"
-        arg="${arg%"${arg##*[![:space:]]}"}"
-        cmd+=" '$arg'"
-    done
+    # Add the extra arguments
+    cmd+=("${extra_args[@]}")
 
-    eval $cmd
+    # Convert command array to a single string for printing and execution
+    local cmd_string="${cmd[@]}"
+
+    # Run the command
+    eval $cmd_string
+}
+
+rmmty() {
+    rmm --save --when "tomorrow" "$@"
 }
 
 rmmt() {
@@ -284,10 +289,6 @@ rmmt() {
 
 rmmy() {
     rmm --save "$@"
-}
-
-rmmty() {
-    remind --title "$*" --when "tomorrow" --save
 }
 
 rmml() {
