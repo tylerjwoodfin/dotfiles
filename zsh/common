@@ -298,7 +298,7 @@ rmm() {
 }
 
 rmmty() {
-    rmm --save --when "tomorrow" "$@"
+    rmm --save --when "tomorrow" --title "$@"
 }
 
 rmmt() {
