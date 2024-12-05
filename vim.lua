@@ -58,3 +58,14 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
     pattern = '*',
     command = "call matchadd('dateTokenMatch', '\\[\\zs.\\{-}\\ze\\]')"
 })
+
+vim.api.nvim_create_autocmd("Syntax", {
+    pattern = "*",
+    callback = function()
+        -- Syntax highlighting for comments
+        vim.cmd([[
+            syntax match commentMatch /#.*$/
+            highlight commentMatch ctermfg=8 guifg=gray
+        ]])
+    end,
+})
