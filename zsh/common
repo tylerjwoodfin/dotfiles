@@ -185,6 +185,19 @@ gcam() {
     git add -A && git commit -m "$branch: $*"
 }
 
+gbr() {
+  if [ -z "$1" ]; then
+    echo "Usage: gbr <release_branch_name>"
+    return 1
+  fi
+  local release_branch="$1"
+  echo "Switching to main and pulling latest changes..."
+  git checkout main && git pull origin main || { echo "Error updating main"; return 1; }
+  echo "Creating and pushing release branch: $release_branch"
+  git checkout -b "$release_branch" && git push -u origin "$release_branch" || { echo "Error creating or pushing release branch"; return 1; }
+  echo "Release branch '$release_branch' created and pushed successfully."
+}
+
 # Useful scripts - see https://github.com/tylerjwoodfin
 alias diary='python3 ~/git/tools/diary/main.py'
 alias shorten='python3 ~/git/tools/shorten.py'
