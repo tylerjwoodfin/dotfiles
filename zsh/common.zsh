@@ -6,58 +6,74 @@ setopt cdablevars
 # aliases and exports, coming from `cabinet`- https://www.github.com/tylerjwoodfin/cabinet
 autoload -Uz add-zsh-hook
 
-setup_cabinet_aliases() {
-  # Check if aliases have already been set
-  if [[ -n $CABINET_ALIASES_SET ]]; then
+# hardcode the cabinet alias to `cloud cabinet`` if device is phone
+for file in "${DOTFILES_OPTS[@]}"; do
+  if [[ "$file" == "phone" ]]; then
+    alias cabinet='cloud cabinet'
+    break
+  fi
+done
+
+parse_aliases_and_exports_from_cabinet() {
+  # Check if the setup has already been run in this session
+  if [[ -n $CABINET_SETUP_DONE ]]; then
     return
   fi
 
-  # Iterate through each file in DOTFILES_SOURCE_FILES
-  for source_file in "${DOTFILES_SOURCE_FILES[@]}"; do
-    # Fetch aliases for the current source file
-    cabinet_output=$(cabinet -g dotfiles alias "$source_file")
-    
-    if [[ -n $cabinet_output ]]; then
-      # Process the raw output directly with jq
-      while IFS= read -r cmd; do
-        eval "$cmd"
-      done < <(printf '%s\n' "$cabinet_output" | jq -r 'to_entries[] | select(.key != null and .value != null) | "alias " + (.key | @sh) + "=" + (.value | @sh)')
-    else
-      echo "Warning: No aliases found for $source_file or cabinet returned no output."
-    fi
-  done
+  local cabinet_output
 
-  CABINET_ALIASES_SET=1
-}
+  # Fetch the entire JSON output from cabinet
+  cabinet_output=$(cabinet -g dotfiles)
 
-setup_cabinet_exports() {
-  # Check if exports have already been set
-  if [[ -n $CABINET_EXPORTS_SET ]]; then
-    return
+  if [[ -z $cabinet_output ]]; then
+    echo "Error: No data returned from cabinet."
+    return 1
   fi
 
-  # Iterate through each file in DOTFILES_SOURCE_FILES
-  for source_file in "${DOTFILES_SOURCE_FILES[@]}"; do
-    # Fetch exports for the current source file
-    cabinet_output=$(cabinet -g dotfiles export "$source_file")
-    
-    if [[ -n $cabinet_output ]]; then
-      # Process the raw output directly with jq
-      while IFS= read -r cmd; do
-        eval "$cmd"
-      done < <(printf '%s\n' "$cabinet_output" | jq -r 'to_entries[] | select(.key != null and .value != null) | "export " + (.key | @sh) + "=" + (.value | @sh)')
+  # Process Cabinet data for a specific type (alias or export)
+  process_cabinet_data() {
+    local type=$1 command_prefix jq_filter commands
+
+    case $type in
+      alias)
+        command_prefix="alias"
+        jq_filter='.alias'
+        ;;
+      export)
+        command_prefix="export"
+        jq_filter='.export'
+        ;;
+      *)
+        echo "Error: Invalid type $type. Use 'alias' or 'export'."
+        return 1
+        ;;
+    esac
+
+    # Generate aliases or exports, filtering by DOTFILES_OPTS from .zshrc
+    commands=$(printf '%s\n' "$cabinet_output" | jq -r --argjson files "$(printf '%s\n' "${DOTFILES_OPTS[@]}" | jq -Rsc 'split("\n")[:-1]')" "
+      $jq_filter | to_entries[] | select(.key as \$k | \$files | index(\$k)) | .value | to_entries[] | 
+      select(.key != null and .value != null) |
+      \"$command_prefix \" + (.key | @sh) + \"=\" + (.value | @sh)
+    ")
+
+    # Execute commands
+    if [[ -n $commands ]]; then
+      eval "$commands"
     else
-      echo "Warning: No exports found for $source_file or cabinet returned no output."
+      echo "Warning: No $type entries found for provided source files in Cabinet."
     fi
-  done
+  }
 
-  CABINET_EXPORTS_SET=1
+  # Process aliases and exports
+  process_cabinet_data alias
+  process_cabinet_data export
+
+  # Mark setup as done for this session
+  CABINET_SETUP_DONE=1
 }
-
 
 # Delay execution using precmd
-add-zsh-hook precmd setup_cabinet_aliases
-add-zsh-hook precmd setup_cabinet_exports
+add-zsh-hook precmd parse_aliases_and_exports_from_cabinet
 
 # personal sprints
 if [ -d "$HOME/syncthing/md/docs/sprints" ]; then
@@ -404,7 +420,7 @@ function llama() {
 }
 
 # source other files - keep on the bottom
-for opt in "${DOTFILES_SOURCE_FILES[@]}"; do
+for opt in "${DOTFILES_OPTS[@]}"; do
     if [[ $opt == "network" ]]; then
         file="$HOME/git/backend/zsh/network.zsh"
     elif [[ "$opt" == "common" ]]; then
