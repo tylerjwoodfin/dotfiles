@@ -1,10 +1,4 @@
-#$!/bin/zsh
-export NNN_OPTS="eH"
-export NNN_PLUG="f:fzcd"
-export NNN_OPENER="$HOME/.config/nnn/nvim-opener.sh"
-
-# load bookmarks from file
-BOOKMARKS_FILE="$HOME/.config/nnn/bookmarks.md"
+#!/bin/zsh
 
 # Generate NNN_BMS variable from the file with $HOME expansion
 if [[ -f "$BOOKMARKS_FILE" ]]; then
