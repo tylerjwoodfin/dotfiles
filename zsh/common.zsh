@@ -56,6 +56,9 @@ parse_aliases_and_exports_from_cabinet() {
       \"$command_prefix \" + (.key | @sh) + \"=\" + (.value | @sh)
     ")
 
+    # Replace $HOME with its actual value in the generated commands
+    commands=$(printf '%s\n' "$commands" | sed "s|\\\$HOME|$HOME|g")
+
     # Execute commands
     if [[ -n $commands ]]; then
       eval "$commands"
@@ -76,7 +79,7 @@ parse_aliases_and_exports_from_cabinet() {
 add-zsh-hook precmd parse_aliases_and_exports_from_cabinet
 
 # personal sprints
-if [ -d "$HOME/syncthing/md/docs/sprints" ]; then
+if [ -d "$sprints" ]; then
   export sprint=$(find "$sprints" -type f -name "sprint [0-9]*.md" | sort -V | tail -n 1)
 fi
 
