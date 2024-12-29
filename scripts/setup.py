@@ -4,9 +4,9 @@
 setup.py
 """
 
-from textwrap import dedent
 import subprocess
 import os
+from textwrap import dedent
 
 class Setup:
     """
@@ -279,35 +279,56 @@ xargs -I {} git clone {}
                 return response
             print("Invalid input. Please enter 'y' or 'n'.")
 
-    def add_zshconfig(self, config):
+    def add_zshconfig(self, option):
         """
-        Adds zsh configs in ../zsh to .zshrc.
+        Adds zsh configs in ../zsh to DOTFILES_OPTS.
         """
-
         while True:
-            response = self.ask(f"Do you want to link the {config} config file to .zshrc")
+            response = self.ask(f"Do you want to add {option} to your DOTFILES_OPTS in .zshrc")
 
             if response == 'y':
-                config_path = f"{self.config_path_prefix}/git/dotfiles/zsh/{config}"
-                if config == 'network':
-                    syncthing_path = f"{self.config_path_prefix}/syncthing/md/docs/network"
-                    config_path = f"{syncthing_path}/alias"
+                zshrc_path = f"{self.config_path_prefix}/.zshrc"
+
+                if option == 'network':
+                    syncthing_path = f"{self.config_path_prefix}/git/backend/zsh"
                     print(
                         f"\nOK, this requires Tyler's zsh config file in {syncthing_path}.")
 
-                cmd_zshrc = dedent(f"""
-                    printf "\n# added by dotfiles/setup.py on {self.today_date}\n\
-                    if [ -f {config_path} ]; then\n\
-                        source {config_path}\n\
-                    fi\n" >> {self.config_path_prefix}/.zshrc
+                # Source the `common` file
+                if option == 'common':
+                    cmd_zshrc = dedent(f"""
+                        printf "\\n# added by dotfiles/setup.py on {self.today_date}\\n\
+                        if [ -f $HOME/git/dotfiles/zsh/common.zsh ]; then\\n\
+                            source $HOME/git/dotfiles/zsh/common.zsh\\n\
+                        fi\\n" >> {zshrc_path}
                     """)
+                    subprocess.run(cmd_zshrc, shell=True, check=True)
 
-                subprocess.run(cmd_zshrc, shell=True, check=True)
+                # Ensure DOTFILES_OPTS line exists and add config to it if not already present
+                with open(zshrc_path, "r+", encoding="utf-8") as zshrc:
+                    lines = zshrc.readlines()
+                    found_opts = False
+                    for i, line in enumerate(lines):
+                        if line.strip().startswith("export DOTFILES_OPTS=("):
+                            found_opts = True
+                            if option not in line:
+                                # Insert the config into the DOTFILES_OPTS array
+                                lines[i] = line.strip()[:-1] + f" {option})\n"
+                            break
+
+                    if not found_opts:
+                        # Append the DOTFILES_OPTS line if it doesn't exist
+                        lines.append(f"export DOTFILES_OPTS=({option})\n")
+
+                    # Write changes back to .zshrc
+                    zshrc.seek(0)
+                    zshrc.writelines(lines)
+                    zshrc.truncate()
+
                 print("Done")
                 break
             if response == 'n':
                 break
-
 
     def create_ssh_key(self):
         """

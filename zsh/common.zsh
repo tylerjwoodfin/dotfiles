@@ -2,14 +2,78 @@
 
 # folders
 setopt cdablevars
-export notes=$HOME/syncthing/md/notes
-export docs=$HOME/syncthing/md/docs
-export work=$HOME/syncthing/md/work
-export workt=$HOME/syncthing/md/work/todo.md
-export logpath=$HOME/syncthing/log
-export cabinet=$HOME/syncthing/cabinet/settings.json
-export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
-export sprints=$HOME/syncthing/md/docs/sprints
+
+# aliases and exports, coming from `cabinet`- https://www.github.com/tylerjwoodfin/cabinet
+autoload -Uz add-zsh-hook
+
+# hardcode the cabinet alias to `cloud cabinet`` if device is phone
+for file in "${DOTFILES_OPTS[@]}"; do
+  if [[ "$file" == "phone" ]]; then
+    alias cabinet='cloud cabinet'
+    break
+  fi
+done
+
+parse_aliases_and_exports_from_cabinet() {
+  # Check if the setup has already been run in this session
+  if [[ -n $CABINET_SETUP_DONE ]]; then
+    return
+  fi
+
+  local cabinet_output
+
+  # Fetch the entire JSON output from cabinet
+  cabinet_output=$(cabinet -g dotfiles)
+
+  if [[ -z $cabinet_output ]]; then
+    echo "Error: No data returned from cabinet."
+    return 1
+  fi
+
+  # Process Cabinet data for a specific type (alias or export)
+  process_cabinet_data() {
+    local type=$1 command_prefix jq_filter commands
+
+    case $type in
+      alias)
+        command_prefix="alias"
+        jq_filter='.alias'
+        ;;
+      export)
+        command_prefix="export"
+        jq_filter='.export'
+        ;;
+      *)
+        echo "Error: Invalid type $type. Use 'alias' or 'export'."
+        return 1
+        ;;
+    esac
+
+    # Generate aliases or exports, filtering by DOTFILES_OPTS from .zshrc
+    commands=$(printf '%s\n' "$cabinet_output" | jq -r --argjson files "$(printf '%s\n' "${DOTFILES_OPTS[@]}" | jq -Rsc 'split("\n")[:-1]')" "
+      $jq_filter | to_entries[] | select(.key as \$k | \$files | index(\$k)) | .value | to_entries[] | 
+      select(.key != null and .value != null) |
+      \"$command_prefix \" + (.key | @sh) + \"=\" + (.value | @sh)
+    ")
+
+    # Execute commands
+    if [[ -n $commands ]]; then
+      eval "$commands"
+    else
+      echo "Warning: No $type entries found for provided source files in Cabinet."
+    fi
+  }
+
+  # Process aliases and exports
+  process_cabinet_data alias
+  process_cabinet_data export
+
+  # Mark setup as done for this session
+  CABINET_SETUP_DONE=1
+}
+
+# Delay execution using precmd
+add-zsh-hook precmd parse_aliases_and_exports_from_cabinet
 
 # personal sprints
 if [ -d "$HOME/syncthing/md/docs/sprints" ]; then
@@ -79,32 +143,6 @@ function cheat() {
   curl "cheat.sh/$encoded_query"
 }
 
-
-# Set ls options
-alias ls='ls -hal --color'
-
-# Show calendar
-alias cal='cal -B1 -A1; echo -e "\nUse ncal to display horizontally"'
-alias ncal='ncal -B1 -A1'
-
-# Use nvim as default editor
-export EDITOR='nvim'
-alias vim='nvim'
-
-# Quick navigation aliases
-alias cdh='cd ~'
-alias cdg='cd ~/git'
-alias cdam='cd ~/git/atlas-man'
-alias cdc='cd ~/git/cabinet'
-alias cddo='cd ~/git/dotfiles'
-alias cdrm='cd ~/git/remindmail'
-alias cdto='cd ~/git/tools'
-alias cdw='cd ~/git/tyler.cloud'
-alias b='cd ../'
-alias x='exit'
-alias cc='clear'
-cdl() { cd "$a"; ls; }
-
 # Enable Colors 🎨
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -113,7 +151,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# Git aliases
+# Git functions
 
 # Block certain flags and patterns in git commands
 function git() {
@@ -168,15 +206,6 @@ function git() {
     command git "$@"
 }
 
-alias glog='git log --graph --pretty=format:"%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset" --abbrev-commit --date=relative'
-alias gcm='git commit -m'
-alias gch='git fetch && git checkout'
-alias gb='git checkout -b'
-alias gs='git status'
-alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d'
-alias gd='git diff'
-alias gdd='git diff develop'
-alias gp='git pull'
 git config --global push.default current
 
 gcam() {
@@ -197,21 +226,6 @@ gbr() {
   git checkout -b "$release_branch" && git push -u origin "$release_branch" || { echo "Error creating or pushing release branch"; return 1; }
   echo "Release branch '$release_branch' created and pushed successfully."
 }
-
-# Useful scripts - see https://github.com/tylerjwoodfin
-alias diary='python3 ~/git/tools/diary/main.py'
-alias shorten='python3 ~/git/tools/shorten.py'
-alias yt='python3 ~/git/tools/yt/main.py'
-alias pitest='python3 ~/git/testfolder/test.py'
-alias turn='python3 ~/git/tools/kasalights/main.py'
-alias notes='nnn ~/syncthing/md/notes'
-alias docs='nnn ~/syncthing/md/docs'
-alias work='nnn ~/syncthing/md/work'
-alias lofi='bash ~/git/tools/lofi.sh'
-alias v='python3 ~/git/voicegpt/main.py'
-alias bike='python3 ~/git/tools/bike/price_calculator.py'
-alias bluesky='python3 ~/git/tools/bluesky/main.py'
-alias lifelog='python3 ~/git/tools/lifelog/main.py'
 
 # remindmail - see https://github.com/tylerjwoodfin/remindmail
 rmm() {
@@ -349,16 +363,9 @@ plex() {
     python3 ~/git/tools/youtube/main.py video "$@" -d ~/syncthing/video/YouTube
 }
 
-alias worka='worka'
-alias rmmt='rmmt'
-alias rmmy='rmmy'
-alias rmmty='rmmty'
-alias rmml='rmml'
-alias rmmsl='rmm --later'
-alias rmme='remind --edit'
-alias rmmst='remind --show-tomorrow'
-alias rmmsw='remind --show-week'
-alias one-more-hour='python3 /home/tyler/git/tools/pihole/one_more_hour.py'
+cdl() { 
+    cd "$a"; ls; 
+}
 
 # atlas-man
 addjira() {
@@ -412,6 +419,20 @@ function llama() {
   ollama run llama3:latest "$input"
 }
 
+# source other files - keep on the bottom
+for opt in "${DOTFILES_OPTS[@]}"; do
+    if [[ $opt == "network" ]]; then
+        file="$HOME/git/backend/zsh/network.zsh"
+    elif [[ "$opt" == "common" ]]; then
+        continue
+    else
+        file="$HOME/git/dotfiles/zsh/$opt"
+    fi
+
+    if [[ -f $file ]]; then
+        source "$file"
+    fi
+done
 
 [ -z "$PS1" ] && return
 
