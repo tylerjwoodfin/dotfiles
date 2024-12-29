@@ -25,3 +25,6 @@
 
 # Disable the “Are you sure you want to open this application?” dialog
 /usr/bin/defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+# Disable bouncing icons
+defaults write com.apple.dock no-bouncing -bool TRUE
