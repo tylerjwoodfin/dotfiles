@@ -1,162 +1,62 @@
 #!/bin/zsh
 
-# folders
+# ----------------------
+# EXPORTS
+# ----------------------
+
+# Directory paths
 setopt cdablevars
+export notes=$HOME/syncthing/md/notes
+export docs=$HOME/syncthing/md/docs
+export work=$HOME/syncthing/md/work
+export workt=$HOME/syncthing/md/work/todo.md
+export logpath=$HOME/syncthing/log
+export cabinet=$HOME/syncthing/cabinet/settings.json
+export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
+export sprints=$HOME/syncthing/md/docs/sprints
 
-# aliases and exports, coming from `cabinet`- https://www.github.com/tylerjwoodfin/cabinet
-autoload -Uz add-zsh-hook
+# NNN exports
+if [[ " ${DOTFILES_OPTS[@]} " =~ " nnn " ]]; then
+    export NNN_OPTS="eH"
+    export NNN_PLUG="f:fzcd"
+    export NNN_OPENER="$HOME/.config/nnn/nvim-opener.sh"
+fi
 
-# hardcode the cabinet alias to `cloud cabinet`` if device is phone
-for file in "${DOTFILES_OPTS[@]}"; do
-  if [[ "$file" == "phone" ]]; then
-    alias cabinet='cloud cabinet'
-    break
-  fi
-done
+# Editor configuration
+export EDITOR='nvim'
 
-parse_aliases_and_exports_from_cabinet() {
-  # Check if the setup has already been run in this session
-  if [[ -n $CABINET_SETUP_DONE ]]; then
-    return
-  fi
+# Git configuration
+git config --global push.default current
 
-  local cabinet_output
-
-  # Fetch the entire JSON output from cabinet
-  cabinet_output=$(cabinet -g dotfiles)
-
-  if [[ -z $cabinet_output ]]; then
-    echo "Error: No data returned from cabinet."
-    return 1
-  fi
-
-  # Process Cabinet data for a specific type (alias or export)
-  process_cabinet_data() {
-    local type=$1 command_prefix jq_filter commands
-
-    case $type in
-      alias)
-        command_prefix="alias"
-        jq_filter='.alias'
-        ;;
-      export)
-        command_prefix="export"
-        jq_filter='.export'
-        ;;
-      *)
-        echo "Error: Invalid type $type. Use 'alias' or 'export'."
-        return 1
-        ;;
-    esac
-
-    # Generate aliases or exports, filtering by DOTFILES_OPTS from .zshrc
-    commands=$(printf '%s\n' "$cabinet_output" | jq -r --argjson files "$(printf '%s\n' "${DOTFILES_OPTS[@]}" | jq -Rsc 'split("\n")[:-1]')" "
-      $jq_filter | to_entries[] | select(.key as \$k | \$files | index(\$k)) | .value | to_entries[] | 
-      select(.key != null and .value != null) |
-      \"$command_prefix \" + (.key | @sh) + \"=\" + (.value | @sh)
-    ")
-
-    # Replace $HOME with its actual value in the generated commands
-    commands=$(printf '%s\n' "$commands" | sed "s|\\\$HOME|$HOME|g")
-
-    # Execute commands
-    if [[ -n $commands ]]; then
-      eval "$commands"
-    else
-      echo "Warning: No $type entries found for provided source files in Cabinet."
-    fi
-  }
-
-  # Process aliases and exports
-  process_cabinet_data alias
-  process_cabinet_data export
-
-  # Mark setup as done for this session
-  CABINET_SETUP_DONE=1
-}
-
-# Delay execution using precmd
-add-zsh-hook precmd parse_aliases_and_exports_from_cabinet
-
-# personal sprints
-if [ -d "$sprints" ]; then
+# Sprint configuration
+if [ -d "$HOME/syncthing/md/docs/sprints" ]; then
   export sprint=$(find "$sprints" -type f -name "sprint [0-9]*.md" | sort -V | tail -n 1)
 fi
 
-newsprint() {
-    # Extract the current sprint number
-    local currentnum=${${sprint:t}//[^0-9]/}
-    local nextnum=$((currentnum + 1))
-    
-    echo "Opening Sprint ${currentnum} to review. Press any key to continue."
-    read -k1
-    nvim "$sprint"
-    
-    echo "\nSprint ${currentnum} is closed! Press any key to begin Sprint ${nextnum}."
-    read -k1
-    
-    # Calculate the next sprint number and create the new sprint file path
-    local newsprint="$sprints/sprint $nextnum.md"
-    
-    # Copy the content of the current sprint to the new sprint file
-    cp "$sprint" "$newsprint"
+# NNN configuration
+if [[ " ${DOTFILES_OPTS[@]} " =~ " nnn " ]]; then
+    BOOKMARKS_FILE="$HOME/.config/nnn/bookmarks.md"
 
-    # Generate the new first line and second line content
-    local today=$(date "+%B %d, %Y" | tr '[:upper:]' '[:lower:]')
-    local twoweeks=$(date -d "+14 days" "+%B %d, %Y" | tr '[:upper:]' '[:lower:]')
-    local new_first_line="# sprint ${nextnum}"
-    local new_second_line="- ${today} until mid-day ${twoweeks}"
-
-    # Update the first and second lines of the new sprint file
-    sed -i "1c\\${new_first_line}" "$newsprint"
-    sed -i "2c\\${new_second_line}" "$newsprint"
-    
-    # Open the new sprint file
-    nvim "$newsprint"
-    echo "Welcome to Sprint ${nextnum}!"
-}
-
-# Function: Edit a file in $notes with nvim
-vn() {
-    [[ $# -eq 0 ]] && return
-
-    filename="$*"
-
-    if [[ "$(uname)" == "Darwin" ]]; then
-        home_prefix_to_replace="/home/"
-        home_prefix_replacement="/Users/"
+    # Generate NNN_BMS variable from the file with $HOME expansion
+    if [[ -f "$BOOKMARKS_FILE" ]]; then
+        export NNN_BMS=$(awk -F':' -v HOME="$HOME" '{
+            gsub("\\$HOME", HOME, $2);          # Replace $HOME with actual home path
+            gsub("^~", HOME, $2);              # Replace ~ with home path
+            printf("%s:%s;", $1, $2);
+        }' "$BOOKMARKS_FILE")
     else
-        home_prefix_to_replace="/Users/"
-        home_prefix_replacement="/home/"
+        echo "Bookmarks file not found: $BOOKMARKS_FILE"
     fi
-
-    filename="${filename%%.md}"
-    
-    if [[ "$filename" == /* ]]; then
-        nvim "${filename/$home_prefix_to_replace/$home_prefix_replacement}.md"
-    else
-        nvim "$notes/$filename.md"
-    fi
-}
-
-# cheat
-function cheat() {
-  local query="$*"
-  local encoded_query=$(echo "$query" | sed 's/ /%20/g')
-  curl "cheat.sh/$encoded_query"
-}
-
-# Enable Colors 🎨
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
 fi
 
-# Git functions
+# ----------------------
+# FUNCTIONS
+# ----------------------
 
-# Block certain flags and patterns in git commands
+# Directory navigation
+cdl() { cd "$a"; ls; }
+
+# Git functions
 function git() {
     # Check for blocked flags
     function check_flags() {
@@ -209,8 +109,6 @@ function git() {
     command git "$@"
 }
 
-git config --global push.default current
-
 gcam() {
     branch=$(git symbolic-ref --short HEAD)
     branch=${branch#*/}
@@ -230,7 +128,89 @@ gbr() {
   echo "Release branch '$release_branch' created and pushed successfully."
 }
 
-# remindmail - see https://github.com/tylerjwoodfin/remindmail
+# Sprint management
+newsprint() {
+    # Extract the current sprint number
+    local currentnum=${${sprint:t}//[^0-9]/}
+    local nextnum=$((currentnum + 1))
+    
+    echo "Opening Sprint ${currentnum} to review. Press any key to continue."
+    read -k1
+    nvim "$sprint"
+    
+    echo "\nSprint ${currentnum} is closed! Press any key to begin Sprint ${nextnum}."
+    read -k1
+    
+    # Calculate the next sprint number and create the new sprint file path
+    local newsprint="$sprints/sprint $nextnum.md"
+    
+    # Copy the content of the current sprint to the new sprint file
+    cp "$sprint" "$newsprint"
+
+    # Generate the new first line and second line content
+    local today=$(date "+%B %d, %Y" | tr '[:upper:]' '[:lower:]')
+    local twoweeks=$(date -d "+14 days" "+%B %d, %Y" | tr '[:upper:]' '[:lower:]')
+    local new_first_line="# sprint ${nextnum}"
+    local new_second_line="- ${today} until mid-day ${twoweeks}"
+
+    # Update the first and second lines of the new sprint file
+    sed -i "1c\\${new_first_line}" "$newsprint"
+    sed -i "2c\\${new_second_line}" "$newsprint"
+    
+    # Open the new sprint file
+    nvim "$newsprint"
+    echo "Welcome to Sprint ${nextnum}!"
+}
+
+# Note editing
+vn() {
+    [[ $# -eq 0 ]] && return
+
+    filename="$*"
+
+    if [[ "$(uname)" == "Darwin" ]]; then
+        home_prefix_to_replace="/home/"
+        home_prefix_replacement="/Users/"
+    else
+        home_prefix_to_replace="/Users/"
+        home_prefix_replacement="/home/"
+    fi
+
+    filename="${filename%%.md}"
+    
+    if [[ "$filename" == /* ]]; then
+        nvim "${filename/$home_prefix_to_replace/$home_prefix_replacement}.md"
+    else
+        nvim "$notes/$filename.md"
+    fi
+}
+
+# Utility functions
+cheat() {
+  local query="$*"
+  local encoded_query=$(echo "$query" | sed 's/ /%20/g')
+  curl "cheat.sh/$encoded_query"
+}
+
+# Work todo management
+worka() {
+    local file_path="$HOME/syncthing/md/work/todo.md"
+    local new_task="- [ ] # $*"
+    
+    awk -v task="$new_task" '
+    BEGIN {added = 0}
+    {
+        if ($0 ~ /^## to do/ && added == 0) {
+            print $0
+            print task
+            added = 1
+        } else {
+            print $0
+        }
+    }' "$file_path" > tmpfile && mv tmpfile "$file_path"
+}
+
+# Remind functions
 rmm() {
     local save=""
     if [[ "$1" == "--save" ]]; then
@@ -238,28 +218,23 @@ rmm() {
         shift
     fi
 
-    # Join all arguments with spaces to process the comma
     local full_input="$*"
     local when=""
     local title=""
     local extra_args=()
     local current_flag=""
 
-    # Split on first comma if it exists
     if [[ "$full_input" == *,* ]]; then
-        when="${full_input%%,*}"           # Get everything before first comma
-        full_input="${full_input#*,}"      # Get everything after first comma
-        # Trim spaces from when
+        when="${full_input%%,*}"
+        full_input="${full_input#*,}"
         when="${when#"${when%%[![:space:]]*}"}"
         when="${when%"${when##*[![:space:]]}"}"
     fi
 
-    # Convert the full input string into an array of words
     local -a words
     local current_word=""
     local in_quotes=false
 
-    # Split the input into words, preserving quoted strings
     for (( i=0; i < ${#full_input}; i++ )); do
         char="${full_input:$i:1}"
         if [[ "$char" == '"' ]]; then
@@ -278,7 +253,6 @@ rmm() {
         words+=("$current_word")
     fi
 
-    # Process the words array
     local is_reading_title=true
     for word in "${words[@]}"; do
         if [[ "$word" == --* ]]; then
@@ -295,35 +269,28 @@ rmm() {
                     extra_args+=("$current_flag" "\"$word\"")
                     current_flag=""
                 else
-                    # Append to the last argument if no new flag
                     extra_args[-1]="${extra_args[-1]%\"} $word\""
                 fi
             fi
         fi
     done
 
-    # Add the last flag if it exists
     if [[ -n "$current_flag" ]]; then
         extra_args+=("$current_flag")
     fi
 
-    # Trim spaces from title
     title="${title#"${title%%[![:space:]]*}"}"
     title="${title%"${title##*[![:space:]]}"}"
 
-    # Build the command with explicit quoting for multi-word arguments
     local cmd=("remind")
     [[ -n $save ]] && cmd+=("$save")
     [[ -n $when ]] && cmd+=("--when" "\"$when\"")
     [[ -n $title ]] && cmd+=("--title" "\"$title\"")
 
-    # Add the extra arguments
     cmd+=("${extra_args[@]}")
 
-    # Convert command array to a single string for printing and execution
     local cmd_string="${cmd[@]}"
 
-    # Run the command
     eval $cmd_string
 }
 
@@ -343,72 +310,41 @@ rmml() {
     remind --title "$*" --when "later"
 }
 
-worka() {
-    # adds to work todo list
-    local file_path="$HOME/syncthing/md/work/todo.md"
-    local new_task="- [ ] # $*"
-    
-    # insert the new task below the "## to do" header
-    awk -v task="$new_task" '
-    BEGIN {added = 0} # Flag to check if task is added
-    {
-        if ($0 ~ /^## to do/ && added == 0) { # Find the "## to do" header
-            print $0 # Print the header
-            print task # Print the new task right after the header
-            added = 1 # Set the flag to avoid adding task again
-        } else {
-            print $0 # Print other lines as they are
-        }
-    }' "$file_path" > tmpfile && mv tmpfile "$file_path"
-}
-
+# Plex function
 plex() {
     python3 ~/git/tools/youtube/main.py video "$@" -d ~/syncthing/video/YouTube
 }
 
-cdl() { 
-    cd "$a"; ls; 
-}
-
-# atlas-man
+# Atlas-man functions
 addjira() {
-    # Initialize arrays for the title and for additional arguments
     local title_args=()
     local extra_args=()
     local reading_flag_value=false
     local current_flag=""
 
-    # Loop through each argument
     while [[ $# -gt 0 ]]; do
         if $reading_flag_value; then
-            # This is a value for a flag
             extra_args+=("$current_flag" "$1")
             reading_flag_value=false
             current_flag=""
         elif [[ "$1" =~ ^-[-]?[a-zA-Z] ]]; then
-            # If argument starts with - or --, it's a flag
             if [[ "$current_flag" != "" ]]; then
-                # Previous flag had no value, add it alone
                 extra_args+=("$current_flag")
             fi
             current_flag="$1"
             reading_flag_value=true
         else
-            # Not a flag or flag value, add to title
             title_args+=("$1")
         fi
         shift
     done
 
-    # Handle any remaining flag
     if [[ "$current_flag" != "" ]]; then
         extra_args+=("$current_flag")
     fi
 
-    # Join title arguments into a single string
     local title="${title_args[*]}"
 
-    # Call atlasman with the title and extra arguments
     atlasman --jira --add-issue "$title" "${extra_args[@]}"
 }
 
@@ -416,11 +352,106 @@ addshopping() {
     atlasman --trello --add-card "shopping" "$*"
 }
 
-# ollama
-function llama() {
+# Ollama function
+llama() {
   local input="$*"
   ollama run llama3:latest "$input"
 }
+
+# ----------------------
+# ALIASES
+# ----------------------
+
+# System aliases
+alias ls='ls -hal --color'
+alias cal='cal -B1 -A1; echo -e "\nUse ncal to display horizontally"'
+alias ncal='ncal -B1 -A1'
+alias vim='nvim'
+alias x='exit'
+alias cc='clear'
+alias b='cd ../'
+
+# Directory navigation aliases
+alias cdh='cd ~'
+alias cdg='cd ~/git'
+alias cdam='cd ~/git/atlas-man'
+alias cdc='cd ~/git/cabinet'
+alias cddo='cd ~/git/dotfiles'
+alias cdrm='cd ~/git/remindmail'
+alias cdto='cd ~/git/tools'
+alias cdw='cd ~/git/tyler.cloud'
+
+# Git aliases
+alias glog='git log --graph --pretty=format:"%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset" --abbrev-commit --date=relative'
+alias gcm='git commit -m'
+alias gch='git fetch && git checkout'
+alias gb='git checkout -b'
+alias gs='git status'
+alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d'
+alias gd='git diff'
+alias gdd='git diff develop'
+alias gp='git pull'
+
+# Tool script aliases
+alias diary='python3 ~/git/tools/diary/main.py'
+alias shorten='python3 ~/git/tools/shorten.py'
+alias yt='python3 ~/git/tools/yt/main.py'
+alias pitest='python3 ~/git/testfolder/test.py'
+alias turn='python3 ~/git/tools/kasalights/main.py'
+alias notes='nnn ~/syncthing/md/notes'
+alias docs='nnn ~/syncthing/md/docs'
+alias work='nnn ~/syncthing/md/work'
+alias lofi='bash ~/git/tools/lofi.sh'
+alias v='python3 ~/git/voicegpt/main.py'
+alias bike='python3 ~/git/tools/bike/price_calculator.py'
+alias bluesky='python3 ~/git/tools/bluesky/main.py'
+alias lifelog='python3 ~/git/tools/lifelog/main.py'
+
+# Remind aliases
+alias rmmt='rmmt'
+alias rmmy='rmmy'
+alias rmmty='rmmty'
+alias rmml='rmml'
+alias rmmsl='rmm --later'
+alias rmme='remind --edit'
+alias rmmst='remind --show-tomorrow'
+alias rmmsw='remind --show-week'
+alias one-more-hour='python3 /home/tyler/git/tools/pihole/one_more_hour.py'
+alias worka='worka'
+
+# 'not-cloud' aliases
+if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
+    cloud_commands=(
+        "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
+        "diary" "turn" "notes" "docs" "work" "vn" "n" "v" "one-more-hour" \
+        "plex" "bike" "addjira" "addshopping" "bluesky" "lifelog"
+    )
+
+    for cmd in "${cloud_commands[@]}"; do
+        alias "$cmd"="cloud $cmd"
+    done
+
+    ## desktop-specific
+    alias duplicate="./git/dotfiles/display/monitors-duplicate.sh"
+    alias duplicate4k="./git/dotfiles/display/monitors-duplicate4k.sh"
+    alias extend="./git/dotfiles/display/monitors-extend.sh"
+    alias steamdeck="./git/dotfiles/display/monitors-steamdeck.sh"
+fi
+
+# 'phone' aliases
+if [[ " ${DOTFILES_OPTS[@]} " =~ " phone " ]]; then
+    alias gpt="cloud gpt"
+    alias cal="cloud cal"
+    alias llama="cloud llama"
+fi
+
+# Enable grep colors
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
 
 # source other files - keep on the bottom
 for opt in "${DOTFILES_OPTS[@]}"; do
@@ -436,7 +467,3 @@ for opt in "${DOTFILES_OPTS[@]}"; do
         source "$file"
     fi
 done
-
-[ -z "$PS1" ] && return
-
-# Aliases below this line won't be called during interactive sessions (e.g., scripts)
