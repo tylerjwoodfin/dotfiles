@@ -395,7 +395,7 @@ alias gp='git pull'
 # Tool script aliases
 alias diary='python3 ~/git/tools/diary/main.py'
 alias shorten='python3 ~/git/tools/shorten.py'
-alias yt='python3 ~/git/tools/yt/main.py'
+alias yt='python3 ~/git/tools/youtube/main.py'
 alias pitest='python3 ~/git/testfolder/test.py'
 alias turn='python3 ~/git/tools/kasalights/main.py'
 alias notes='nnn ~/syncthing/md/notes'
