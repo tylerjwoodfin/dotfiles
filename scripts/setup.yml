@@ -1,0 +1,261 @@
+- hosts: localhost
+  become: yes
+  gather_facts: yes
+  tags:
+    - all
+
+  tasks:
+    - name: Gather system facts
+      setup:
+      tags: always
+    # 🔹 Install Homebrew (Mac only)
+    - name: Install Homebrew (macOS)
+      block:
+        - name: Install Homebrew
+          shell: >
+            /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          args:
+            creates: /usr/local/bin/brew
+          when: ansible_os_family == "Darwin"
+          tags: homebrew
+      rescue:
+        - name: Log Homebrew installation failure
+          debug:
+            msg: "⚠️ Homebrew installation failed, continuing."
+          tags: homebrew
+
+    # 🔹 Install CLI tools (Mac & Linux)
+    - name: Install CLI tools (Mac)
+      block:
+        - name: Install CLI tools
+          homebrew:
+            name:
+              - zsh
+              - neovim
+              - curl
+              - git
+              - jq
+              - make
+              - docker
+              - nnn
+            state: present
+          when: ansible_os_family == "Darwin"
+          tags: cli
+      rescue:
+        - name: Log Mac CLI tool installation failure
+          debug:
+            msg: "⚠️ CLI tools installation failed on Mac, continuing."
+          tags: cli
+
+    - name: Install CLI tools (Ubuntu)
+      block:
+        - name: Remove conflicting containerd package (if exists)
+          apt:
+            name: containerd
+            state: absent
+          when: ansible_os_family == "Debian"
+          tags: cli
+
+        - name: Install CLI tools
+          apt:
+            name:
+              - zsh
+              - neovim
+              - curl
+              - git
+              - jq
+              - make
+              - docker.io
+              - nnn
+              - syncthing
+            state: present
+            update_cache: yes
+          when: ansible_os_family == "Debian"
+          tags: cli
+      rescue:
+        - name: Log Ubuntu CLI tool installation failure
+          debug:
+            msg: "⚠️ CLI tools installation failed on Ubuntu, continuing."
+          tags: cli
+
+    # 🔹 Install GUI Apps (Mac)
+    - name: Install GUI apps (Mac)
+      block:
+        - name: Install GUI apps
+          homebrew_cask:
+            name:
+              - arc
+              - visual-studio-code
+              - brave-browser
+              - tor-browser
+              - librewolf
+              - zettlr
+              - syncthing
+            state: present
+          when: ansible_os_family == "Darwin"
+          tags: gui
+      rescue:
+        - name: Log Mac GUI apps installation failure
+          debug:
+            msg: "⚠️ GUI apps installation failed on Mac, continuing."
+          tags: gui
+
+    # 🔹 Install GUI Apps (Ubuntu)
+    - name: Install GUI apps (Ubuntu)
+      block:
+        - name: Add Brave Browser repository
+          shell: |
+            sudo apt install curl -y
+            sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+            echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+            sudo apt update
+          args:
+            creates: /etc/apt/sources.list.d/brave-browser-release.list
+          tags: gui
+
+        - name: Install Brave, Tor, and VS Code
+          apt:
+            name:
+              - brave-browser
+              - torbrowser-launcher
+            state: present
+          tags: gui
+
+        - name: Install VS Code (Snap)
+          snap:
+            name: code
+            classic: yes
+          tags: gui
+
+        - name: Install Syncthing (Ubuntu)
+          apt:
+            name: syncthing
+            state: present
+          tags: gui
+
+        - name: Install LibreWolf (Ubuntu)
+          block:
+            - name: Add LibreWolf repository key
+              shell: |
+                sudo mkdir -p /etc/apt/keyrings
+                wget -qO- https://deb.librewolf.net/keyring.gpg | sudo tee /etc/apt/keyrings/librewolf.gpg > /dev/null
+              args:
+                creates: /etc/apt/keyrings/librewolf.gpg
+              tags: gui
+
+            - name: Add LibreWolf repository
+              shell: |
+                echo "deb [signed-by=/etc/apt/keyrings/librewolf.gpg arch=amd64] https://deb.librewolf.net $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/librewolf.list
+              args:
+                creates: /etc/apt/sources.list.d/librewolf.list
+              tags: gui
+
+            - name: Update apt and install LibreWolf
+              apt:
+                update_cache: yes
+                name: librewolf
+                state: present
+              tags: gui
+
+      when: ansible_os_family == "Debian"
+      tags: gui
+      rescue:
+        - name: Log Ubuntu GUI apps installation failure
+          debug:
+            msg: "⚠️ GUI apps installation failed on Ubuntu, continuing."
+          tags: gui
+
+    # 🔹 Clone All Repos from GitHub
+    - name: Clone all GitHub repos
+      block:
+        - name: Clone repositories
+          shell: >
+            UserName=tylerjwoodfin;
+            curl -s https://api.github.com/users/$UserName/repos?per_page=1000 |
+            jq -r '.[]|.ssh_url' | xargs -I {} git clone {}
+          args:
+            chdir: "{{ ansible_env.HOME }}/git"
+          tags: clone
+      rescue:
+        - name: Log repo cloning failure
+          debug:
+            msg: "⚠️ Cloning GitHub repositories failed, continuing."
+          tags: clone
+
+    # 🔹 Install Miscellaneous Tools
+    - name: Install CopyQ (Clipboard Manager)
+      block:
+        - name: Install CopyQ
+          apt:
+            name: copyq
+            state: present
+          when: ansible_os_family == "Debian"
+          tags: copyq
+      rescue:
+        - name: Log CopyQ installation failure
+          debug:
+            msg: "⚠️ CopyQ installation failed, continuing."
+          tags: copyq
+
+    - name: Install Pihole (Ad Blocker)
+      block:
+        - name: Install PiHole
+          shell: curl -sSL https://install.pi-hole.net | bash
+          tags: pihole
+      rescue:
+        - name: Log PiHole installation failure
+          debug:
+            msg: "⚠️ PiHole installation failed, continuing."
+          tags: pihole
+
+    - name: Install Cabinet (Python Package)
+      block:
+        - name: Install Cabinet
+          pip:
+            name: cabinet
+          tags: python
+      rescue:
+        - name: Log Cabinet installation failure
+          debug:
+            msg: "⚠️ Cabinet Python package installation failed, continuing."
+          tags: python
+
+    - name: Install RemindMail (Python Package)
+      block:
+        - name: Install RemindMail
+          pip:
+            name: remindmail
+          tags: python
+      rescue:
+        - name: Log RemindMail installation failure
+          debug:
+            msg: "⚠️ RemindMail Python package installation failed, continuing."
+          tags: python
+
+    - name: Open external download links (Mac)
+      block:
+        - name: Open Mac download links
+          shell: "open {{ item }}"
+          loop:
+            - "https://spotify.com/download"
+            - "https://github.com/rustdesk/rustdesk/releases"
+          when: ansible_os_family == "Darwin"
+      rescue:
+        - name: Log Mac download failure
+          debug:
+            msg: "⚠️ Mac download links failed to open, continuing."
+      tags: downloads
+
+    - name: Open external download links (Linux)
+      block:
+        - name: Open Linux download links
+          shell: "xdg-open {{ item }}"
+          loop:
+            - "https://spotify.com/download"
+            - "https://github.com/rustdesk/rustdesk/releases"
+          when: ansible_os_family == "Debian"
+      rescue:
+        - name: Log Linux download failure
+          debug:
+            msg: "⚠️ Linux download links failed to open, continuing."
+      tags: downloads
