@@ -6,7 +6,7 @@ Disclaimer: these are unique to my setup; this repo really only exists for my co
 
 # automatic setup
 
-- run `python3 scripts/setup.py`
+- run `zsh scripts/setup.sh`
 
 # manual setup
 

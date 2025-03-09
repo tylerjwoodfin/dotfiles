@@ -138,30 +138,6 @@
             state: present
           tags: gui
 
-        - name: Install LibreWolf (Ubuntu)
-          block:
-            - name: Add LibreWolf repository key
-              shell: |
-                sudo mkdir -p /etc/apt/keyrings
-                wget -qO- https://deb.librewolf.net/keyring.gpg | sudo tee /etc/apt/keyrings/librewolf.gpg > /dev/null
-              args:
-                creates: /etc/apt/keyrings/librewolf.gpg
-              tags: gui
-
-            - name: Add LibreWolf repository
-              shell: |
-                echo "deb [signed-by=/etc/apt/keyrings/librewolf.gpg arch=amd64] https://deb.librewolf.net $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/librewolf.list
-              args:
-                creates: /etc/apt/sources.list.d/librewolf.list
-              tags: gui
-
-            - name: Update apt and install LibreWolf
-              apt:
-                update_cache: yes
-                name: librewolf
-                state: present
-              tags: gui
-
       when: ansible_os_family == "Debian"
       tags: gui
       rescue:
@@ -170,20 +146,46 @@
             msg: "⚠️ GUI apps installation failed on Ubuntu, continuing."
           tags: gui
 
-    # 🔹 Clone All Repos from GitHub
-    - name: Clone all GitHub repos
+    - name: Configure SSH and clone all GitHub repos
       block:
-        - name: Clone repositories
-          shell: >
+        - name: Ensure SSH key exists
+          ansible.builtin.command: "[ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''"
+          args:
+            creates: "{{ ansible_env.HOME }}/.ssh/id_rsa"
+          tags: ssh, clone
+
+        - name: Display SSH public key (manual step)
+          ansible.builtin.command: "cat {{ ansible_env.HOME }}/.ssh/id_rsa.pub"
+          register: ssh_pubkey
+          changed_when: false
+          tags: ssh, clone
+
+        - name: Prompt user to add SSH key to GitHub
+          ansible.builtin.debug:
+            msg: |
+              🔑 Add this SSH key to GitHub: https://github.com/settings/keys
+              {{ ssh_pubkey.stdout }}
+          tags: ssh, clone
+
+        - name: Test SSH connection to GitHub
+          ansible.builtin.command: "ssh -T git@github.com"
+          register: ssh_test
+          failed_when: ssh_test.rc != 1  # Expecting "Hi <user>! You've successfully authenticated, but GitHub does not provide shell access."
+          changed_when: false
+          tags: ssh, clone
+
+        - name: Clone repositories using SSH
+          ansible.builtin.shell: >
             UserName=tylerjwoodfin;
             curl -s https://api.github.com/users/$UserName/repos?per_page=1000 |
             jq -r '.[]|.ssh_url' | xargs -I {} git clone {}
           args:
             chdir: "{{ ansible_env.HOME }}/git"
           tags: clone
+
       rescue:
         - name: Log repo cloning failure
-          debug:
+          ansible.builtin.debug:
             msg: "⚠️ Cloning GitHub repositories failed, continuing."
           tags: clone
 
@@ -202,68 +204,65 @@
             msg: "⚠️ CopyQ installation failed, continuing."
           tags: copyq
 
-    - name: Install Pihole (Ad Blocker)
+    - name: Install Pihole
       block:
         - name: Install PiHole
-          shell: curl -sSL https://install.pi-hole.net | bash
+          ansible.builtin.shell:
+            cmd: "curl -sSL https://install.pi-hole.net | bash -s -- --unattended"
+            executable: /bin/bash
+          become: true
+          args:
+            creates: /etc/pihole/setupVars.conf
           tags: pihole
       rescue:
         - name: Log PiHole installation failure
-          debug:
+          ansible.builtin.debug:
             msg: "⚠️ PiHole installation failed, continuing."
           tags: pihole
 
-    - name: Install Cabinet (Python Package)
+    # 🔹 Install Cabinet and Remindmail
+    - name: Ensure pipx is installed
+      ansible.builtin.package:
+        name: pipx
+        state: present
+      become: true
+      tags: python
+
+    - name: Ensure pipx is in PATH
+      ansible.builtin.shell: "eval $(pipx ensurepath)"
+      args:
+        executable: /bin/bash
+      changed_when: false
+      tags: python
+
+    - name: Install Cabinet (Python Package via pipx)
       block:
-        - name: Install Cabinet
-          pip:
-            name: cabinet
+        - name: Install Cabinet via pipx
+          ansible.builtin.shell: "pipx install cabinet"
+          args:
+            executable: /bin/bash
           tags: python
+
       rescue:
         - name: Log Cabinet installation failure
-          debug:
+          ansible.builtin.debug:
             msg: "⚠️ Cabinet Python package installation failed, continuing."
           tags: python
 
-    - name: Install RemindMail (Python Package)
+    - name: Install RemindMail (Python Package via pipx)
       block:
-        - name: Install RemindMail
-          pip:
-            name: remindmail
+        - name: Install RemindMail via pipx
+          ansible.builtin.shell: "pipx install remindmail"
+          args:
+            executable: /bin/bash
           tags: python
+
       rescue:
         - name: Log RemindMail installation failure
-          debug:
+          ansible.builtin.debug:
             msg: "⚠️ RemindMail Python package installation failed, continuing."
           tags: python
 
-    - name: Open external download links (Mac)
-      block:
-        - name: Open Mac download links
-          shell: "open {{ item }}"
-          loop:
-            - "https://spotify.com/download"
-            - "https://github.com/rustdesk/rustdesk/releases"
-          when: ansible_os_family == "Darwin"
-      rescue:
-        - name: Log Mac download failure
-          debug:
-            msg: "⚠️ Mac download links failed to open, continuing."
-      tags: downloads
-
-    - name: Open external download links (Linux)
-      block:
-        - name: Open Linux download links
-          shell: "xdg-open {{ item }}"
-          loop:
-            - "https://spotify.com/download"
-            - "https://github.com/rustdesk/rustdesk/releases"
-          when: ansible_os_family == "Debian"
-      rescue:
-        - name: Log Linux download failure
-          debug:
-            msg: "⚠️ Linux download links failed to open, continuing."
-      tags: downloads
 
     # 🔹 MacOS Defaults
     - name: Apply MacOS defaults
@@ -287,23 +286,6 @@
             msg: "⚠️ mac.sh execution failed, continuing."
           tags: mac_defaults
 
-    # 🔹 Set Borg Passphrase
-    - name: Set Borg passphrase
-      block:
-        - name: Prompt for and set Borg passphrase
-          shell: |
-            read -s -p "Enter Borg passphrase: " BORG_PASSPHRASE && echo \
-            "export BORG_PASSPHRASE='$BORG_PASSPHRASE'" >> ~/.zshrc && source ~/.zshrc
-          args:
-            executable: /bin/zsh
-          tags: borg
-
-      rescue:
-        - name: Log Borg passphrase setup failure
-          debug:
-            msg: "⚠️ Borg passphrase setup failed, continuing."
-          tags: borg
-
     # 🔹 Configure Git
     - name: Configure Git settings
       vars:
@@ -317,7 +299,7 @@
 
         - name: Set Git email defaults
           shell: |
-            git config --global user.email "{{ self.git_addr }}"
+            git config --global user.email 14207553+tylerjwoodfin@users.noreply.github.com
             git config --global user.name "Tyler Woodfin"
           tags: git
 
@@ -370,3 +352,40 @@
           debug:
             msg: "⚠️ SSH authorized_keys setup failed, continuing."
           tags: ssh
+
+    - name: Link vim.lua to Neovim init.lua
+      block:
+        - name: Append vim.lua reference to init.lua
+          ansible.builtin.lineinfile:
+            path: "{{ ansible_env.HOME }}/.config/nvim/init.lua"
+            line: |
+              -- added by dotfiles on {{ ansible_date_time.date }}
+              dofile('{{ ansible_env.HOME }}/git/dotfiles/vim.lua')
+            create: yes
+          tags: vim
+
+      rescue:
+        - name: Log failure to link vim.lua
+          ansible.builtin.debug:
+            msg: "⚠️ Failed to link vim.lua to init.lua, continuing."
+          tags: vim
+
+    - name: Set Zsh as the default shell
+      block:
+        - name: Ensure Zsh is installed
+          ansible.builtin.package:
+            name: zsh
+            state: present
+          become: true
+          tags: zsh
+
+        - name: Change default shell to Zsh
+          ansible.builtin.shell: "chsh -s $(which zsh) {{ ansible_env.USER }}"
+          become: true
+          tags: zsh
+
+      rescue:
+        - name: Log failure to set Zsh as default shell
+          ansible.builtin.debug:
+            msg: "⚠️ Failed to set Zsh as the default shell, continuing."
+          tags: zsh
