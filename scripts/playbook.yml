@@ -38,6 +38,7 @@
               - make
               - docker
               - nnn
+              - borgbackup
             state: present
           when: ansible_os_family == "Darwin"
           tags: cli
@@ -68,6 +69,10 @@
               - docker.io
               - nnn
               - syncthing
+              - borgbackup
+              - net-tools
+              - chrome-gnome-shell
+              - input-remapper
             state: present
             update_cache: yes
           when: ansible_os_family == "Debian"
@@ -259,3 +264,109 @@
           debug:
             msg: "⚠️ Linux download links failed to open, continuing."
       tags: downloads
+
+    # 🔹 MacOS Defaults
+    - name: Apply MacOS defaults
+      block:
+        - name: Execute mac.sh script using zsh
+          ansible.builtin.command:
+            cmd: zsh ../mac.sh
+          args:
+            chdir: "{{ playbook_dir }}"
+          register: script_output
+          tags: mac_defaults
+
+        - name: Show script output
+          debug:
+            var: script_output.stdout
+          when: ansible_os_family == "Darwin"
+          tags: mac_defaults
+      rescue:
+        - name: Log MacOS defaults script failure
+          debug:
+            msg: "⚠️ mac.sh execution failed, continuing."
+          tags: mac_defaults
+
+    # 🔹 Set Borg Passphrase
+    - name: Set Borg passphrase
+      block:
+        - name: Prompt for and set Borg passphrase
+          shell: |
+            read -s -p "Enter Borg passphrase: " BORG_PASSPHRASE && echo \
+            "export BORG_PASSPHRASE='$BORG_PASSPHRASE'" >> ~/.zshrc && source ~/.zshrc
+          args:
+            executable: /bin/zsh
+          tags: borg
+
+      rescue:
+        - name: Log Borg passphrase setup failure
+          debug:
+            msg: "⚠️ Borg passphrase setup failed, continuing."
+          tags: borg
+
+    # 🔹 Configure Git
+    - name: Configure Git settings
+      vars:
+        git: "{{ ansible_env.HOME }}/git"
+      block:
+        - name: Apply Pre-push hooks
+          shell: zsh {{ git }}/tools/githooks/apply_pre-push.sh
+          args:
+            executable: /bin/zsh
+          tags: git
+
+        - name: Set Git email defaults
+          shell: |
+            git config --global user.email "{{ self.git_addr }}"
+            git config --global user.name "Tyler Woodfin"
+          tags: git
+
+        - name: Link global .gitignore to Git configuration
+          shell: git config --global core.excludesfile {{ git }}/dotfiles/.gitignore
+          tags: git
+
+      rescue:
+        - name: Log Git configuration failure
+          debug:
+            msg: "⚠️ Git configuration failed, continuing."
+          tags: git
+
+    # 🔹 Configure SSH Authorized Keys
+    - name: Apply the shared authorized_keys file
+      block:
+        - name: Update sshd_config with authorized_keys file path
+          shell: |
+            sudo sed -i '/^AuthorizedKeysFile/d' /etc/ssh/sshd_config
+            echo 'AuthorizedKeysFile %h/.ssh/authorized_keys {{ ansible_env.HOME }}/docs/network/authorized_keys.md' | sudo tee -a /etc/ssh/sshd_config
+          tags: ssh
+
+        - name: Set authorized_keys notice
+          copy:
+            content: |
+              # this file is empty.
+              # authorized public keys are stored in ~/syncthing/md/docs/network/authorized_keys.md.
+              # For instructions, see ~/syncthing/md/docs/network/ssh for instructions.
+            dest: "{{ ansible_env.HOME }}/.ssh/authorized_keys"
+            mode: '0644'
+          tags: ssh
+
+        - name: Ensure correct directory permissions
+          shell: find {{ ansible_env.HOME }} -type d -exec chmod 700 {} +
+          tags: ssh
+
+        - name: Ensure correct ownership of directories
+          shell: find {{ ansible_env.HOME }} -type d -exec chown {{ ansible_env.USER }}:{{ ansible_env.USER }} {} +
+          tags: ssh
+
+        - name: Restart SSH service (Linux only)
+          systemd:
+            name: sshd
+            state: restarted
+          when: ansible_os_family == "Debian"
+          tags: ssh
+
+      rescue:
+        - name: Log SSH configuration failure
+          debug:
+            msg: "⚠️ SSH authorized_keys setup failed, continuing."
+          tags: ssh
