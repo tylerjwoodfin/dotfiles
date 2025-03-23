@@ -6,7 +6,7 @@ Disclaimer: these are unique to my setup; this repo really only exists for my co
 
 # automatic setup
 
-- run `zsh scripts/setup.sh`
+- `zsh scripts/setup.sh`
 
 # manual setup
 

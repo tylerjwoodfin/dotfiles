@@ -276,7 +276,7 @@
       block:
         - name: Execute mac.sh script using zsh
           ansible.builtin.command:
-            cmd: zsh ../mac.sh
+            cmd: zsh ../scripts/mac.sh
           args:
             chdir: "{{ playbook_dir }}"
           register: script_output
