@@ -62,7 +62,8 @@ OPTIONS+=("downloads" "Open external app download links" OFF)
 OPTIONS+=("borg" "Set BorgBackup passphrase" OFF)
 OPTIONS+=("clone" "Clone all GitHub repositories (run SEPARATELY after SSH!)" OFF)
 OPTIONS+=("vim" "Link vim.lua to Neovim init.lua" OFF)
-OPTIONS+=("zsh" "Set ZSH to the default shell" OFF)
+OPTIONS+=("zsh" "Set the default shell to ZSH" OFF)
+OPTIONS+=("zshrc" "Add common.zsh to .zshrc" OFF)
 
 SELECTED=$(whiptail --title "Select Setup Options" --checklist \
 "Choose items to install (use Space to select, Enter to confirm):" 20 78 15 \

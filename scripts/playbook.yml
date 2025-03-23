@@ -96,6 +96,7 @@
               - librewolf
               - zettlr
               - syncthing
+              - rustdesk
             state: present
           when: ansible_os_family == "Darwin"
           tags: gui
@@ -135,6 +136,12 @@
         - name: Install Syncthing (Ubuntu)
           apt:
             name: syncthing
+            state: present
+          tags: gui
+
+        - name: Install Rustdesk (Ubuntu)
+          apt:
+            name: rustdesk
             state: present
           tags: gui
 
@@ -389,3 +396,16 @@
           ansible.builtin.debug:
             msg: "⚠️ Failed to set Zsh as the default shell, continuing."
           tags: zsh
+
+    # 🔹 Configure .zshrc
+    - name: Ensure custom dotfiles config is in .zshrc
+      ansible.builtin.blockinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        marker: "# {mark} DOTFILES CONFIG"
+        block: |
+          export DOTFILES_OPTS=(common network nnn) # adjust as needed; other options: not-cloud, nnn, network, phone
+          if [ -f $HOME/git/dotfiles/zsh/common.zsh ]; then
+              source $HOME/git/dotfiles/zsh/common.zsh
+          fi
+        create: yes
+      tags: zshrc
