@@ -1,0 +1,411 @@
+- hosts: localhost
+  become: yes
+  gather_facts: yes
+  tags:
+    - all
+
+  tasks:
+    - name: Gather system facts
+      setup:
+      tags: always
+    # 🔹 Install Homebrew (Mac only)
+    - name: Install Homebrew (macOS)
+      block:
+        - name: Install Homebrew
+          shell: >
+            /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          args:
+            creates: /usr/local/bin/brew
+          when: ansible_os_family == "Darwin"
+          tags: homebrew
+      rescue:
+        - name: Log Homebrew installation failure
+          debug:
+            msg: "⚠️ Homebrew installation failed, continuing."
+          tags: homebrew
+
+    # 🔹 Install CLI tools (Mac & Linux)
+    - name: Install CLI tools (Mac)
+      block:
+        - name: Install CLI tools
+          homebrew:
+            name:
+              - zsh
+              - neovim
+              - curl
+              - git
+              - jq
+              - make
+              - docker
+              - nnn
+              - borgbackup
+            state: present
+          when: ansible_os_family == "Darwin"
+          tags: cli
+      rescue:
+        - name: Log Mac CLI tool installation failure
+          debug:
+            msg: "⚠️ CLI tools installation failed on Mac, continuing."
+          tags: cli
+
+    - name: Install CLI tools (Ubuntu)
+      block:
+        - name: Remove conflicting containerd package (if exists)
+          apt:
+            name: containerd
+            state: absent
+          when: ansible_os_family == "Debian"
+          tags: cli
+
+        - name: Install CLI tools
+          apt:
+            name:
+              - zsh
+              - neovim
+              - curl
+              - git
+              - jq
+              - make
+              - docker.io
+              - nnn
+              - syncthing
+              - borgbackup
+              - net-tools
+              - chrome-gnome-shell
+              - input-remapper
+            state: present
+            update_cache: yes
+          when: ansible_os_family == "Debian"
+          tags: cli
+      rescue:
+        - name: Log Ubuntu CLI tool installation failure
+          debug:
+            msg: "⚠️ CLI tools installation failed on Ubuntu, continuing."
+          tags: cli
+
+    # 🔹 Install GUI Apps (Mac)
+    - name: Install GUI apps (Mac)
+      block:
+        - name: Install GUI apps
+          homebrew_cask:
+            name:
+              - arc
+              - visual-studio-code
+              - brave-browser
+              - tor-browser
+              - librewolf
+              - zettlr
+              - syncthing
+              - rustdesk
+            state: present
+          when: ansible_os_family == "Darwin"
+          tags: gui
+      rescue:
+        - name: Log Mac GUI apps installation failure
+          debug:
+            msg: "⚠️ GUI apps installation failed on Mac, continuing."
+          tags: gui
+
+    # 🔹 Install GUI Apps (Ubuntu)
+    - name: Install GUI apps (Ubuntu)
+      block:
+        - name: Add Brave Browser repository
+          shell: |
+            sudo apt install curl -y
+            sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+            echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main" | sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+            sudo apt update
+          args:
+            creates: /etc/apt/sources.list.d/brave-browser-release.list
+          tags: gui
+
+        - name: Install Brave, Tor, and VS Code
+          apt:
+            name:
+              - brave-browser
+              - torbrowser-launcher
+            state: present
+          tags: gui
+
+        - name: Install VS Code (Snap)
+          snap:
+            name: code
+            classic: yes
+          tags: gui
+
+        - name: Install Syncthing (Ubuntu)
+          apt:
+            name: syncthing
+            state: present
+          tags: gui
+
+        - name: Install Rustdesk (Ubuntu)
+          apt:
+            name: rustdesk
+            state: present
+          tags: gui
+
+      when: ansible_os_family == "Debian"
+      tags: gui
+      rescue:
+        - name: Log Ubuntu GUI apps installation failure
+          debug:
+            msg: "⚠️ GUI apps installation failed on Ubuntu, continuing."
+          tags: gui
+
+    - name: Configure SSH and clone all GitHub repos
+      block:
+        - name: Ensure SSH key exists
+          ansible.builtin.command: "[ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''"
+          args:
+            creates: "{{ ansible_env.HOME }}/.ssh/id_rsa"
+          tags: ssh, clone
+
+        - name: Display SSH public key (manual step)
+          ansible.builtin.command: "cat {{ ansible_env.HOME }}/.ssh/id_rsa.pub"
+          register: ssh_pubkey
+          changed_when: false
+          tags: ssh, clone
+
+        - name: Prompt user to add SSH key to GitHub
+          ansible.builtin.debug:
+            msg: |
+              🔑 Add this SSH key to GitHub: https://github.com/settings/keys
+              {{ ssh_pubkey.stdout }}
+          tags: ssh, clone
+
+        - name: Test SSH connection to GitHub
+          ansible.builtin.command: "ssh -T git@github.com"
+          register: ssh_test
+          failed_when: ssh_test.rc != 1  # Expecting "Hi <user>! You've successfully authenticated, but GitHub does not provide shell access."
+          changed_when: false
+          tags: ssh, clone
+
+        - name: Clone repositories using SSH
+          ansible.builtin.shell: >
+            UserName=tylerjwoodfin;
+            curl -s https://api.github.com/users/$UserName/repos?per_page=1000 |
+            jq -r '.[]|.ssh_url' | xargs -I {} git clone {}
+          args:
+            chdir: "{{ ansible_env.HOME }}/git"
+          tags: clone
+
+      rescue:
+        - name: Log repo cloning failure
+          ansible.builtin.debug:
+            msg: "⚠️ Cloning GitHub repositories failed, continuing."
+          tags: clone
+
+    # 🔹 Install Miscellaneous Tools
+    - name: Install CopyQ (Clipboard Manager)
+      block:
+        - name: Install CopyQ
+          apt:
+            name: copyq
+            state: present
+          when: ansible_os_family == "Debian"
+          tags: copyq
+      rescue:
+        - name: Log CopyQ installation failure
+          debug:
+            msg: "⚠️ CopyQ installation failed, continuing."
+          tags: copyq
+
+    - name: Install Pihole
+      block:
+        - name: Install PiHole
+          ansible.builtin.shell:
+            cmd: "curl -sSL https://install.pi-hole.net | bash -s -- --unattended"
+            executable: /bin/bash
+          become: true
+          args:
+            creates: /etc/pihole/setupVars.conf
+          tags: pihole
+      rescue:
+        - name: Log PiHole installation failure
+          ansible.builtin.debug:
+            msg: "⚠️ PiHole installation failed, continuing."
+          tags: pihole
+
+    # 🔹 Install Cabinet and Remindmail
+    - name: Ensure pipx is installed
+      ansible.builtin.package:
+        name: pipx
+        state: present
+      become: true
+      tags: python
+
+    - name: Ensure pipx is in PATH
+      ansible.builtin.shell: "eval $(pipx ensurepath)"
+      args:
+        executable: /bin/bash
+      changed_when: false
+      tags: python
+
+    - name: Install Cabinet (Python Package via pipx)
+      block:
+        - name: Install Cabinet via pipx
+          ansible.builtin.shell: "pipx install cabinet"
+          args:
+            executable: /bin/bash
+          tags: python
+
+      rescue:
+        - name: Log Cabinet installation failure
+          ansible.builtin.debug:
+            msg: "⚠️ Cabinet Python package installation failed, continuing."
+          tags: python
+
+    - name: Install RemindMail (Python Package via pipx)
+      block:
+        - name: Install RemindMail via pipx
+          ansible.builtin.shell: "pipx install remindmail"
+          args:
+            executable: /bin/bash
+          tags: python
+
+      rescue:
+        - name: Log RemindMail installation failure
+          ansible.builtin.debug:
+            msg: "⚠️ RemindMail Python package installation failed, continuing."
+          tags: python
+
+
+    # 🔹 MacOS Defaults
+    - name: Apply MacOS defaults
+      block:
+        - name: Execute mac.sh script using zsh
+          ansible.builtin.command:
+            cmd: zsh ../scripts/mac.sh
+          args:
+            chdir: "{{ playbook_dir }}"
+          register: script_output
+          tags: mac_defaults
+
+        - name: Show script output
+          debug:
+            var: script_output.stdout
+          when: ansible_os_family == "Darwin"
+          tags: mac_defaults
+      rescue:
+        - name: Log MacOS defaults script failure
+          debug:
+            msg: "⚠️ mac.sh execution failed, continuing."
+          tags: mac_defaults
+
+    # 🔹 Configure Git
+    - name: Configure Git settings
+      vars:
+        git: "{{ ansible_env.HOME }}/git"
+      block:
+        - name: Apply Pre-push hooks
+          shell: zsh {{ git }}/tools/githooks/apply_pre-push.sh
+          args:
+            executable: /bin/zsh
+          tags: git
+
+        - name: Set Git email defaults
+          shell: |
+            git config --global user.email 14207553+tylerjwoodfin@users.noreply.github.com
+            git config --global user.name "Tyler Woodfin"
+          tags: git
+
+        - name: Link global .gitignore to Git configuration
+          shell: git config --global core.excludesfile {{ git }}/dotfiles/.gitignore
+          tags: git
+
+      rescue:
+        - name: Log Git configuration failure
+          debug:
+            msg: "⚠️ Git configuration failed, continuing."
+          tags: git
+
+    # 🔹 Configure SSH Authorized Keys
+    - name: Apply the shared authorized_keys file
+      block:
+        - name: Update sshd_config with authorized_keys file path
+          shell: |
+            sudo sed -i '/^AuthorizedKeysFile/d' /etc/ssh/sshd_config
+            echo 'AuthorizedKeysFile %h/.ssh/authorized_keys {{ ansible_env.HOME }}/docs/network/authorized_keys.md' | sudo tee -a /etc/ssh/sshd_config
+          tags: ssh
+
+        - name: Set authorized_keys notice
+          copy:
+            content: |
+              # this file is empty.
+              # authorized public keys are stored in ~/syncthing/md/docs/network/authorized_keys.md.
+              # For instructions, see ~/syncthing/md/docs/network/ssh for instructions.
+            dest: "{{ ansible_env.HOME }}/.ssh/authorized_keys"
+            mode: '0644'
+          tags: ssh
+
+        - name: Ensure correct directory permissions
+          shell: find {{ ansible_env.HOME }} -type d -exec chmod 700 {} +
+          tags: ssh
+
+        - name: Ensure correct ownership of directories
+          shell: find {{ ansible_env.HOME }} -type d -exec chown {{ ansible_env.USER }}:{{ ansible_env.USER }} {} +
+          tags: ssh
+
+        - name: Restart SSH service (Linux only)
+          systemd:
+            name: sshd
+            state: restarted
+          when: ansible_os_family == "Debian"
+          tags: ssh
+
+      rescue:
+        - name: Log SSH configuration failure
+          debug:
+            msg: "⚠️ SSH authorized_keys setup failed, continuing."
+          tags: ssh
+
+    - name: Link vim.lua to Neovim init.lua
+      block:
+        - name: Append vim.lua reference to init.lua
+          ansible.builtin.lineinfile:
+            path: "{{ ansible_env.HOME }}/.config/nvim/init.lua"
+            line: |
+              -- added by dotfiles on {{ ansible_date_time.date }}
+              dofile('{{ ansible_env.HOME }}/git/dotfiles/vim.lua')
+            create: yes
+          tags: vim
+
+      rescue:
+        - name: Log failure to link vim.lua
+          ansible.builtin.debug:
+            msg: "⚠️ Failed to link vim.lua to init.lua, continuing."
+          tags: vim
+
+    - name: Set Zsh as the default shell
+      block:
+        - name: Ensure Zsh is installed
+          ansible.builtin.package:
+            name: zsh
+            state: present
+          become: true
+          tags: zsh
+
+        - name: Change default shell to Zsh
+          ansible.builtin.shell: "chsh -s $(which zsh) {{ ansible_env.USER }}"
+          become: true
+          tags: zsh
+
+      rescue:
+        - name: Log failure to set Zsh as default shell
+          ansible.builtin.debug:
+            msg: "⚠️ Failed to set Zsh as the default shell, continuing."
+          tags: zsh
+
+    # 🔹 Configure .zshrc
+    - name: Ensure custom dotfiles config is in .zshrc
+      ansible.builtin.blockinfile:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        marker: "# {mark} DOTFILES CONFIG"
+        block: |
+          export DOTFILES_OPTS=(common network nnn) # adjust as needed; other options: not-cloud, nnn, network, phone
+          if [ -f $HOME/git/dotfiles/zsh/common.zsh ]; then
+              source $HOME/git/dotfiles/zsh/common.zsh
+          fi
+        create: yes
+      tags: zshrc

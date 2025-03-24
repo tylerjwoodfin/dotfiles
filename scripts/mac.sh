@@ -13,9 +13,6 @@
 # Disable .DS_Store files
 /usr/bin/defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
-# Delete all existing .DS_Store files
-# find ~ -type f -name '.DS_Store' -delete
-
 # Automatically expand "Save As..." dialogue boxes
 /usr/bin/defaults write -g NSNavPanelExpandedStateForSaveMode -bool true
 /usr/bin/defaults write -g NSNavPanelExpandedStateForSaveMode2 -bool true
@@ -28,3 +25,10 @@
 
 # Disable bouncing icons
 defaults write com.apple.dock no-bouncing -bool TRUE
+
+# Show hidden files in Finder
+/usr/bin/defaults write com.apple.finder AppleShowAllFiles -bool true
+
+# Show the ~/Library folder
+/usr/bin/chflags nohidden ~/Library
+/usr/bin/killall Finder
