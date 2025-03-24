@@ -406,6 +406,7 @@ alias v='python3 ~/git/voicegpt/main.py'
 alias bike='python3 ~/git/tools/bike/price_calculator.py'
 alias bluesky='python3 ~/git/tools/bluesky/main.py'
 alias lifelog='python3 ~/git/tools/lifelog/main.py'
+alias foodlog='python3 ~/git/tools/food_diary/main.py'
 
 # Remind aliases
 alias rmmt='rmmt'
@@ -424,7 +425,7 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
         "diary" "turn" "notes" "docs" "work" "vn" "n" "v" "one-more-hour" \
-        "plex" "bike" "addjira" "addshopping" "bluesky" "lifelog"
+        "plex" "bike" "addjira" "addshopping" "bluesky" "lifelog" "foodlog"
     )
 
     for cmd in "${cloud_commands[@]}"; do
