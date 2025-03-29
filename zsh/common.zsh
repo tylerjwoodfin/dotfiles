@@ -167,6 +167,7 @@ vn() {
     [[ $# -eq 0 ]] && return
 
     filename="$*"
+    filename="${filename%%.md}"
 
     if [[ "$(uname)" == "Darwin" ]]; then
         home_prefix_to_replace="/home/"
@@ -176,12 +177,25 @@ vn() {
         home_prefix_replacement="/home/"
     fi
 
-    filename="${filename%%.md}"
-    
     if [[ "$filename" == /* ]]; then
-        nvim "${filename/$home_prefix_to_replace/$home_prefix_replacement}.md"
+        local_path="${filename/$home_prefix_to_replace/$home_prefix_replacement}.md"
     else
-        nvim "$notes/$filename.md"
+        local_path="$notes/$filename.md"
+    fi
+
+    if [[ -f "$local_path" ]]; then
+        nvim "$local_path"
+    else
+        case "$HOST" in
+            cloud)
+                fallback="rainbow"
+                ;;
+            *)
+                fallback="cloud"
+                ;;
+        esac
+        echo "Checking $fallback..."
+        $fallback vn "$*"
     fi
 }
 
@@ -424,7 +438,7 @@ alias worka='worka'
 if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
-        "diary" "turn" "notes" "docs" "work" "vn" "n" "v" "one-more-hour" \
+        "diary" "turn" "notes" "docs" "work" "n" "v" "one-more-hour" \
         "plex" "bike" "addjira" "addshopping" "bluesky" "lifelog" "foodlog"
     )
 
