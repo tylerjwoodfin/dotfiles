@@ -50,6 +50,7 @@ OPTIONS=()
 
 [[ "$PLATFORM" == "MacOS" ]] && OPTIONS+=("homebrew" "MacOS: Install Homebrew" OFF)
 [[ "$PLATFORM" == "MacOS" ]] && OPTIONS+=("mac_defaults" "MacOS: Set defaults" OFF)
+[[ "$PLATFORM" == "MacOS" ]] && OPTIONS+=("iterm2" "MacOS: Install, Configure iTerm2" OFF)
 OPTIONS+=("cli" "Install CLI tools (git, docker, etc.)" OFF)
 OPTIONS+=("gui" "Install GUI apps (Browsers, VS Code, Syncthing)" OFF)
 OPTIONS+=("ssh" "Setup SSH (does not overwrite existing keys)" OFF)
