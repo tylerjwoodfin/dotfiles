@@ -48,23 +48,32 @@ fi
 # Define checklist items with filtering based on PLATFORM
 OPTIONS=()
 
+# Core system setup
 [[ "$PLATFORM" == "MacOS" ]] && OPTIONS+=("homebrew" "MacOS: Install Homebrew" OFF)
 [[ "$PLATFORM" == "MacOS" ]] && OPTIONS+=("mac_defaults" "MacOS: Set defaults" OFF)
 [[ "$PLATFORM" == "MacOS" ]] && OPTIONS+=("iterm2" "MacOS: Install, Configure iTerm2" OFF)
+
+# Package installation
 OPTIONS+=("cli" "Install CLI tools (git, docker, etc.)" OFF)
 OPTIONS+=("gui" "Install GUI apps (Browsers, VS Code, Syncthing)" OFF)
+
+# Configuration
 OPTIONS+=("ssh" "Setup SSH (does not overwrite existing keys)" OFF)
 OPTIONS+=("git" "Setup Git (user email, .gitignore, etc.)" OFF)
+OPTIONS+=("vim" "Link vim.lua to Neovim init.lua" OFF)
+OPTIONS+=("zsh" "Set the default shell to ZSH" OFF)
+OPTIONS+=("zshrc" "Add common.zsh to .zshrc" OFF)
+
+# Optional services
 OPTIONS+=("pihole" "Install Pihole (overwrites!)" OFF)
 OPTIONS+=("python" "Install Cabinet and Remindmail via Pipx" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("copyq" "Ubuntu: Install CopyQ (clipboard manager)" OFF)
+
+# Additional setup
 OPTIONS+=("hostname" "Change system hostname" OFF)
 OPTIONS+=("downloads" "Open external app download links" OFF)
 OPTIONS+=("borg" "Set BorgBackup passphrase" OFF)
 OPTIONS+=("clone" "Clone all GitHub repositories (run SEPARATELY after SSH!)" OFF)
-OPTIONS+=("vim" "Link vim.lua to Neovim init.lua" OFF)
-OPTIONS+=("zsh" "Set the default shell to ZSH" OFF)
-OPTIONS+=("zshrc" "Add common.zsh to .zshrc" OFF)
 
 SELECTED=$(whiptail --title "Select Setup Options" --checklist \
 "Choose items to install (use Space to select, Enter to confirm):" 20 78 15 \
@@ -84,14 +93,25 @@ echo "Running Ansible with tags: $SELECTED_TAGS"
 echo "If this script fails, please run the following command manually:"
 echo "ansible-playbook $SETUP_YML --tags=$SELECTED_TAGS --ask-become-pass -vvv"
 
-# Check if SSH is configured for Git
-if [[ "$SELECTED" == *"clone"* ]]; then
-    whiptail --title "Git Clone Notice" --yesno "The SSH key must have been configured and uploaded to Github. Did you do this?" 10 78
+# Check for SSH key if SSH setup is selected
+if [[ "$SELECTED" == *"ssh"* ]]; then
+    if [ ! -f "$HOME/.ssh/id_rsa" ]; then
+        echo "No SSH key found. The playbook will generate one for you."
+    fi
 fi
 
-if [ $? -ne 0 ]; then
-    echo "Setup canceled by user."
-    exit 1
+# Check if SSH is configured for Git
+if [[ "$SELECTED" == *"clone"* ]]; then
+    if [ ! -f "$HOME/.ssh/id_rsa" ]; then
+        whiptail --title "SSH Key Missing" --msgbox "You need to set up SSH first. Please run the setup again with the 'ssh' option selected." 10 78
+        exit 1
+    fi
+    
+    whiptail --title "Git Clone Notice" --yesno "The SSH key must have been configured and uploaded to Github. Did you do this?" 10 78
+    if [ $? -ne 0 ]; then
+        echo "Setup canceled by user."
+        exit 1
+    fi
 fi
 
 # Run Ansible playbook with selected tags
@@ -99,14 +119,20 @@ ansible-playbook "$SETUP_YML" --tags="$SELECTED_TAGS" --ask-become-pass
 
 echo "Ansible Setup complete ✅"
 
-# 'downloads' -> open_bookmarks_linux.sh
+# Post-setup tasks
 if [[ "$SELECTED" == *"downloads"* ]]; then
     echo "Opening download links in browser..."
     "$SCRIPT_DIR/open_bookmarks.sh"
 fi
 
-# 'borg' -> borg_passphrase.sh
 if [[ "$SELECTED" == *"borg"* ]]; then
     echo "Setting up Borg passphrase..."
     "$SCRIPT_DIR/borg_passphrase.sh"
+fi
+
+# Final instructions
+if [[ "$SELECTED" == *"ssh"* ]]; then
+    echo "🔑 If you just generated a new SSH key, please add it to GitHub:"
+    echo "   https://github.com/settings/keys"
+    echo "   Then run the setup again with the 'clone' option to clone your repositories."
 fi

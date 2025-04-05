@@ -73,6 +73,7 @@
               - net-tools
               - chrome-gnome-shell
               - input-remapper
+              - ufw
             state: present
             update_cache: yes
           when: ansible_os_family == "Debian"
@@ -155,6 +156,14 @@
 
     - name: Configure SSH and clone all GitHub repos
       block:
+        - name: Ensure .ssh directory exists with correct permissions
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}/.ssh"
+            state: directory
+            mode: '0700'
+            owner: "{{ ansible_env.USER }}"
+          tags: ssh, clone
+
         - name: Ensure SSH key exists
           ansible.builtin.command: "[ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''"
           args:
@@ -213,6 +222,16 @@
 
     - name: Install Pihole
       block:
+        - name: Install PiHole dependencies
+          apt:
+            name: 
+              - curl
+              - wget
+              - git
+            state: present
+          when: ansible_os_family == "Debian"
+          tags: pihole
+
         - name: Install PiHole
           ansible.builtin.shell:
             cmd: "curl -sSL https://install.pi-hole.net | bash -s -- --unattended"
@@ -220,6 +239,7 @@
           become: true
           args:
             creates: /etc/pihole/setupVars.conf
+          when: ansible_os_family == "Debian"
           tags: pihole
       rescue:
         - name: Log PiHole installation failure
@@ -321,13 +341,24 @@
           tags: git
 
         - name: Set Git email defaults
-          shell: |
-            git config --global user.email 14207553+tylerjwoodfin@users.noreply.github.com
-            git config --global user.name "Tyler Woodfin"
+          ansible.builtin.git_config:
+            name: user.email
+            value: 14207553+tylerjwoodfin@users.noreply.github.com
+            scope: global
+          tags: git
+
+        - name: Set Git name defaults
+          ansible.builtin.git_config:
+            name: user.name
+            value: "Tyler Woodfin"
+            scope: global
           tags: git
 
         - name: Link global .gitignore to Git configuration
-          shell: git config --global core.excludesfile {{ git }}/dotfiles/.gitignore
+          ansible.builtin.git_config:
+            name: core.excludesfile
+            value: "{{ git }}/dotfiles/.gitignore"
+            scope: global
           tags: git
 
       rescue:
@@ -340,9 +371,12 @@
     - name: Apply the shared authorized_keys file
       block:
         - name: Update sshd_config with authorized_keys file path
-          shell: |
-            sudo sed -i '/^AuthorizedKeysFile/d' /etc/ssh/sshd_config
-            echo 'AuthorizedKeysFile %h/.ssh/authorized_keys {{ ansible_env.HOME }}/docs/network/authorized_keys.md' | sudo tee -a /etc/ssh/sshd_config
+          ansible.builtin.lineinfile:
+            path: /etc/ssh/sshd_config
+            regexp: '^AuthorizedKeysFile'
+            line: 'AuthorizedKeysFile %h/.ssh/authorized_keys {{ ansible_env.HOME }}/docs/network/authorized_keys.md'
+            state: present
+          become: true
           tags: ssh
 
         - name: Set authorized_keys notice
@@ -356,11 +390,30 @@
           tags: ssh
 
         - name: Ensure correct directory permissions
-          shell: find {{ ansible_env.HOME }} -type d -exec chmod 700 {} +
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}"
+            state: directory
+            mode: '0700'
+            recurse: yes
           tags: ssh
 
         - name: Ensure correct ownership of directories
-          shell: find {{ ansible_env.HOME }} -type d -exec chown {{ ansible_env.USER }}:{{ ansible_env.USER }} {} +
+          ansible.builtin.file:
+            path: "{{ ansible_env.HOME }}"
+            state: directory
+            owner: "{{ ansible_env.USER }}"
+            recurse: yes
+          tags: ssh
+
+        - name: Configure UFW
+          ufw:
+            rule: allow
+            name: OpenSSH
+            state: enabled
+            policy: deny
+            default_deny: yes
+            allow_ssh: yes
+          when: ansible_os_family == "Debian"
           tags: ssh
 
         - name: Restart SSH service (Linux only)
