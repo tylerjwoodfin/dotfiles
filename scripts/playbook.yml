@@ -293,6 +293,22 @@
             msg: "⚠️ mac.sh execution failed, continuing."
           tags: mac_defaults
 
+    - name: Configure iTerm2 to load preferences from dotfiles
+    block:
+      - name: Install iTerm2
+        homebrew_cask:
+          name: iterm2
+          state: present
+        tags: iterm2
+
+      - name: Configure iTerm2 to load preferences from dotfiles
+        shell: >
+          defaults write com.googlecode.iterm2 PrefsCustomFolder -string "{{ ansible_env.HOME }}/git/dotfiles/mac/iterm2" &&
+          defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+        tags: iterm2
+    when: ansible_os_family == "Darwin"
+    tags: iterm2
+
     # 🔹 Configure Git
     - name: Configure Git settings
       vars:
