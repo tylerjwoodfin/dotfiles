@@ -12,11 +12,29 @@ else
     PLATFORM="Unknown"
 fi
 
+# Function to install Homebrew if missing
+install_homebrew() {
+    echo "Homebrew is not installed."
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || { echo "Failed to install Homebrew."; exit 1; }
+    
+    # Add Homebrew to PATH for the current session
+    if [[ -x /opt/homebrew/bin/brew ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -x /usr/local/bin/brew ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+}
+
 # Function to install whiptail if missing
 install_whiptail() {
     echo "whiptail is not installed."
     
     if [[ "$PLATFORM" == "MacOS" ]]; then
+        # Check if Homebrew is installed
+        if ! command -v brew &> /dev/null; then
+            install_homebrew
+        fi
         echo "Installing whiptail via Homebrew..."
         brew install newt || { echo "Failed to install whiptail."; exit 1; }
     elif [[ "$PLATFORM" == "Ubuntu" ]]; then
