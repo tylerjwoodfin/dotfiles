@@ -162,23 +162,25 @@
       block:
         - name: Ensure .ssh directory exists with correct permissions
           ansible.builtin.file:
-            path: "{{ ansible_env.HOME }}/.ssh"
+            path: "{{ lookup('env', 'HOME') }}/.ssh"
             state: directory
             mode: '0700'
-            owner: "{{ ansible_env.USER }}"
+            owner: "{{ lookup('env', 'USER') }}"
+          become: false
           tags: ssh, clone
 
         - name: Ensure SSH key exists
-          ansible.builtin.command: "ssh-keygen -t rsa -b 4096 -f {{ ansible_env.HOME }}/.ssh/id_rsa -N ''"
+          ansible.builtin.command: "ssh-keygen -t rsa -b 4096 -f {{ lookup('env', 'HOME') }}/.ssh/id_rsa -N ''"
           args:
-            creates: "{{ ansible_env.HOME }}/.ssh/id_rsa"
+            creates: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
           become: false
           tags: ssh, clone
 
         - name: Display SSH public key (manual step)
-          ansible.builtin.command: "cat {{ ansible_env.HOME }}/.ssh/id_rsa.pub"
+          ansible.builtin.command: "cat {{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
           register: ssh_pubkey
           changed_when: false
+          become: false
           tags: ssh, clone
 
         - name: Prompt user to add SSH key to GitHub
@@ -193,6 +195,7 @@
           register: ssh_test
           failed_when: ssh_test.rc != 1  # Expecting "Hi <user>! You've successfully authenticated, but GitHub does not provide shell access."
           changed_when: false
+          become: false
           tags: ssh, clone
 
         - name: Clone repositories using SSH
@@ -201,7 +204,8 @@
             curl -s https://api.github.com/users/$UserName/repos?per_page=1000 |
             jq -r '.[]|.ssh_url' | xargs -I {} git clone {}
           args:
-            chdir: "{{ ansible_env.HOME }}/git"
+            chdir: "{{ lookup('env', 'HOME') }}/git"
+          become: false
           tags: clone
 
       rescue:
