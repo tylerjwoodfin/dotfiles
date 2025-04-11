@@ -11,10 +11,13 @@ debug() {
 # Detect OS type
 if [[ "$OSTYPE" == "darwin"* ]]; then
     PLATFORM="MacOS"
+    debug "Detected MacOS platform"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     PLATFORM="Ubuntu"
+    debug "Detected Ubuntu platform"
 else
     PLATFORM="Unknown"
+    debug "Unknown platform: $OSTYPE"
 fi
 
 # Function to check if a command exists
@@ -36,7 +39,7 @@ install_homebrew() {
             eval "$(/usr/local/bin/brew shellenv)"
         fi
     else
-        debug "Homebrew is already installed"
+        debug "Homebrew is already installed at $(which brew)"
     fi
 }
 
