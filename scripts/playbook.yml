@@ -25,9 +25,9 @@
           tags: homebrew
 
     # 🔹 Install CLI tools (Mac & Linux)
-    - name: Install CLI tools (Mac)
+    - name: Install Mac CLI tools
       block:
-        - name: Install CLI tools
+        - name: Install Mac CLI tools via Homebrew
           homebrew:
             name:
               - zsh
@@ -50,7 +50,7 @@
             msg: "⚠️ CLI tools installation failed on Mac, continuing."
           tags: cli
 
-    - name: Install CLI tools (Ubuntu)
+    - name: Install Ubuntu CLI tools
       block:
         - name: Remove conflicting containerd package (if exists)
           apt:
@@ -59,7 +59,7 @@
           when: ansible_facts['os_family'] == "Debian"
           tags: cli
 
-        - name: Install CLI tools
+        - name: Install Ubuntu CLI tools via APT
           apt:
             name:
               - zsh
