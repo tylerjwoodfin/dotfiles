@@ -328,7 +328,7 @@
 
         - name: Configure iTerm2 to load preferences from dotfiles
           shell: >
-            defaults write com.googlecode.iterm2 PrefsCustomFolder -string "{{ ansible_env.HOME }}/git/dotfiles/mac/iterm2" &&
+            defaults write com.googlecode.iterm2 PrefsCustomFolder -string "{{ lookup('env', 'HOME') }}/git/dotfiles/mac/iterm2" &&
             defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
           become: false
       when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
