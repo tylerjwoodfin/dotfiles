@@ -126,6 +126,7 @@ OPTIONS+=("cli" "Install CLI tools (git, docker, etc.)" OFF)
 OPTIONS+=("gui" "Install GUI apps (Browsers, VS Code, Syncthing)" OFF)
 
 # Configuration
+OPTIONS+=("hostname" "Change system hostname" OFF)
 OPTIONS+=("ssh" "Setup SSH (does not overwrite existing keys)" OFF)
 OPTIONS+=("git" "Setup Git (user email, .gitignore, etc.)" OFF)
 OPTIONS+=("vim" "Link vim.lua to Neovim init.lua" OFF)
@@ -138,7 +139,6 @@ OPTIONS+=("python" "Install Cabinet and Remindmail via Pipx" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("copyq" "Ubuntu: Install CopyQ (clipboard manager)" OFF)
 
 # Additional setup
-OPTIONS+=("hostname" "Change system hostname" OFF)
 OPTIONS+=("downloads" "Open external app download links" OFF)
 OPTIONS+=("borg" "Set BorgBackup passphrase" OFF)
 OPTIONS+=("clone" "Clone all GitHub repositories (run SEPARATELY after SSH!)" OFF)

@@ -184,10 +184,11 @@
           tags: ssh, clone
 
         - name: Prompt user to add SSH key to GitHub
-          ansible.builtin.debug:
-            msg: |
-              🔑 Add this SSH key to GitHub: https://github.com/settings/keys
-              {{ ssh_pubkey.stdout }}
+          ansible.builtin.shell: |
+            echo "🔑 Add this SSH key to GitHub: https://github.com/settings/keys"
+            echo "{{ ssh_pubkey.stdout }}"
+          changed_when: false
+          become: false
           tags: ssh, clone
 
         - name: Test SSH connection to GitHub
