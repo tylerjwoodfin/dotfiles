@@ -327,9 +327,12 @@
           tags: python
 
     - name: Ensure pipx is in PATH
-      ansible.builtin.shell: "eval $(pipx ensurepath --force 2>/dev/null || true)"
+      ansible.builtin.shell: |
+        pipx_path=$(pipx environment | grep -o 'PIPX_HOME=.*' | cut -d'=' -f2)
+        echo "export PATH=\"$pipx_path/bin:$PATH\"" >> ~/.zshrc
+        source ~/.zshrc
       args:
-        executable: /bin/bash
+        executable: /bin/zsh
       changed_when: false
       become: false
       tags: python
