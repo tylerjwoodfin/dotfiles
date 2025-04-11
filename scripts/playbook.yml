@@ -49,6 +49,7 @@
             /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           args:
             creates: /usr/local/bin/brew
+          become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
           tags: homebrew
       rescue:
@@ -89,6 +90,7 @@
           apt:
             name: containerd
             state: absent
+          become: true
           when: ansible_facts['os_family'] == "Debian"
           tags: cli
 
@@ -111,6 +113,7 @@
               - ufw
             state: present
             update_cache: yes
+          become: true
           when: ansible_facts['os_family'] == "Debian"
           tags: cli
       rescue:
@@ -306,17 +309,29 @@
 
     # 🔹 Install Cabinet and Remindmail
     - name: Ensure pipx is installed
-      ansible.builtin.package:
-        name: pipx
-        state: present
-      become: true
-      tags: python
+      block:
+        - name: Install pipx via Homebrew
+          homebrew:
+            name: pipx
+            state: present
+          become: false
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          tags: python
+
+        - name: Install pipx via APT
+          apt:
+            name: pipx
+            state: present
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: python
 
     - name: Ensure pipx is in PATH
       ansible.builtin.shell: "eval $(pipx ensurepath)"
       args:
         executable: /bin/bash
       changed_when: false
+      become: false
       tags: python
 
     - name: Install Cabinet (Python Package via pipx)
@@ -325,6 +340,7 @@
           ansible.builtin.shell: "pipx install cabinet"
           args:
             executable: /bin/bash
+          become: false
           tags: python
 
       rescue:
@@ -339,6 +355,7 @@
           ansible.builtin.shell: "pipx install remindmail"
           args:
             executable: /bin/bash
+          become: false
           tags: python
 
       rescue:
@@ -448,6 +465,7 @@
               # For instructions, see ~/syncthing/md/docs/network/ssh for instructions.
             dest: "{{ lookup('env', 'HOME') }}/.ssh/authorized_keys"
             mode: '0644'
+          become: false
           tags: ssh
 
         - name: Ensure correct directory permissions
@@ -456,6 +474,7 @@
             state: directory
             mode: '0700'
             recurse: yes
+          become: false
           tags: ssh
 
         - name: Ensure correct ownership of directories
@@ -464,6 +483,7 @@
             state: directory
             owner: "{{ lookup('env', 'USER') }}"
             recurse: yes
+          become: false
           tags: ssh
 
         - name: Configure UFW
@@ -474,6 +494,7 @@
             policy: deny
             default_deny: yes
             allow_ssh: yes
+          become: true
           when: ansible_facts['os_family'] == "Debian"
           tags: ssh
 
@@ -481,6 +502,7 @@
           systemd:
             name: sshd
             state: restarted
+          become: true
           when: ansible_facts['os_family'] == "Debian"
           tags: ssh
 
@@ -514,6 +536,7 @@
             name: zsh
             state: present
           become: true
+          when: ansible_facts['os_family'] == "Debian"
           tags: zsh
 
         - name: Change default shell to Zsh
