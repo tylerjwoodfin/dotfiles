@@ -40,6 +40,7 @@
               - nnn
               - borgbackup
             state: present
+          become: false
           when: ansible_os_family == "Darwin"
           tags: cli
       rescue:
@@ -99,6 +100,7 @@
               - syncthing
               - rustdesk
             state: present
+          become: false
           when: ansible_os_family == "Darwin"
           tags: gui
       rescue:
@@ -165,9 +167,10 @@
           tags: ssh, clone
 
         - name: Ensure SSH key exists
-          ansible.builtin.command: "[ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''"
+          ansible.builtin.command: "ssh-keygen -t rsa -b 4096 -f {{ ansible_env.HOME }}/.ssh/id_rsa -N ''"
           args:
             creates: "{{ ansible_env.HOME }}/.ssh/id_rsa"
+          become: false
           tags: ssh, clone
 
         - name: Display SSH public key (manual step)
@@ -319,12 +322,14 @@
           homebrew_cask:
             name: iterm2
             state: present
+          become: false
           tags: iterm2
 
         - name: Configure iTerm2 to load preferences from dotfiles
           shell: >
             defaults write com.googlecode.iterm2 PrefsCustomFolder -string "{{ ansible_env.HOME }}/git/dotfiles/mac/iterm2" &&
             defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+          become: false
           tags: iterm2
       when: ansible_os_family == "Darwin"
       tags: iterm2
