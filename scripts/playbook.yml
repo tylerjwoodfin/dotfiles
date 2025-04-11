@@ -426,7 +426,7 @@
           ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             regexp: '^AuthorizedKeysFile'
-            line: 'AuthorizedKeysFile %h/.ssh/authorized_keys {{ lookup('env', 'HOME') }}/docs/network/authorized_keys.md'
+            line: "AuthorizedKeysFile %h/.ssh/authorized_keys {{ lookup('env', 'HOME') }}/docs/network/authorized_keys.md"
             state: present
           become: true
           tags: ssh
