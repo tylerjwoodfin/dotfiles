@@ -8,6 +8,39 @@
     - name: Gather system facts
       setup:
       tags: always
+
+    # 🔹 Configure Hostname
+    - name: Configure system hostname
+      block:
+        - name: Prompt for new hostname
+          ansible.builtin.pause:
+            prompt: "Enter new hostname"
+          register: hostname_input
+          become: false
+          tags: hostname
+
+        - name: Set hostname (MacOS)
+          shell: |
+            scutil --set ComputerName "{{ hostname_input.user_input }}"
+            scutil --set LocalHostName "{{ hostname_input.user_input }}"
+            scutil --set HostName "{{ hostname_input.user_input }}"
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          become: true
+          tags: hostname
+
+        - name: Set hostname (Ubuntu)
+          hostname:
+            name: "{{ hostname_input.user_input }}"
+          when: ansible_facts['os_family'] == "Debian"
+          become: true
+          tags: hostname
+
+      rescue:
+        - name: Log hostname configuration failure
+          debug:
+            msg: "⚠️ Hostname configuration failed, continuing."
+          tags: hostname
+
     # 🔹 Install Homebrew (Mac only)
     - name: Install Homebrew (macOS)
       block:
@@ -338,38 +371,6 @@
           become: false
       when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
       tags: iterm2
-
-    # 🔹 Configure Hostname
-    - name: Configure system hostname
-      block:
-        - name: Prompt for new hostname
-          ansible.builtin.pause:
-            prompt: "Enter new hostname"
-          register: hostname_input
-          become: false
-          tags: hostname
-
-        - name: Set hostname (MacOS)
-          shell: |
-            scutil --set ComputerName "{{ hostname_input.user_input }}"
-            scutil --set LocalHostName "{{ hostname_input.user_input }}"
-            scutil --set HostName "{{ hostname_input.user_input }}"
-          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
-          become: true
-          tags: hostname
-
-        - name: Set hostname (Ubuntu)
-          hostname:
-            name: "{{ hostname_input.user_input }}"
-          when: ansible_facts['os_family'] == "Debian"
-          become: true
-          tags: hostname
-
-      rescue:
-        - name: Log hostname configuration failure
-          debug:
-            msg: "⚠️ Hostname configuration failed, continuing."
-          tags: hostname
 
     # 🔹 Configure Git
     - name: Configure Git settings
