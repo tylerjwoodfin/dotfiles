@@ -16,7 +16,7 @@
             /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           args:
             creates: /usr/local/bin/brew
-          when: ansible_os_family == "Darwin"
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
           tags: homebrew
       rescue:
         - name: Log Homebrew installation failure
@@ -41,8 +41,9 @@
               - borgbackup
             state: present
           become: false
-          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS"
-          tags: cli
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+      when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+      tags: cli
       rescue:
         - name: Log Mac CLI tool installation failure
           debug:
@@ -55,7 +56,7 @@
           apt:
             name: containerd
             state: absent
-          when: ansible_os_family == "Debian"
+          when: ansible_facts['os_family'] == "Debian"
           tags: cli
 
         - name: Install CLI tools
@@ -77,7 +78,7 @@
               - ufw
             state: present
             update_cache: yes
-          when: ansible_os_family == "Debian"
+          when: ansible_facts['os_family'] == "Debian"
           tags: cli
       rescue:
         - name: Log Ubuntu CLI tool installation failure
@@ -101,8 +102,9 @@
               - rustdesk
             state: present
           become: false
-          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS"
-          tags: gui
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+      when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+      tags: gui
       rescue:
         - name: Log Mac GUI apps installation failure
           debug:
@@ -148,7 +150,7 @@
             state: present
           tags: gui
 
-      when: ansible_os_family == "Debian"
+      when: ansible_facts['os_family'] == "Debian"
       tags: gui
       rescue:
         - name: Log Ubuntu GUI apps installation failure
@@ -215,7 +217,7 @@
           apt:
             name: copyq
             state: present
-          when: ansible_os_family == "Debian"
+          when: ansible_facts['os_family'] == "Debian"
           tags: copyq
       rescue:
         - name: Log CopyQ installation failure
@@ -232,7 +234,7 @@
               - wget
               - git
             state: present
-          when: ansible_os_family == "Debian"
+          when: ansible_facts['os_family'] == "Debian"
           tags: pihole
 
         - name: Install PiHole
@@ -242,7 +244,7 @@
           become: true
           args:
             creates: /etc/pihole/setupVars.conf
-          when: ansible_os_family == "Debian"
+          when: ansible_facts['os_family'] == "Debian"
           tags: pihole
       rescue:
         - name: Log PiHole installation failure
@@ -308,7 +310,7 @@
         - name: Show script output
           debug:
             var: script_output.stdout
-          when: ansible_os_family == "Darwin"
+          when: ansible_facts['os_family'] == "Darwin"
           tags: mac_defaults
       rescue:
         - name: Log MacOS defaults script failure
@@ -323,15 +325,13 @@
             name: iterm2
             state: present
           become: false
-          tags: iterm2
 
         - name: Configure iTerm2 to load preferences from dotfiles
           shell: >
             defaults write com.googlecode.iterm2 PrefsCustomFolder -string "{{ ansible_env.HOME }}/git/dotfiles/mac/iterm2" &&
             defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
           become: false
-          tags: iterm2
-      when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS"
+      when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
       tags: iterm2
 
     # 🔹 Configure Git
@@ -418,14 +418,14 @@
             policy: deny
             default_deny: yes
             allow_ssh: yes
-          when: ansible_os_family == "Debian"
+          when: ansible_facts['os_family'] == "Debian"
           tags: ssh
 
         - name: Restart SSH service (Linux only)
           systemd:
             name: sshd
             state: restarted
-          when: ansible_os_family == "Debian"
+          when: ansible_facts['os_family'] == "Debian"
           tags: ssh
 
       rescue:

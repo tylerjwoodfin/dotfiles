@@ -25,21 +25,36 @@ command_exists() {
     command -v "$1" &> /dev/null
 }
 
+# Function to add Homebrew to PATH
+add_homebrew_to_path() {
+    if [[ "$PLATFORM" == "MacOS" ]]; then
+        # Add Homebrew to PATH for the current session
+        if [[ -x /opt/homebrew/bin/brew ]]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+            debug "Added Homebrew to PATH from /opt/homebrew"
+        elif [[ -x /usr/local/bin/brew ]]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+            debug "Added Homebrew to PATH from /usr/local"
+        fi
+
+        # Add Homebrew to PATH permanently
+        if ! grep -q "brew shellenv" ~/.zprofile; then
+            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+            debug "Added Homebrew to ~/.zprofile"
+        fi
+    fi
+}
+
 # Function to install Homebrew if missing
 install_homebrew() {
     if ! command_exists brew; then
         echo "Homebrew is not installed."
         echo "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || { echo "Failed to install Homebrew."; exit 1; }
-        
-        # Add Homebrew to PATH for the current session
-        if [[ -x /opt/homebrew/bin/brew ]]; then
-            eval "$(/opt/homebrew/bin/brew shellenv)"
-        elif [[ -x /usr/local/bin/brew ]]; then
-            eval "$(/usr/local/bin/brew shellenv)"
-        fi
+        add_homebrew_to_path
     else
         debug "Homebrew is already installed at $(which brew)"
+        add_homebrew_to_path
     fi
 }
 
