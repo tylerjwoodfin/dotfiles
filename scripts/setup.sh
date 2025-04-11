@@ -12,26 +12,42 @@ else
     PLATFORM="Unknown"
 fi
 
+# Function to install whiptail if missing
+install_whiptail() {
+    echo "whiptail is not installed."
+    
+    if [[ "$PLATFORM" == "MacOS" ]]; then
+        echo "Installing whiptail via Homebrew..."
+        brew install newt || { echo "Failed to install whiptail."; exit 1; }
+    elif [[ "$PLATFORM" == "Ubuntu" ]]; then
+        echo "Installing whiptail via APT..."
+        sudo apt update && sudo apt install -y whiptail || { echo "Failed to install whiptail."; exit 1; }
+    else
+        echo "Unsupported OS. Please install whiptail manually."
+        exit 1
+    fi
+}
+
 # Function to install Ansible if missing
 install_ansible() {
     echo "Ansible is not installed."
     
-    if whiptail --yesno "Ansible is required to run this setup. Do you want to install it now?" 10 60; then
-        if [[ "$PLATFORM" == "MacOS" ]]; then
-            echo "Installing Ansible via Homebrew..."
-            brew install ansible || { echo "Failed to install Ansible."; exit 1; }
-        elif [[ "$PLATFORM" == "Ubuntu" ]]; then
-            echo "Installing Ansible via APT..."
-            sudo apt update && sudo apt install -y ansible || { echo "Failed to install Ansible."; exit 1; }
-        else
-            echo "Unsupported OS. Please install Ansible manually."
-            exit 1
-        fi
+    if [[ "$PLATFORM" == "MacOS" ]]; then
+        echo "Installing Ansible via Homebrew..."
+        brew install ansible || { echo "Failed to install Ansible."; exit 1; }
+    elif [[ "$PLATFORM" == "Ubuntu" ]]; then
+        echo "Installing Ansible via APT..."
+        sudo apt update && sudo apt install -y ansible || { echo "Failed to install Ansible."; exit 1; }
     else
-        echo "Ansible is required. Exiting."
+        echo "Unsupported OS. Please install Ansible manually."
         exit 1
     fi
 }
+
+# Check if whiptail is installed, install if missing
+if ! command -v whiptail &> /dev/null; then
+    install_whiptail
+fi
 
 # Check if Ansible is installed, install if missing
 if ! command -v ansible-playbook &> /dev/null; then
