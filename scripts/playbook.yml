@@ -346,6 +346,7 @@
           ansible.builtin.pause:
             prompt: "Enter new hostname"
           register: hostname_input
+          become: false
           tags: hostname
 
         - name: Set hostname (MacOS)
