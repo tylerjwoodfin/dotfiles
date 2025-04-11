@@ -202,24 +202,20 @@
           become: false
           tags: ssh, clone
 
-        - name: Ensure SSH key exists
+        - name: Generate SSH key if it doesn't exist
           ansible.builtin.command: "ssh-keygen -t rsa -b 4096 -f {{ lookup('env', 'HOME') }}/.ssh/id_rsa -N ''"
           args:
             creates: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+          register: keygen_result
           become: false
           tags: ssh, clone
 
-        - name: Display SSH public key (manual step)
-          ansible.builtin.command: "cat {{ lookup('env', 'HOME') }}/.ssh/id_rsa.pub"
-          register: ssh_pubkey
-          changed_when: false
-          become: false
-          tags: ssh, clone
-
-        - name: Prompt user to add SSH key to GitHub
+        - name: Display new SSH key and wait for GitHub setup
           ansible.builtin.shell: |
             echo "🔑 Add this SSH key to GitHub: https://github.com/settings/keys"
-            echo "{{ ssh_pubkey.stdout }}"
+            echo "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
+            read -p "Press Enter after you have added the SSH key to GitHub"
+          when: keygen_result.changed
           changed_when: false
           become: false
           tags: ssh, clone
