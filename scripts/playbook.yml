@@ -237,6 +237,15 @@
           become: false
           tags: ssh, clone
 
+        - name: Ensure git directory exists
+          ansible.builtin.file:
+            path: "{{ lookup('env', 'HOME') }}/git"
+            state: directory
+            mode: '0755'
+            owner: "{{ lookup('env', 'USER') }}"
+          become: false
+          tags: clone
+
         - name: Clone repositories using SSH
           ansible.builtin.shell: >
             UserName=tylerjwoodfin;
