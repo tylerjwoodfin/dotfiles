@@ -41,7 +41,7 @@
               - borgbackup
             state: present
           become: false
-          when: ansible_os_family == "Darwin"
+          when: ansible_facts['os_family'] == "Darwin"
           tags: cli
       rescue:
         - name: Log Mac CLI tool installation failure
@@ -101,7 +101,7 @@
               - rustdesk
             state: present
           become: false
-          when: ansible_os_family == "Darwin"
+          when: ansible_facts['os_family'] == "Darwin"
           tags: gui
       rescue:
         - name: Log Mac GUI apps installation failure
@@ -331,7 +331,7 @@
             defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
           become: false
           tags: iterm2
-      when: ansible_os_family == "Darwin"
+      when: ansible_facts['os_family'] == "Darwin"
       tags: iterm2
 
     # 🔹 Configure Git

@@ -3,6 +3,11 @@
 # Get the directory of the script
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Debug function
+debug() {
+    echo "DEBUG: $1"
+}
+
 # Detect OS type
 if [[ "$OSTYPE" == "darwin"* ]]; then
     PLATFORM="MacOS"
@@ -11,6 +16,11 @@ elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
 else
     PLATFORM="Unknown"
 fi
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" &> /dev/null
+}
 
 # Function to install Homebrew if missing
 install_homebrew() {
@@ -28,49 +38,49 @@ install_homebrew() {
 
 # Function to install whiptail if missing
 install_whiptail() {
-    echo "whiptail is not installed."
-    
-    if [[ "$PLATFORM" == "MacOS" ]]; then
-        # Check if Homebrew is installed
-        if ! command -v brew &> /dev/null; then
-            install_homebrew
+    if ! command_exists whiptail; then
+        echo "whiptail is not installed."
+        
+        if [[ "$PLATFORM" == "MacOS" ]]; then
+            echo "Installing whiptail via Homebrew..."
+            brew install newt || { echo "Failed to install whiptail."; exit 1; }
+        elif [[ "$PLATFORM" == "Ubuntu" ]]; then
+            echo "Installing whiptail via APT..."
+            sudo apt update && sudo apt install -y whiptail || { echo "Failed to install whiptail."; exit 1; }
+        else
+            echo "Unsupported OS. Please install whiptail manually."
+            exit 1
         fi
-        echo "Installing whiptail via Homebrew..."
-        brew install newt || { echo "Failed to install whiptail."; exit 1; }
-    elif [[ "$PLATFORM" == "Ubuntu" ]]; then
-        echo "Installing whiptail via APT..."
-        sudo apt update && sudo apt install -y whiptail || { echo "Failed to install whiptail."; exit 1; }
     else
-        echo "Unsupported OS. Please install whiptail manually."
-        exit 1
+        debug "whiptail is already installed"
     fi
 }
 
 # Function to install Ansible if missing
 install_ansible() {
-    echo "Ansible is not installed."
-    
-    if [[ "$PLATFORM" == "MacOS" ]]; then
-        echo "Installing Ansible via Homebrew..."
-        brew install ansible || { echo "Failed to install Ansible."; exit 1; }
-    elif [[ "$PLATFORM" == "Ubuntu" ]]; then
-        echo "Installing Ansible via APT..."
-        sudo apt update && sudo apt install -y ansible || { echo "Failed to install Ansible."; exit 1; }
+    if ! command_exists ansible-playbook; then
+        echo "Ansible is not installed."
+        
+        if [[ "$PLATFORM" == "MacOS" ]]; then
+            echo "Installing Ansible via Homebrew..."
+            brew install ansible || { echo "Failed to install Ansible."; exit 1; }
+        elif [[ "$PLATFORM" == "Ubuntu" ]]; then
+            echo "Installing Ansible via APT..."
+            sudo apt update && sudo apt install -y ansible || { echo "Failed to install Ansible."; exit 1; }
+        else
+            echo "Unsupported OS. Please install Ansible manually."
+            exit 1
+        fi
     else
-        echo "Unsupported OS. Please install Ansible manually."
-        exit 1
+        debug "Ansible is already installed"
     fi
 }
 
 # Check if whiptail is installed, install if missing
-if ! command -v whiptail &> /dev/null; then
-    install_whiptail
-fi
+install_whiptail
 
 # Check if Ansible is installed, install if missing
-if ! command -v ansible-playbook &> /dev/null; then
-    install_ansible
-fi
+install_ansible
 
 # Ensure playbook.yml exists
 SETUP_YML="$SCRIPT_DIR/playbook.yml"
