@@ -327,7 +327,7 @@
           tags: python
 
     - name: Ensure pipx is in PATH
-      ansible.builtin.shell: "eval $(pipx ensurepath)"
+      ansible.builtin.shell: "eval $(pipx ensurepath --force)"
       args:
         executable: /bin/bash
       changed_when: false
