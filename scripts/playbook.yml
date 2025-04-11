@@ -119,10 +119,10 @@
             msg: "⚠️ CLI tools installation failed on Ubuntu, continuing."
           tags: cli
 
-    # 🔹 Install GUI Apps (Mac)
-    - name: Install GUI apps (Mac)
+    # 🔹 Install GUI Apps - MacOS
+    - name: Install GUI apps - MacOS
       block:
-        - name: Install GUI apps
+        - name: Install GUI apps - MacOS
           homebrew_cask:
             name:
               - arc
@@ -133,6 +133,7 @@
               - zettlr
               - syncthing
               - rustdesk
+              - bettertouchtool
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
@@ -144,8 +145,8 @@
             msg: "⚠️ GUI apps installation failed on Mac, continuing."
           tags: gui
 
-    # 🔹 Install GUI Apps (Ubuntu)
-    - name: Install GUI apps (Ubuntu)
+    # 🔹 Install GUI Apps - Ubuntu
+    - name: Install GUI apps - Ubuntu
       block:
         - name: Add Brave Browser repository
           shell: |
@@ -379,12 +380,13 @@
     # 🔹 Configure Git
     - name: Configure Git settings
       vars:
-        git: "{{ ansible_env.HOME }}/git"
+        git: "{{ lookup('env', 'HOME') }}/git"
       block:
         - name: Apply Pre-push hooks
           shell: zsh {{ git }}/tools/githooks/apply_pre-push.sh
           args:
             executable: /bin/zsh
+          become: false
           tags: git
 
         - name: Set Git email defaults
@@ -392,6 +394,7 @@
             name: user.email
             value: 14207553+tylerjwoodfin@users.noreply.github.com
             scope: global
+          become: false
           tags: git
 
         - name: Set Git name defaults
@@ -399,6 +402,7 @@
             name: user.name
             value: "Tyler Woodfin"
             scope: global
+          become: false
           tags: git
 
         - name: Link global .gitignore to Git configuration
@@ -406,6 +410,7 @@
             name: core.excludesfile
             value: "{{ git }}/dotfiles/.gitignore"
             scope: global
+          become: false
           tags: git
 
       rescue:
@@ -421,7 +426,7 @@
           ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             regexp: '^AuthorizedKeysFile'
-            line: 'AuthorizedKeysFile %h/.ssh/authorized_keys {{ ansible_env.HOME }}/docs/network/authorized_keys.md'
+            line: 'AuthorizedKeysFile %h/.ssh/authorized_keys {{ lookup('env', 'HOME') }}/docs/network/authorized_keys.md'
             state: present
           become: true
           tags: ssh
@@ -432,13 +437,13 @@
               # this file is empty.
               # authorized public keys are stored in ~/syncthing/md/docs/network/authorized_keys.md.
               # For instructions, see ~/syncthing/md/docs/network/ssh for instructions.
-            dest: "{{ ansible_env.HOME }}/.ssh/authorized_keys"
+            dest: "{{ lookup('env', 'HOME') }}/.ssh/authorized_keys"
             mode: '0644'
           tags: ssh
 
         - name: Ensure correct directory permissions
           ansible.builtin.file:
-            path: "{{ ansible_env.HOME }}"
+            path: "{{ lookup('env', 'HOME') }}"
             state: directory
             mode: '0700'
             recurse: yes
@@ -446,9 +451,9 @@
 
         - name: Ensure correct ownership of directories
           ansible.builtin.file:
-            path: "{{ ansible_env.HOME }}"
+            path: "{{ lookup('env', 'HOME') }}"
             state: directory
-            owner: "{{ ansible_env.USER }}"
+            owner: "{{ lookup('env', 'USER') }}"
             recurse: yes
           tags: ssh
 
@@ -480,10 +485,10 @@
       block:
         - name: Append vim.lua reference to init.lua
           ansible.builtin.lineinfile:
-            path: "{{ ansible_env.HOME }}/.config/nvim/init.lua"
+            path: "{{ lookup('env', 'HOME') }}/.config/nvim/init.lua"
             line: |
               -- added by dotfiles on {{ ansible_date_time.date }}
-              dofile('{{ ansible_env.HOME }}/git/dotfiles/vim.lua')
+              dofile('{{ lookup('env', 'HOME') }}/git/dotfiles/vim.lua')
             create: yes
           tags: vim
 
@@ -503,7 +508,7 @@
           tags: zsh
 
         - name: Change default shell to Zsh
-          ansible.builtin.shell: "chsh -s $(which zsh) {{ ansible_env.USER }}"
+          ansible.builtin.shell: "chsh -s $(which zsh) {{ lookup('env', 'USER') }}"
           become: true
           tags: zsh
 
@@ -516,7 +521,7 @@
     # 🔹 Configure .zshrc
     - name: Ensure custom dotfiles config is in .zshrc
       ansible.builtin.blockinfile:
-        path: "{{ ansible_env.HOME }}/.zshrc"
+        path: "{{ lookup('env', 'HOME') }}/.zshrc"
         marker: "# {mark} DOTFILES CONFIG"
         block: |
           export DOTFILES_OPTS=(common network nnn) # adjust as needed; other options: not-cloud, nnn, network, phone
