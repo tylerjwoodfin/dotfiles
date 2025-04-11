@@ -213,9 +213,10 @@
         - name: Display new SSH key and wait for GitHub setup
           block:
             - name: Display SSH key
-              ansible.builtin.shell: |
-                echo "🔑 Add this SSH key to GitHub: https://github.com/settings/keys"
-                echo "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}"
+              ansible.builtin.debug:
+                msg: |
+                  🔑 Add this SSH key to GitHub, ignoring ###:
+                  ###{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}###
               changed_when: false
               become: false
               tags: ssh, clone
