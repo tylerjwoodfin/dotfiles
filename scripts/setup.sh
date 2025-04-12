@@ -3,21 +3,89 @@
 # Get the directory of the script
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Debug function
+debug() {
+    echo "DEBUG: $1"
+}
+
 # Detect OS type
 if [[ "$OSTYPE" == "darwin"* ]]; then
     PLATFORM="MacOS"
+    debug "Detected MacOS platform"
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
     PLATFORM="Ubuntu"
+    debug "Detected Ubuntu platform"
 else
     PLATFORM="Unknown"
+    debug "Unknown platform: $OSTYPE"
 fi
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" &> /dev/null
+}
+
+# Function to add Homebrew to PATH
+add_homebrew_to_path() {
+    if [[ "$PLATFORM" == "MacOS" ]]; then
+        # Add Homebrew to PATH for the current session
+        if [[ -x /opt/homebrew/bin/brew ]]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+            debug "Added Homebrew to PATH from /opt/homebrew"
+        elif [[ -x /usr/local/bin/brew ]]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+            debug "Added Homebrew to PATH from /usr/local"
+        fi
+
+        # Add Homebrew to PATH permanently
+        if ! grep -q "brew shellenv" ~/.zprofile; then
+            echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+            debug "Added Homebrew to ~/.zprofile"
+        fi
+    fi
+}
+
+# Function to install Homebrew if missing
+install_homebrew() {
+    if ! command_exists brew; then
+        echo "Homebrew is not installed."
+        echo "Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || { echo "Failed to install Homebrew."; exit 1; }
+        add_homebrew_to_path
+    else
+        debug "Homebrew is already installed at $(which brew)"
+        add_homebrew_to_path
+    fi
+}
+
+# Function to install whiptail if missing
+install_whiptail() {
+    if ! command_exists whiptail; then
+        echo "whiptail is not installed."
+        
+        if [[ "$PLATFORM" == "MacOS" ]]; then
+            install_homebrew
+            echo "Installing whiptail via Homebrew..."
+            brew install newt || { echo "Failed to install whiptail."; exit 1; }
+        elif [[ "$PLATFORM" == "Ubuntu" ]]; then
+            echo "Installing whiptail via APT..."
+            sudo apt update && sudo apt install -y whiptail || { echo "Failed to install whiptail."; exit 1; }
+        else
+            echo "Unsupported OS. Please install whiptail manually."
+            exit 1
+        fi
+    else
+        debug "whiptail is already installed"
+    fi
+}
 
 # Function to install Ansible if missing
 install_ansible() {
-    echo "Ansible is not installed."
-    
-    if whiptail --yesno "Ansible is required to run this setup. Do you want to install it now?" 10 60; then
+    if ! command_exists ansible-playbook; then
+        echo "Ansible is not installed."
+        
         if [[ "$PLATFORM" == "MacOS" ]]; then
+            install_homebrew
             echo "Installing Ansible via Homebrew..."
             brew install ansible || { echo "Failed to install Ansible."; exit 1; }
         elif [[ "$PLATFORM" == "Ubuntu" ]]; then
@@ -28,15 +96,15 @@ install_ansible() {
             exit 1
         fi
     else
-        echo "Ansible is required. Exiting."
-        exit 1
+        debug "Ansible is already installed"
     fi
 }
 
+# Check if whiptail is installed, install if missing
+install_whiptail
+
 # Check if Ansible is installed, install if missing
-if ! command -v ansible-playbook &> /dev/null; then
-    install_ansible
-fi
+install_ansible
 
 # Ensure playbook.yml exists
 SETUP_YML="$SCRIPT_DIR/playbook.yml"
@@ -58,6 +126,7 @@ OPTIONS+=("cli" "Install CLI tools (git, docker, etc.)" OFF)
 OPTIONS+=("gui" "Install GUI apps (Browsers, VS Code, Syncthing)" OFF)
 
 # Configuration
+OPTIONS+=("hostname" "Change system hostname" OFF)
 OPTIONS+=("ssh" "Setup SSH (does not overwrite existing keys)" OFF)
 OPTIONS+=("git" "Setup Git (user email, .gitignore, etc.)" OFF)
 OPTIONS+=("vim" "Link vim.lua to Neovim init.lua" OFF)
@@ -70,7 +139,6 @@ OPTIONS+=("python" "Install Cabinet and Remindmail via Pipx" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("copyq" "Ubuntu: Install CopyQ (clipboard manager)" OFF)
 
 # Additional setup
-OPTIONS+=("hostname" "Change system hostname" OFF)
 OPTIONS+=("downloads" "Open external app download links" OFF)
 OPTIONS+=("borg" "Set BorgBackup passphrase" OFF)
 OPTIONS+=("clone" "Clone all GitHub repositories (run SEPARATELY after SSH!)" OFF)

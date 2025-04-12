@@ -8,6 +8,39 @@
     - name: Gather system facts
       setup:
       tags: always
+
+    # 🔹 Configure Hostname
+    - name: Configure system hostname
+      block:
+        - name: Prompt for new hostname
+          ansible.builtin.pause:
+            prompt: "Enter new hostname"
+          register: hostname_input
+          become: false
+          tags: hostname
+
+        - name: Set hostname (MacOS)
+          shell: |
+            scutil --set ComputerName "{{ hostname_input.user_input }}"
+            scutil --set LocalHostName "{{ hostname_input.user_input }}"
+            scutil --set HostName "{{ hostname_input.user_input }}"
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          become: true
+          tags: hostname
+
+        - name: Set hostname (Ubuntu)
+          hostname:
+            name: "{{ hostname_input.user_input }}"
+          when: ansible_facts['os_family'] == "Debian"
+          become: true
+          tags: hostname
+
+      rescue:
+        - name: Log hostname configuration failure
+          debug:
+            msg: "⚠️ Hostname configuration failed, continuing."
+          tags: hostname
+
     # 🔹 Install Homebrew (Mac only)
     - name: Install Homebrew (macOS)
       block:
@@ -16,7 +49,8 @@
             /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           args:
             creates: /usr/local/bin/brew
-          when: ansible_os_family == "Darwin"
+          become: false
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
           tags: homebrew
       rescue:
         - name: Log Homebrew installation failure
@@ -25,9 +59,9 @@
           tags: homebrew
 
     # 🔹 Install CLI tools (Mac & Linux)
-    - name: Install CLI tools (Mac)
+    - name: Install Mac CLI tools
       block:
-        - name: Install CLI tools
+        - name: Install Mac CLI tools via Homebrew
           homebrew:
             name:
               - zsh
@@ -40,24 +74,27 @@
               - nnn
               - borgbackup
             state: present
-          when: ansible_os_family == "Darwin"
-          tags: cli
+          become: false
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+      when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+      tags: cli
       rescue:
         - name: Log Mac CLI tool installation failure
           debug:
             msg: "⚠️ CLI tools installation failed on Mac, continuing."
           tags: cli
 
-    - name: Install CLI tools (Ubuntu)
+    - name: Install Ubuntu CLI tools
       block:
         - name: Remove conflicting containerd package (if exists)
           apt:
             name: containerd
             state: absent
-          when: ansible_os_family == "Debian"
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
           tags: cli
 
-        - name: Install CLI tools
+        - name: Install Ubuntu CLI tools via APT
           apt:
             name:
               - zsh
@@ -76,7 +113,8 @@
               - ufw
             state: present
             update_cache: yes
-          when: ansible_os_family == "Debian"
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
           tags: cli
       rescue:
         - name: Log Ubuntu CLI tool installation failure
@@ -84,10 +122,10 @@
             msg: "⚠️ CLI tools installation failed on Ubuntu, continuing."
           tags: cli
 
-    # 🔹 Install GUI Apps (Mac)
-    - name: Install GUI apps (Mac)
+    # 🔹 Install GUI Apps - MacOS
+    - name: Install GUI apps - MacOS
       block:
-        - name: Install GUI apps
+        - name: Install GUI apps - MacOS
           homebrew_cask:
             name:
               - arc
@@ -97,18 +135,25 @@
               - librewolf
               - zettlr
               - syncthing
+              - notion
+              - hiddenbar
               - rustdesk
+              - bettertouchtool
+              - wireguard
+              - cursor
             state: present
-          when: ansible_os_family == "Darwin"
-          tags: gui
+          become: false
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+      when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+      tags: gui
       rescue:
         - name: Log Mac GUI apps installation failure
           debug:
             msg: "⚠️ GUI apps installation failed on Mac, continuing."
           tags: gui
 
-    # 🔹 Install GUI Apps (Ubuntu)
-    - name: Install GUI apps (Ubuntu)
+    # 🔹 Install GUI Apps - Ubuntu
+    - name: Install GUI apps - Ubuntu
       block:
         - name: Add Brave Browser repository
           shell: |
@@ -146,7 +191,7 @@
             state: present
           tags: gui
 
-      when: ansible_os_family == "Debian"
+      when: ansible_facts['os_family'] == "Debian"
       tags: gui
       rescue:
         - name: Log Ubuntu GUI apps installation failure
@@ -158,29 +203,37 @@
       block:
         - name: Ensure .ssh directory exists with correct permissions
           ansible.builtin.file:
-            path: "{{ ansible_env.HOME }}/.ssh"
+            path: "{{ lookup('env', 'HOME') }}/.ssh"
             state: directory
             mode: '0700'
-            owner: "{{ ansible_env.USER }}"
+            owner: "{{ lookup('env', 'USER') }}"
+          become: false
           tags: ssh, clone
 
-        - name: Ensure SSH key exists
-          ansible.builtin.command: "[ -f ~/.ssh/id_rsa ] || ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ''"
+        - name: Generate SSH key if it doesn't exist
+          ansible.builtin.command: "ssh-keygen -t rsa -b 4096 -f {{ lookup('env', 'HOME') }}/.ssh/id_rsa -N ''"
           args:
-            creates: "{{ ansible_env.HOME }}/.ssh/id_rsa"
+            creates: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+          register: keygen_result
+          become: false
           tags: ssh, clone
 
-        - name: Display SSH public key (manual step)
-          ansible.builtin.command: "cat {{ ansible_env.HOME }}/.ssh/id_rsa.pub"
-          register: ssh_pubkey
-          changed_when: false
-          tags: ssh, clone
+        - name: Display new SSH key and wait for GitHub setup
+          block:
+            - name: Display SSH key
+              ansible.builtin.debug:
+                msg: |
+                  🔑 Add this SSH key to GitHub, ignoring ###:
+                  ###{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_rsa.pub') }}###
+              changed_when: false
+              become: false
+              tags: ssh, clone
 
-        - name: Prompt user to add SSH key to GitHub
-          ansible.builtin.debug:
-            msg: |
-              🔑 Add this SSH key to GitHub: https://github.com/settings/keys
-              {{ ssh_pubkey.stdout }}
+            - name: Wait for user to add key to GitHub
+              ansible.builtin.pause:
+                prompt: "Press Enter after you have added the SSH key to GitHub"
+              tags: ssh, clone
+          when: keygen_result.changed
           tags: ssh, clone
 
         - name: Test SSH connection to GitHub
@@ -188,7 +241,17 @@
           register: ssh_test
           failed_when: ssh_test.rc != 1  # Expecting "Hi <user>! You've successfully authenticated, but GitHub does not provide shell access."
           changed_when: false
+          become: false
           tags: ssh, clone
+
+        - name: Ensure git directory exists
+          ansible.builtin.file:
+            path: "{{ lookup('env', 'HOME') }}/git"
+            state: directory
+            mode: '0755'
+            owner: "{{ lookup('env', 'USER') }}"
+          become: false
+          tags: clone
 
         - name: Clone repositories using SSH
           ansible.builtin.shell: >
@@ -196,7 +259,8 @@
             curl -s https://api.github.com/users/$UserName/repos?per_page=1000 |
             jq -r '.[]|.ssh_url' | xargs -I {} git clone {}
           args:
-            chdir: "{{ ansible_env.HOME }}/git"
+            chdir: "{{ lookup('env', 'HOME') }}/git"
+          become: false
           tags: clone
 
       rescue:
@@ -212,7 +276,7 @@
           apt:
             name: copyq
             state: present
-          when: ansible_os_family == "Debian"
+          when: ansible_facts['os_family'] == "Debian"
           tags: copyq
       rescue:
         - name: Log CopyQ installation failure
@@ -229,7 +293,7 @@
               - wget
               - git
             state: present
-          when: ansible_os_family == "Debian"
+          when: ansible_facts['os_family'] == "Debian"
           tags: pihole
 
         - name: Install PiHole
@@ -239,7 +303,7 @@
           become: true
           args:
             creates: /etc/pihole/setupVars.conf
-          when: ansible_os_family == "Debian"
+          when: ansible_facts['os_family'] == "Debian"
           tags: pihole
       rescue:
         - name: Log PiHole installation failure
@@ -249,17 +313,32 @@
 
     # 🔹 Install Cabinet and Remindmail
     - name: Ensure pipx is installed
-      ansible.builtin.package:
-        name: pipx
-        state: present
-      become: true
-      tags: python
+      block:
+        - name: Install pipx via Homebrew
+          homebrew:
+            name: pipx
+            state: present
+          become: false
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          tags: python
+
+        - name: Install pipx via APT
+          apt:
+            name: pipx
+            state: present
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: python
 
     - name: Ensure pipx is in PATH
-      ansible.builtin.shell: "eval $(pipx ensurepath)"
+      ansible.builtin.shell: |
+        pipx_path=$(pipx environment | grep -o 'PIPX_HOME=.*' | cut -d'=' -f2)
+        echo "export PATH=\"$pipx_path/bin:$PATH\"" >> ~/.zshrc
+        source ~/.zshrc
       args:
-        executable: /bin/bash
+        executable: /bin/zsh
       changed_when: false
+      become: false
       tags: python
 
     - name: Install Cabinet (Python Package via pipx)
@@ -268,6 +347,7 @@
           ansible.builtin.shell: "pipx install cabinet"
           args:
             executable: /bin/bash
+          become: false
           tags: python
 
       rescue:
@@ -282,6 +362,7 @@
           ansible.builtin.shell: "pipx install remindmail"
           args:
             executable: /bin/bash
+          become: false
           tags: python
 
       rescue:
@@ -305,7 +386,7 @@
         - name: Show script output
           debug:
             var: script_output.stdout
-          when: ansible_os_family == "Darwin"
+          when: ansible_facts['os_family'] == "Darwin"
           tags: mac_defaults
       rescue:
         - name: Log MacOS defaults script failure
@@ -313,31 +394,16 @@
             msg: "⚠️ mac.sh execution failed, continuing."
           tags: mac_defaults
 
-    - name: Configure iTerm2 to load preferences from dotfiles
-    block:
-      - name: Install iTerm2
-        homebrew_cask:
-          name: iterm2
-          state: present
-        tags: iterm2
-
-      - name: Configure iTerm2 to load preferences from dotfiles
-        shell: >
-          defaults write com.googlecode.iterm2 PrefsCustomFolder -string "{{ ansible_env.HOME }}/git/dotfiles/mac/iterm2" &&
-          defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
-        tags: iterm2
-    when: ansible_os_family == "Darwin"
-    tags: iterm2
-
     # 🔹 Configure Git
     - name: Configure Git settings
       vars:
-        git: "{{ ansible_env.HOME }}/git"
+        git: "{{ lookup('env', 'HOME') }}/git"
       block:
         - name: Apply Pre-push hooks
           shell: zsh {{ git }}/tools/githooks/apply_pre-push.sh
           args:
             executable: /bin/zsh
+          become: false
           tags: git
 
         - name: Set Git email defaults
@@ -345,6 +411,7 @@
             name: user.email
             value: 14207553+tylerjwoodfin@users.noreply.github.com
             scope: global
+          become: false
           tags: git
 
         - name: Set Git name defaults
@@ -352,6 +419,7 @@
             name: user.name
             value: "Tyler Woodfin"
             scope: global
+          become: false
           tags: git
 
         - name: Link global .gitignore to Git configuration
@@ -359,6 +427,7 @@
             name: core.excludesfile
             value: "{{ git }}/dotfiles/.gitignore"
             scope: global
+          become: false
           tags: git
 
       rescue:
@@ -374,7 +443,7 @@
           ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             regexp: '^AuthorizedKeysFile'
-            line: 'AuthorizedKeysFile %h/.ssh/authorized_keys {{ ansible_env.HOME }}/docs/network/authorized_keys.md'
+            line: "AuthorizedKeysFile %h/.ssh/authorized_keys {{ lookup('env', 'HOME') }}/docs/network/authorized_keys.md"
             state: present
           become: true
           tags: ssh
@@ -385,24 +454,27 @@
               # this file is empty.
               # authorized public keys are stored in ~/syncthing/md/docs/network/authorized_keys.md.
               # For instructions, see ~/syncthing/md/docs/network/ssh for instructions.
-            dest: "{{ ansible_env.HOME }}/.ssh/authorized_keys"
+            dest: "{{ lookup('env', 'HOME') }}/.ssh/authorized_keys"
             mode: '0644'
+          become: false
           tags: ssh
 
         - name: Ensure correct directory permissions
           ansible.builtin.file:
-            path: "{{ ansible_env.HOME }}"
+            path: "{{ lookup('env', 'HOME') }}"
             state: directory
             mode: '0700'
             recurse: yes
+          become: false
           tags: ssh
 
         - name: Ensure correct ownership of directories
           ansible.builtin.file:
-            path: "{{ ansible_env.HOME }}"
+            path: "{{ lookup('env', 'HOME') }}"
             state: directory
-            owner: "{{ ansible_env.USER }}"
+            owner: "{{ lookup('env', 'USER') }}"
             recurse: yes
+          become: false
           tags: ssh
 
         - name: Configure UFW
@@ -413,14 +485,16 @@
             policy: deny
             default_deny: yes
             allow_ssh: yes
-          when: ansible_os_family == "Debian"
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
           tags: ssh
 
         - name: Restart SSH service (Linux only)
           systemd:
             name: sshd
             state: restarted
-          when: ansible_os_family == "Debian"
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
           tags: ssh
 
       rescue:
@@ -433,10 +507,10 @@
       block:
         - name: Append vim.lua reference to init.lua
           ansible.builtin.lineinfile:
-            path: "{{ ansible_env.HOME }}/.config/nvim/init.lua"
+            path: "{{ lookup('env', 'HOME') }}/.config/nvim/init.lua"
             line: |
               -- added by dotfiles on {{ ansible_date_time.date }}
-              dofile('{{ ansible_env.HOME }}/git/dotfiles/vim.lua')
+              dofile('{{ lookup('env', 'HOME') }}/git/dotfiles/vim.lua')
             create: yes
           tags: vim
 
@@ -453,10 +527,11 @@
             name: zsh
             state: present
           become: true
+          when: ansible_facts['os_family'] == "Debian"
           tags: zsh
 
         - name: Change default shell to Zsh
-          ansible.builtin.shell: "chsh -s $(which zsh) {{ ansible_env.USER }}"
+          ansible.builtin.shell: "chsh -s $(which zsh) {{ lookup('env', 'USER') }}"
           become: true
           tags: zsh
 
@@ -469,7 +544,7 @@
     # 🔹 Configure .zshrc
     - name: Ensure custom dotfiles config is in .zshrc
       ansible.builtin.blockinfile:
-        path: "{{ ansible_env.HOME }}/.zshrc"
+        path: "{{ lookup('env', 'HOME') }}/.zshrc"
         marker: "# {mark} DOTFILES CONFIG"
         block: |
           export DOTFILES_OPTS=(common network nnn) # adjust as needed; other options: not-cloud, nnn, network, phone
