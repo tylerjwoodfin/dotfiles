@@ -440,8 +440,7 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
         "diary" "turn" "notes" "docs" "work" "n" "v" "one-more-hour" \
-        "plex" "bike" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" \
-        "cabbie"
+        "plex" "bike" "addjira" "addshopping" "bluesky" "lifelog" "foodlog"
     )
 
     for cmd in "${cloud_commands[@]}"; do
