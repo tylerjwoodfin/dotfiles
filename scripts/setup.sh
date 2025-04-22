@@ -137,6 +137,7 @@ OPTIONS+=("zshrc" "Add common.zsh to .zshrc" OFF)
 OPTIONS+=("pihole" "Install Pihole (overwrites!)" OFF)
 OPTIONS+=("python" "Install Cabinet and Remindmail via Pipx" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("copyq" "Ubuntu: Install CopyQ (clipboard manager)" OFF)
+[[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("fail2ban" "Ubuntu: Install and configure Fail2Ban" OFF)
 
 # Additional setup
 OPTIONS+=("downloads" "Open external app download links" OFF)
