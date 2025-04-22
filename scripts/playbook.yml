@@ -509,6 +509,56 @@
             msg: "⚠️ SSH authorized_keys setup failed, continuing."
           tags: ssh
 
+    # 🔹 Configure Fail2Ban
+    - name: Configure Fail2Ban
+      block:
+        - name: Install fail2ban
+          apt:
+            name: fail2ban
+            state: present
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: fail2ban
+
+        - name: Configure fail2ban jail.local
+          copy:
+            content: |
+              [DEFAULT]
+              bantime = 1h
+              findtime = 10m
+              maxretry = 5
+              banaction = iptables-multiport
+              backend = auto
+
+              [sshd]
+              enabled = true
+              port = ssh
+              filter = sshd
+              logpath = /var/log/auth.log
+              maxretry = 3
+              findtime = 300
+              bantime = 3600
+            dest: /etc/fail2ban/jail.local
+            mode: '0644'
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: fail2ban
+
+        - name: Ensure fail2ban service is enabled and started
+          systemd:
+            name: fail2ban
+            state: started
+            enabled: yes
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: fail2ban
+
+      rescue:
+        - name: Log fail2ban configuration failure
+          debug:
+            msg: "⚠️ fail2ban configuration failed, continuing."
+          tags: fail2ban
+
     - name: Link vim.lua to Neovim init.lua
       block:
         - name: Append vim.lua reference to init.lua
