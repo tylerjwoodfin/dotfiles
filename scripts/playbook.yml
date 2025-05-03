@@ -73,6 +73,7 @@
               - docker
               - nnn
               - borgbackup
+              - node
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
@@ -147,9 +148,19 @@
               - spotify
               - soulseek
               - steam
+              - zoom
+              - libreoffice
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          tags: gui
+
+        - name: Install Docker Desktop for MacOS
+          shell: brew install --cask docker
+          become: false
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          tags: gui
+
       when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
       tags: gui
       rescue:
@@ -171,11 +182,28 @@
             creates: /etc/apt/sources.list.d/brave-browser-release.list
           tags: gui
 
-        - name: Install Brave, Tor, and VS Code
+        - name: Add Docker Desktop repository
+          shell: |
+            sudo apt-get update
+            sudo apt-get install -y ca-certificates curl gnupg
+            sudo install -m 0755 -d /etc/apt/keyrings
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+            sudo chmod a+r /etc/apt/keyrings/docker.gpg
+            echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            sudo apt-get update
+          tags: gui
+
+        - name: Install Docker Desktop and other GUI apps
           apt:
             name:
               - brave-browser
               - torbrowser-launcher
+              - docker-ce
+              - docker-ce-cli
+              - containerd.io
+              - docker-buildx-plugin
+              - docker-compose-plugin
+              - docker-desktop
             state: present
           tags: gui
 
