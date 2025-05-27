@@ -74,6 +74,7 @@
               - nnn
               - borgbackup
               - node
+              - stow
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
@@ -112,6 +113,7 @@
               - chrome-gnome-shell
               - input-remapper
               - ufw
+              - stow
             state: present
             update_cache: yes
           become: true
@@ -456,14 +458,6 @@
           become: false
           tags: git
 
-        - name: Link global .gitignore to Git configuration
-          ansible.builtin.git_config:
-            name: core.excludesfile
-            value: "{{ git }}/dotfiles/.gitignore"
-            scope: global
-          become: false
-          tags: git
-
       rescue:
         - name: Log Git configuration failure
           debug:
@@ -586,23 +580,6 @@
           debug:
             msg: "⚠️ fail2ban configuration failed, continuing."
           tags: fail2ban
-
-    - name: Link vim.lua to Neovim init.lua
-      block:
-        - name: Append vim.lua reference to init.lua
-          ansible.builtin.lineinfile:
-            path: "{{ lookup('env', 'HOME') }}/.config/nvim/init.lua"
-            line: |
-              -- added by dotfiles on {{ ansible_date_time.date }}
-              dofile('{{ lookup('env', 'HOME') }}/git/dotfiles/vim.lua')
-            create: yes
-          tags: vim
-
-      rescue:
-        - name: Log failure to link vim.lua
-          ansible.builtin.debug:
-            msg: "⚠️ Failed to link vim.lua to init.lua, continuing."
-          tags: vim
 
     - name: Set Zsh as the default shell
       block:

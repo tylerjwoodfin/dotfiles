@@ -129,7 +129,6 @@ OPTIONS+=("gui" "Install GUI apps (Browsers, VS Code, Syncthing)" OFF)
 OPTIONS+=("hostname" "Change system hostname" OFF)
 OPTIONS+=("ssh" "Setup SSH (does not overwrite existing keys)" OFF)
 OPTIONS+=("git" "Setup Git (user email, .gitignore, etc.)" OFF)
-OPTIONS+=("vim" "Link vim.lua to Neovim init.lua" OFF)
 OPTIONS+=("zsh" "Set the default shell to ZSH" OFF)
 OPTIONS+=("zshrc" "Add common.zsh to .zshrc" OFF)
 

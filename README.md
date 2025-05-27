@@ -24,8 +24,12 @@ sudo apt install stow
 
 Symlink all dotfiles:
 ```bash
-stow .
+cd ~/git/dotfiles
+stow --target=$HOME .
 ```
+
+## uBlock Origin
+- add `https://raw.githubusercontent.com/tylerjwoodfin/dotfiles/refs/heads/main/uBlock.txt` to uBlock Origin's custom filter list.
 
 ## zsh
 - add to `~/.zshrc`:
@@ -36,9 +40,7 @@ if [ -f $HOME/git/dotfiles/zsh/common.zsh ]; then
 fi
 ```
 
----
-
-## 🔁 About Zsh Aliases / Env Vars
+### 🔁 About Zsh Aliases / Env Vars
 
 Many aliases and environment variables are pulled from [Cabinet](https://www.github.com/tylerjwoodfin/cabinet) and injected at shell startup.
 

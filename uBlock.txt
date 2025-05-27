@@ -1,0 +1,6 @@
+! uBlock Origin Custom Filters; apply by adding https://raw.githubusercontent.com/tylerjwoodfin/dotfiles/refs/heads/main/uBlock.txt to custom filters list.
+
+! Apr 13, 2025 https://www.notion.com
+||accounts.google.com/gsi/iframe/select$subdocument
+
+https://raw.githubusercontent.com/gijsdev/ublock-hide-yt-shorts/master/list.txt
