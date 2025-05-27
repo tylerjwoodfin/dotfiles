@@ -14,6 +14,7 @@ export logpath=$HOME/syncthing/log
 export cabinet=$HOME/syncthing/cabinet/settings.json
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
 export sprints=$HOME/syncthing/md/docs/sprints
+export NNTPSERVER=news.eternal-september.org
 
 # NNN exports
 if [[ " ${DOTFILES_OPTS[@]} " =~ " nnn " ]]; then
