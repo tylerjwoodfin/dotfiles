@@ -69,3 +69,37 @@ vim.api.nvim_create_autocmd("Syntax", {
         ]])
     end,
 })
+
+-- yml, easier highlighting
+-- vim.keymap.set('n', '<leader>dy', function()
+vim.keymap.set('n', '<leader>dy', function()
+  -- Get current line
+  local current = vim.fn.line('.')
+
+  -- Search upward for the nearest top-level `-` line
+  local start = current
+  while start > 1 do
+    local line = vim.fn.getline(start)
+    if line:match('^%s*-%s') then break end
+    start = start - 1
+  end
+
+  -- If not on a valid YAML block, do nothing
+  if not vim.fn.getline(start):match('^%s*-%s') then
+    print("Not inside a YAML block.")
+    return
+  end
+
+  -- Search downward to find the start of the next YAML block or end of file
+  local finish = start + 1
+  local last = vim.fn.line('$')
+  while finish <= last do
+    local line = vim.fn.getline(finish)
+    if line:match('^%s*-%s') then break end
+    finish = finish + 1
+  end
+
+  -- Delete from start to finish - 1
+  vim.cmd(start .. ',' .. (finish - 1) .. 'delete')
+end, { noremap = true, silent = true })
+
