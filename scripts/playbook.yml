@@ -152,6 +152,7 @@
               - steam
               - zoom
               - libreoffice
+              - protonvpn
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
@@ -184,6 +185,17 @@
             creates: /etc/apt/sources.list.d/brave-browser-release.list
           tags: gui
 
+        - name: Add ProtonVPN repository
+          shell: |
+            sudo apt update
+            sudo apt install -y wget
+            wget -qO - https://repo.protonvpn.com/debian/public_key.asc | sudo apt-key add -
+            echo "deb https://repo.protonvpn.com/debian stable main" | sudo tee /etc/apt/sources.list.d/protonvpn-stable-release.list
+            sudo apt update
+          args:
+            creates: /etc/apt/sources.list.d/protonvpn-stable-release.list
+          tags: gui
+
         - name: Add Docker Desktop repository
           shell: |
             sudo apt-get update
@@ -206,6 +218,7 @@
               - docker-buildx-plugin
               - docker-compose-plugin
               - docker-desktop
+              - protonvpn
             state: present
           tags: gui
 
