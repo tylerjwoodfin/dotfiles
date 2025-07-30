@@ -110,13 +110,13 @@ function git() {
     command git "$@"
 }
 
-gcam() {
+function gcam() {
     branch=$(git symbolic-ref --short HEAD)
     branch=${branch#*/}
     git add -A && git commit -m "$branch: $*"
 }
 
-gbr() {
+function gbr() {
   if [ -z "$1" ]; then
     echo "Usage: gbr <release_branch_name>"
     return 1
