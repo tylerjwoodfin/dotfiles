@@ -129,7 +129,7 @@ gbr() {
   echo "Release branch '$release_branch' created and pushed successfully."
 }
 
-function _gtag() {
+function gtag() {
   tag="$1"
 
   # Checkout main or master
