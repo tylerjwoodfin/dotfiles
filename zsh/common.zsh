@@ -129,6 +129,34 @@ gbr() {
   echo "Release branch '$release_branch' created and pushed successfully."
 }
 
+function _gtag() {
+  tag="$1"
+
+  # Checkout main or master
+  if git rev-parse --verify main >/dev/null 2>&1; then
+    git checkout main
+  else
+    git checkout master
+  fi
+
+  git pull
+
+  if [ -z "$tag" ]; then
+    if [ -f package.json ]; then
+      tag=$(jq -r .version package.json)
+    elif [ -f setup.cfg ]; then
+      tag=$(grep -E "^version\s*=" setup.cfg | head -n1 | awk -F= "{print \$2}" | xargs)
+    else
+      echo "No tag provided and neither package.json nor setup.cfg found."
+      return 1
+    fi
+  fi
+
+  git tag -a "$tag" -m "Release $tag"
+  git push --tags
+}
+
+
 # Sprint management
 newsprint() {
     # Extract the current sprint number
