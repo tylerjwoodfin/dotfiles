@@ -461,14 +461,14 @@ alias rmmsl='rmm --later'
 alias rmme='remind --edit'
 alias rmmst='remind --show-tomorrow'
 alias rmmsw='remind --show-week'
-alias one-more-hour='python3 /home/tyler/git/tools/pihole/one_more_hour.py'
+alias one-hour-of-distraction='python3 /home/tyler/git/tools/pihole/one_hour_of_distraction.py'
 alias worka='worka'
 
 # 'not-cloud' aliases
 if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
-        "diary" "turn" "notes" "docs" "work" "n" "v" "one-more-hour" \
+        "diary" "turn" "notes" "docs" "work" "n" "v" "one-hour-of-distraction" \
         "plex" "bike" "addjira" "addshopping" "bluesky" "lifelog" "foodlog"
     )
 
