@@ -235,24 +235,6 @@ cheat() {
   curl "cheat.sh/$encoded_query"
 }
 
-# Work todo management
-worka() {
-    local file_path="$HOME/syncthing/md/work/todo.md"
-    local new_task="- [ ] # $*"
-    
-    awk -v task="$new_task" '
-    BEGIN {added = 0}
-    {
-        if ($0 ~ /^## to do/ && added == 0) {
-            print $0
-            print task
-            added = 1
-        } else {
-            print $0
-        }
-    }' "$file_path" > tmpfile && mv tmpfile "$file_path"
-}
-
 # Remind functions
 rmm() {
     local save=""
@@ -353,52 +335,38 @@ rmml() {
     remind --title "$*" --when "later"
 }
 
-# Plex function
+# Plex
 plex() {
     python3 ~/git/tools/youtube/main.py video "$@" -d ~/syncthing/video/YouTube
 }
 
-# Atlas-man functions
-addjira() {
-    local title_args=()
-    local extra_args=()
-    local reading_flag_value=false
-    local current_flag=""
-
-    while [[ $# -gt 0 ]]; do
-        if $reading_flag_value; then
-            extra_args+=("$current_flag" "$1")
-            reading_flag_value=false
-            current_flag=""
-        elif [[ "$1" =~ ^-[-]?[a-zA-Z] ]]; then
-            if [[ "$current_flag" != "" ]]; then
-                extra_args+=("$current_flag")
-            fi
-            current_flag="$1"
-            reading_flag_value=true
-        else
-            title_args+=("$1")
-        fi
-        shift
-    done
-
-    if [[ "$current_flag" != "" ]]; then
-        extra_args+=("$current_flag")
-    fi
-
-    local title="${title_args[*]}"
-
-    atlasman --jira --add-issue "$title" "${extra_args[@]}"
-}
-
-addshopping() {
-    atlasman --trello --add-card "shopping" "$*"
-}
-
-# Ollama function
+# Ollama
 llama() {
   local input="$*"
   ollama run llama3:latest "$input"
+}
+
+# URL shortening
+shorten() {
+  echo "shorten"
+  if [ -z "$SHORTEN_TOKEN" ]; then
+    echo "Set SHORTEN_TOKEN (export SHORTEN_TOKEN=...)" >&2
+    return 1
+  fi
+  if [ -z "$1" ]; then
+    echo "usage: short <url> [slug]" >&2
+    return 1
+  fi
+  local endpoint="https://tyler.cloud/s/api/shorten"
+  if [ -n "$2" ]; then
+    body="{\"url\":\"$1\",\"slug\":\"$2\"}"
+  else
+    body="{\"url\":\"$1\"}"
+  fi
+  curl -fsS -X POST "$endpoint" \
+    -H "Authorization: Bearer $SHORTEN_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "$body"
 }
 
 # ----------------------
@@ -437,7 +405,6 @@ alias gp='git pull'
 
 # Tool script aliases
 alias diary='python3 ~/git/tools/diary/main.py'
-alias shorten='python3 ~/git/tools/shorten.py'
 alias yt='python3 ~/git/tools/youtube/main.py'
 alias pitest='python3 ~/git/testfolder/test.py'
 alias turn='python3 ~/git/tools/kasalights/main.py'
