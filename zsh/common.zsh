@@ -348,7 +348,6 @@ llama() {
 
 # URL shortening
 shorten() {
-  echo "shorten"
   if [ -z "$SHORTEN_TOKEN" ]; then
     echo "Set SHORTEN_TOKEN (export SHORTEN_TOKEN=...)" >&2
     return 1
