@@ -306,7 +306,7 @@
           ansible.builtin.shell: >
             UserName=tylerjwoodfin;
             curl -s https://api.github.com/users/$UserName/repos?per_page=1000 |
-            jq -r '.[]|.ssh_url' | xargs -I {} git clone {}
+            jq -r '.[] | select(.archived == false) | .ssh_url' | xargs -I {} git clone {}
           args:
             chdir: "{{ lookup('env', 'HOME') }}/git"
           become: false
