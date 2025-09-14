@@ -11,10 +11,7 @@ export docs=$HOME/syncthing/md/docs
 export work=$HOME/syncthing/md/work
 export workt=$HOME/syncthing/md/work/todo.md
 export logpath=$HOME/syncthing/log
-export cabinet=$HOME/syncthing/cabinet/settings.json
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
-export sprints=$HOME/syncthing/md/docs/sprints
-export NNTPSERVER=news.eternal-september.org
 
 # NNN exports
 if [[ " ${DOTFILES_OPTS[@]} " =~ " nnn " ]]; then
@@ -28,11 +25,6 @@ export EDITOR='nvim'
 
 # Git configuration
 git config --global push.default current
-
-# Sprint configuration
-if [ -d "$HOME/syncthing/md/docs/sprints" ]; then
-  export sprint=$(find "$sprints" -type f -name "sprint [0-9]*.md" | sort -V | tail -n 1)
-fi
 
 # NNN configuration
 if [[ " ${DOTFILES_OPTS[@]} " =~ " nnn " ]]; then
@@ -154,41 +146,6 @@ function gtag() {
 
   git tag -a "$tag" -m "Release $tag"
   git push --tags
-}
-
-
-# Sprint management
-newsprint() {
-    # Extract the current sprint number
-    local currentnum=${${sprint:t}//[^0-9]/}
-    local nextnum=$((currentnum + 1))
-    
-    echo "Opening Sprint ${currentnum} to review. Press any key to continue."
-    read -k1
-    nvim "$sprint"
-    
-    echo "\nSprint ${currentnum} is closed! Press any key to begin Sprint ${nextnum}."
-    read -k1
-    
-    # Calculate the next sprint number and create the new sprint file path
-    local newsprint="$sprints/sprint $nextnum.md"
-    
-    # Copy the content of the current sprint to the new sprint file
-    cp "$sprint" "$newsprint"
-
-    # Generate the new first line and second line content
-    local today=$(date "+%B %d, %Y" | tr '[:upper:]' '[:lower:]')
-    local twoweeks=$(date -d "+14 days" "+%B %d, %Y" | tr '[:upper:]' '[:lower:]')
-    local new_first_line="# sprint ${nextnum}"
-    local new_second_line="- ${today} until mid-day ${twoweeks}"
-
-    # Update the first and second lines of the new sprint file
-    sed -i "1c\\${new_first_line}" "$newsprint"
-    sed -i "2c\\${new_second_line}" "$newsprint"
-    
-    # Open the new sprint file
-    nvim "$newsprint"
-    echo "Welcome to Sprint ${nextnum}!"
 }
 
 # Note editing
@@ -384,7 +341,6 @@ alias b='cd ../'
 # Directory navigation aliases
 alias cdh='cd ~'
 alias cdg='cd ~/git'
-alias cdam='cd ~/git/atlas-man'
 alias cdc='cd ~/git/cabinet'
 alias cddo='cd ~/git/dotfiles'
 alias cdrm='cd ~/git/remindmail'
@@ -407,13 +363,11 @@ alias gp='git pull'
 alias diary='python3 ~/git/tools/diary/main.py'
 alias yt='python3 ~/git/tools/youtube/main.py'
 alias pitest='python3 ~/git/testfolder/test.py'
-alias turn='python3 ~/git/tools/kasalights/main.py'
 alias notes='nnn ~/syncthing/md/notes'
 alias docs='nnn ~/syncthing/md/docs'
 alias work='nnn ~/syncthing/md/work'
 alias lofi='zsh ~/git/tools/lofi.sh'
 alias v='python3 ~/git/voicegpt/main.py'
-alias bike='python3 ~/git/tools/bike/price_calculator.py'
 alias bluesky='python3 ~/git/tools/bluesky/main.py'
 alias lifelog='python3 ~/git/tools/lifelog/main.py'
 alias foodlog='python3 ~/git/tools/foodlog/main.py'
@@ -436,18 +390,12 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
         "diary" "turn" "notes" "docs" "work" "n" "v" "one-hour-of-distraction" \
-        "plex" "bike" "addjira" "addshopping" "bluesky" "lifelog" "foodlog"
+        "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog"
     )
 
     for cmd in "${cloud_commands[@]}"; do
         alias "$cmd"="cloud $cmd"
     done
-
-    ## desktop-specific
-    alias duplicate="./git/dotfiles/display/monitors-duplicate.sh"
-    alias duplicate4k="./git/dotfiles/display/monitors-duplicate4k.sh"
-    alias extend="./git/dotfiles/display/monitors-extend.sh"
-    alias steamdeck="./git/dotfiles/display/monitors-steamdeck.sh"
 fi
 
 # 'phone' aliases
