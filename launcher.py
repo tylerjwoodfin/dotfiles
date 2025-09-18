@@ -49,27 +49,23 @@ class ZshParser:
         self.cache_file = Path.home() / '.cache' / 'launcher_cache.pkl'
         
     def parse(self) -> List[Command]:
-        """Parse the zsh file and extract commands with descriptions."""
         if not self.zsh_file_path.exists():
             raise FileNotFoundError(f"Zsh file not found: {self.zsh_file_path}")
         
-        # Check cache first
-        if self._load_cache():
-            return self.commands
+        # 🔴 Disable cache while debugging
+        # if self._load_cache():
+        #     return self.commands
         
-        # Parse the file
-        with open(self.zsh_file_path, 'r', encoding='utf-8') as f:
+        with open(self.zsh_file_path, "r", encoding="utf-8") as f:
             content = f.read()
-            
+
         self._parse_functions(content)
         self._parse_aliases(content)
-        
-        # Sort alphabetically by name
+
         self.commands.sort(key=lambda x: x.name)
-        
-        # Save to cache
-        self._save_cache()
-        
+
+        # self._save_cache()   # disable saving too while debugging
+
         return self.commands
     
     def _load_cache(self) -> bool:
@@ -103,7 +99,7 @@ class ZshParser:
     def _parse_functions(self, content: str):
         """Parse function definitions and their comments."""
         # Pattern to match function definitions with optional comments
-        function_pattern = r'(?:^#\s*(.+?)\s*$)?\s*(?:function\s+)?(\w+)\s*\(\s*\)\s*\{'
+        function_pattern = r'(?:^#\s*(.+)\s*$)?\s*(?:function\s+)?(\w+)\s*\(\s*\)\s*\{'
         
         for match in re.finditer(function_pattern, content, re.MULTILINE):
             comment = match.group(1) or ""
@@ -127,60 +123,69 @@ class ZshParser:
             
             if brace_count == 0:
                 func_body = content[start_pos:end_pos-1].strip()
+                description = comment.strip()
+                
+                # Skip functions with launcher-hidden or launcher-hide description
+                if description in ["launcher-hidden", "launcher-hide"]:
+                    continue
+                    
                 self.commands.append(Command(
                     name=func_name,
-                    description=comment.strip(),
+                    description=description,
                     command_type='function',
                     raw_command=func_name
                 ))
     
     def _parse_aliases(self, content: str):
-        """Parse alias definitions and their comments."""
-        # Pattern to match aliases with optional comments
-        # This handles both single and double quotes, and captures the full command
-        alias_pattern = r'(?:^#\s*(.+?)\s*$)?\s*alias\s+(\w+)=[\'"]([^\'"]*)[\'"]'
-        
-        # Also handle aliases without quotes (like simple commands)
-        alias_pattern_no_quotes = r'(?:^#\s*(.+?)\s*$)?\s*alias\s+(\w+)=([^\s][^#\n]*)'
-        
-        # First pass: aliases with quotes
-        for match in re.finditer(alias_pattern, content, re.MULTILINE):
-            comment = match.group(1) or ""
-            alias_name = match.group(2)
-            alias_value = match.group(3)
-            
-            # Skip the launcher alias itself
-            if alias_name == 'l':
-                continue
-                
-            self.commands.append(Command(
-                name=alias_name,
-                description=comment.strip(),
-                command_type='alias',
-                raw_command=alias_value
-            ))
-        
-        # Second pass: aliases without quotes (but not already captured)
-        existing_names = {cmd.name for cmd in self.commands}
-        for match in re.finditer(alias_pattern_no_quotes, content, re.MULTILINE):
-            comment = match.group(1) or ""
-            alias_name = match.group(2)
-            alias_value = match.group(3).strip()
-            
-            # Skip if already captured or if it's the launcher alias
-            if alias_name in existing_names or alias_name == 'l':
-                continue
-                
-            # Skip if it looks like a quoted alias (contains quotes)
-            if '"' in alias_value or "'" in alias_value:
-                continue
-                
-            self.commands.append(Command(
-                name=alias_name,
-                description=comment.strip(),
-                command_type='alias',
-                raw_command=alias_value
-            ))
+        lines = content.splitlines()
+        debug_path = Path.home() / "test.md"
+        with open(debug_path, "w", encoding="utf-8") as dbg:
+            dbg.write("# Alias Debug Output\n\n")
+
+            for line in lines:
+                if not line.strip().startswith("alias "):
+                    continue
+                if "=" not in line:
+                    continue
+
+                dbg.write(f"RAW: {line}\n")
+
+                alias_def, alias_rest = line.split("=", 1)
+                alias_name = alias_def.replace("alias", "").strip()
+                if alias_name == "l":
+                    continue
+
+                # Default values
+                comment_inline = ""
+                alias_value = alias_rest.strip()
+
+                # Split off inline comment if present
+                if "#" in alias_rest:
+                    alias_value, comment_inline = alias_rest.split("#", 1)
+                    alias_value = alias_value.strip()
+                    comment_inline = comment_inline.strip()
+
+                # Strip quotes around alias value
+                if alias_value.startswith(("'", '"')) and alias_value.endswith(("'", '"')):
+                    alias_value = alias_value[1:-1]
+
+                description = comment_inline  # only inline
+
+                # Skip aliases with launcher-hidden or launcher-hide description
+                if description in ["launcher-hidden", "launcher-hide"]:
+                    continue
+
+                dbg.write(f"  alias_name: {alias_name}\n")
+                dbg.write(f"  alias_value: {alias_value}\n")
+                dbg.write(f"  comment_inline: {comment_inline}\n")
+                dbg.write(f"  description: {description}\n\n")
+
+                self.commands.append(Command(
+                    name=alias_name,
+                    description=description,
+                    command_type="alias",
+                    raw_command=alias_value
+                ))
 
 
 class CommandItem(ListItem):

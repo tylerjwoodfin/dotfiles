@@ -344,48 +344,38 @@ shorten() {
 # ALIASES
 # ----------------------
 
-# System aliases# list files with details
-alias ls='ls -hal --color'
-# show calendar
-alias cal='cal -B1 -A1; echo -e "\nUse ncal to display horizontally"'
-# show calendar horizontal
-alias ncal='ncal -B1 -A1'
+# System aliases
+alias ls='ls -hal --color' # list
+alias cal='cal -B1 -A1; echo -e "\nUse ncal to display horizontally"' # calendar
+alias ncal='cal -3' # calendar horizontal
 # use nvim editor
-alias vim='nvim'
+alias vim='nvim' # launcher-hidden
 # exit shell
-alias x='exit'
+alias x='exit' # launcher-hidden
 # clear screen
-alias cc='clear'
+alias cc='clear' # clear
 # go back directory
-alias b='cd ../'
+alias b='cd ../' # back
 
 # Directory navigation aliases
-# go to home
-alias cdh='cd ~'
-# go to git
-alias cdg='cd ~/git'
-# go to cabinet
-alias cdc='cd ~/git/cabinet'
-# go to dotfiles
-alias cddo='cd ~/git/dotfiles'
-# go to remindmail
-alias cdrm='cd ~/git/remindmail'
-# go to tools
-alias cdto='cd ~/git/tools'
-# go to tyler.cloud
-alias cdw='cd ~/git/tyler.cloud'
-# go to backend
-alias cdbe='cd ~/git/backend'
+alias cdh='cd ~' # home
+alias cdg='cd ~/git' # git
+alias cdc='cd ~/git/cabinet' # cabinet
+alias cddo='cd ~/git/dotfiles' # dotfiles
+alias cdrm='cd ~/git/remindmail' # remindmail
+alias cdto='cd ~/git/tools' # tools
+alias cdw='cd ~/git/tyler.cloud' # tyler.cloud
+alias cdbe='cd ~/git/backend' # backend
 
 # Git aliases
-alias glog='git log --graph --pretty=format:"%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset" --abbrev-commit --date=relative'
-alias gcm='git commit -m'
-alias gch='git fetch && git checkout'
-alias gb='git checkout -b'
+alias glog='git log --graph --pretty=format:"%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset" --abbrev-commit --date=relative' # git log
+alias gcm='git commit -m' # git commit
+alias gch='git fetch && git checkout' # git fetch/checkout
+alias gb='git checkout -b' # git new branch
 alias gs='git status'
-alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d'
+alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d' # remove old branches
 alias gd='git diff'
-alias gdd='git diff develop'
+alias gdd='git diff develop' # git diff develop
 alias gp='git pull'
 
 # Tool script aliases
@@ -400,8 +390,8 @@ alias bluesky='python3 ~/git/tools/bluesky/main.py' # start post
 alias lifelog='python3 ~/git/tools/lifelog/main.py' # log event
 alias foodlog='python3 ~/git/tools/foodlog/main.py' # log food
 alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
+
 # launcher function
-# First unalias l if it exists, then define the function
 unalias l 2>/dev/null || true
 l() {
     # Create a temporary file for the command
@@ -428,7 +418,7 @@ alias rmmsl='rmm --later' # remind later
 alias rmme='remind --edit' # edit reminders
 alias rmmst='remind --show-tomorrow' # show tomorrow
 alias rmmsw='remind --show-week' # show week
-alias one-hour-of-distraction='python3 /home/tyler/git/tools/pihole/one_hour_of_distraction.py'
+alias one-hour-of-distraction='python3 /home/tyler/git/tools/pihole/one_hour_of_distraction.py' # unblock pihole
 
 # 'not-cloud' aliases
 if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
@@ -439,7 +429,7 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     )
 
     for cmd in "${cloud_commands[@]}"; do
-        alias "$cmd"="cloud $cmd"
+        alias "$cmd"="cloud $cmd" # launcher-hidden
     done
 fi
 
