@@ -28,7 +28,7 @@ git config --global push.default current
 
 # show git branch info in prompt
 autoload -Uz vcs_info
-precmd() { vcs_info }
+precmd() { vcs_info } # launcher-hidden
 
 # Format the vcs_info_msg_0_ variable
 zstyle ':vcs_info:git:*' formats '%b'
@@ -203,7 +203,9 @@ vn() {
 }
 
 # Utility functions
-cheat() { # learn about a command
+
+# learn about a command
+cheat() { 
   local query="$*"
   local encoded_query=$(echo "$query" | sed 's/ /%20/g')
   curl "cheat.sh/$encoded_query"
@@ -212,6 +214,8 @@ cheat() { # learn about a command
 # Remind functions
 # First unalias all functions that might conflict with aliases
 unalias rmm rmmt rmmy rmmty rmml plex shorten 2>/dev/null || true
+
+# reminder
 rmm() {
     local save=""
     if [[ "$1" == "--save" ]]; then
@@ -382,11 +386,11 @@ alias glog='git log --graph --pretty=format:"%Cred%h%Creset %an: %s - %Creset %C
 alias gcm='git commit -m' # git commit
 alias gch='git fetch && git checkout' # git fetch/checkout
 alias gb='git checkout -b' # git new branch
-alias gs='git status'
+alias gs='git status' # git status
 alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d' # remove old branches
-alias gd='git diff'
+alias gd='git diff' # git diff
 alias gdd='git diff develop' # git diff develop
-alias gp='git pull'
+alias gp='git pull' # git pull
 
 # Tool script aliases
 alias diary='python3 ~/git/tools/diary/main.py' # diary
@@ -445,9 +449,8 @@ fi
 
 # 'phone' aliases
 if [[ " ${DOTFILES_OPTS[@]} " =~ " phone " ]]; then
-    alias gpt="cloud gpt"
-    alias cal="cloud cal"
-    alias llama="cloud llama"
+    alias cal="cloud cal" # launcher-hidden
+    alias llama="cloud llama" # launcher-hidden
 fi
 
 # Enable grep colors
