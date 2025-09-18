@@ -26,6 +26,18 @@ export EDITOR='nvim'
 # Git configuration
 git config --global push.default current
 
+# show git branch info in prompt
+autoload -Uz vcs_info
+precmd() { vcs_info }
+
+# Format the vcs_info_msg_0_ variable
+zstyle ':vcs_info:git:*' formats '%b'
+
+# Set up the prompt (with git branch name)
+setopt PROMPT_SUBST
+
+PROMPT='%m -> %1~%F{green}${vcs_info_msg_0_:+(${vcs_info_msg_0_})}%F{white}$ '
+
 # NNN configuration
 if [[ " ${DOTFILES_OPTS[@]} " =~ " nnn " ]]; then
     BOOKMARKS_FILE="$HOME/.config/nnn/bookmarks.md"
