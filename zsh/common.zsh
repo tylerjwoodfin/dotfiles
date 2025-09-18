@@ -47,6 +47,7 @@ fi
 # ----------------------
 
 # Directory navigation
+# change dir and list
 cdl() { cd "$a"; ls; }
 
 # Git functions
@@ -102,12 +103,14 @@ function git() {
     command git "$@"
 }
 
+# git commit with branch name
 function gcam() {
     branch=$(git symbolic-ref --short HEAD)
     branch=${branch#*/}
     git add -A && git commit -m "$branch: $*"
 }
 
+# git create release branch
 function gbr() {
   if [ -z "$1" ]; then
     echo "Usage: gbr <release_branch_name>"
@@ -121,6 +124,7 @@ function gbr() {
   echo "Release branch '$release_branch' created and pushed successfully."
 }
 
+# git create and push tag
 function gtag() {
   tag="$1"
 
@@ -149,6 +153,7 @@ function gtag() {
 }
 
 # Note editing
+# edit note file
 vn() {
     [[ $# -eq 0 ]] && return
 
@@ -186,6 +191,7 @@ vn() {
 }
 
 # Utility functions
+# show cheat sheet
 cheat() {
   local query="$*"
   local encoded_query=$(echo "$query" | sed 's/ /%20/g')
@@ -193,6 +199,9 @@ cheat() {
 }
 
 # Remind functions
+# create reminder
+# First unalias all functions that might conflict with aliases
+unalias rmm rmmt rmmy rmmty rmml plex shorten 2>/dev/null || true
 rmm() {
     local save=""
     if [[ "$1" == "--save" ]]; then
@@ -276,34 +285,40 @@ rmm() {
     eval $cmd_string
 }
 
+# reminder for tomorrow
 rmmty() {
     rmm --save --when "tomorrow" --title "$@"
 }
 
+# reminder for tomorrow
 rmmt() {
     remind --title "$*" --when "tomorrow"
 }
 
+# save reminder
 rmmy() {
     rmm --save "$@"
 }
 
+# reminder for later
 rmml() {
     remind --title "$*" --when "later"
 }
 
-# Plex
+# download yt to plex
 plex() {
     python3 ~/git/tools/youtube/main.py video "$@" -d ~/syncthing/video/YouTube
 }
 
 # Ollama
+# run llama model
 llama() {
   local input="$*"
   ollama run llama3:latest "$input"
 }
 
 # URL shortening
+# shorten url
 shorten() {
   if [ -z "$SHORTEN_TOKEN" ]; then
     echo "Set SHORTEN_TOKEN (export SHORTEN_TOKEN=...)" >&2
@@ -329,23 +344,37 @@ shorten() {
 # ALIASES
 # ----------------------
 
-# System aliases
+# System aliases# list files with details
 alias ls='ls -hal --color'
+# show calendar
 alias cal='cal -B1 -A1; echo -e "\nUse ncal to display horizontally"'
+# show calendar horizontal
 alias ncal='ncal -B1 -A1'
+# use nvim editor
 alias vim='nvim'
+# exit shell
 alias x='exit'
+# clear screen
 alias cc='clear'
+# go back directory
 alias b='cd ../'
 
 # Directory navigation aliases
+# go to home
 alias cdh='cd ~'
+# go to git
 alias cdg='cd ~/git'
+# go to cabinet
 alias cdc='cd ~/git/cabinet'
+# go to dotfiles
 alias cddo='cd ~/git/dotfiles'
+# go to remindmail
 alias cdrm='cd ~/git/remindmail'
+# go to tools
 alias cdto='cd ~/git/tools'
+# go to tyler.cloud
 alias cdw='cd ~/git/tyler.cloud'
+# go to backend
 alias cdbe='cd ~/git/backend'
 
 # Git aliases
@@ -360,30 +389,46 @@ alias gdd='git diff develop'
 alias gp='git pull'
 
 # Tool script aliases
-alias diary='python3 ~/git/tools/diary/main.py'
-alias yt='python3 ~/git/tools/youtube/main.py'
-alias pitest='python3 ~/git/testfolder/test.py'
-alias notes='nnn ~/syncthing/md/notes'
-alias docs='nnn ~/syncthing/md/docs'
-alias work='nnn ~/syncthing/md/work'
-alias lofi='zsh ~/git/tools/lofi.sh'
-alias v='python3 ~/git/voicegpt/main.py'
-alias bluesky='python3 ~/git/tools/bluesky/main.py'
-alias lifelog='python3 ~/git/tools/lifelog/main.py'
-alias foodlog='python3 ~/git/tools/foodlog/main.py'
-alias cabbie='python3 ~/git/tools/cabbie/main.py'
+alias diary='python3 ~/git/tools/diary/main.py' # diary
+alias yt='python3 ~/git/tools/youtube/main.py' # youtube downloader
+alias pitest='python3 ~/git/testfolder/test.py' # test python
+alias notes='nnn ~/syncthing/md/notes' # open notes
+alias docs='nnn ~/syncthing/md/docs' # open docs
+alias work='nnn ~/syncthing/md/work' # open work
+alias lofi='zsh ~/git/tools/lofi.sh' # 🎧
+alias bluesky='python3 ~/git/tools/bluesky/main.py' # start post
+alias lifelog='python3 ~/git/tools/lifelog/main.py' # log event
+alias foodlog='python3 ~/git/tools/foodlog/main.py' # log food
+alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
+# launcher function
+# First unalias l if it exists, then define the function
+unalias l 2>/dev/null || true
+l() {
+    # Create a temporary file for the command
+    local cmd_file=$(mktemp)
+    
+    # Run the launcher with the temp file path
+    python3 ~/git/dotfiles/launcher.py "$cmd_file"
+    
+    # Read and execute the command if it exists
+    if [[ -f "$cmd_file" && -s "$cmd_file" ]]; then
+        command=$(cat "$cmd_file")
+        rm "$cmd_file"
+        if [[ -n "$command" ]]; then
+            eval "$command"
+        fi
+    else
+        rm "$cmd_file"
+    fi
+}
 
-# Remind aliases
-alias rmmt='rmmt'
-alias rmmy='rmmy'
-alias rmmty='rmmty'
-alias rmml='rmml'
-alias rmmsl='rmm --later'
-alias rmme='remind --edit'
-alias rmmst='remind --show-tomorrow'
-alias rmmsw='remind --show-week'
+
+# These are now functions, not aliases
+alias rmmsl='rmm --later' # remind later
+alias rmme='remind --edit' # edit reminders
+alias rmmst='remind --show-tomorrow' # show tomorrow
+alias rmmsw='remind --show-week' # show week
 alias one-hour-of-distraction='python3 /home/tyler/git/tools/pihole/one_hour_of_distraction.py'
-alias worka='worka'
 
 # 'not-cloud' aliases
 if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
