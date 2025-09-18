@@ -303,7 +303,7 @@ class LauncherApp(App):
         list_view = self.query_one("#command_list", ListView)
         list_view.clear()
         
-        for cmd in self.filtered_commands[:20]:  # Limit to 20 for performance
+        for cmd in self.filtered_commands:  # Show all commands
             item = CommandItem(cmd)
             list_view.append(item)
         

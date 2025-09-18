@@ -191,15 +191,13 @@ vn() {
 }
 
 # Utility functions
-# show cheat sheet
-cheat() {
+cheat() { # learn about a command
   local query="$*"
   local encoded_query=$(echo "$query" | sed 's/ /%20/g')
   curl "cheat.sh/$encoded_query"
 }
 
 # Remind functions
-# create reminder
 # First unalias all functions that might conflict with aliases
 unalias rmm rmmt rmmy rmmty rmml plex shorten 2>/dev/null || true
 rmm() {
