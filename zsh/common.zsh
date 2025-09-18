@@ -26,6 +26,18 @@ export EDITOR='nvim'
 # Git configuration
 git config --global push.default current
 
+# show git branch info in prompt
+autoload -Uz vcs_info
+precmd() { vcs_info }
+
+# Format the vcs_info_msg_0_ variable
+zstyle ':vcs_info:git:*' formats '%b'
+
+# Set up the prompt (with git branch name)
+setopt PROMPT_SUBST
+
+PROMPT='%m -> %1~%F{green}${vcs_info_msg_0_:+(${vcs_info_msg_0_})}%F{white}$ '
+
 # NNN configuration
 if [[ " ${DOTFILES_OPTS[@]} " =~ " nnn " ]]; then
     BOOKMARKS_FILE="$HOME/.config/nnn/bookmarks.md"
@@ -47,6 +59,7 @@ fi
 # ----------------------
 
 # Directory navigation
+# change dir and list
 cdl() { cd "$a"; ls; }
 
 # Git functions
@@ -102,12 +115,14 @@ function git() {
     command git "$@"
 }
 
+# git commit with branch name
 function gcam() {
     branch=$(git symbolic-ref --short HEAD)
     branch=${branch#*/}
     git add -A && git commit -m "$branch: $*"
 }
 
+# git create release branch
 function gbr() {
   if [ -z "$1" ]; then
     echo "Usage: gbr <release_branch_name>"
@@ -121,6 +136,7 @@ function gbr() {
   echo "Release branch '$release_branch' created and pushed successfully."
 }
 
+# git create and push tag
 function gtag() {
   tag="$1"
 
@@ -149,6 +165,7 @@ function gtag() {
 }
 
 # Note editing
+# edit note file
 vn() {
     [[ $# -eq 0 ]] && return
 
@@ -186,13 +203,15 @@ vn() {
 }
 
 # Utility functions
-cheat() {
+cheat() { # learn about a command
   local query="$*"
   local encoded_query=$(echo "$query" | sed 's/ /%20/g')
   curl "cheat.sh/$encoded_query"
 }
 
 # Remind functions
+# First unalias all functions that might conflict with aliases
+unalias rmm rmmt rmmy rmmty rmml plex shorten 2>/dev/null || true
 rmm() {
     local save=""
     if [[ "$1" == "--save" ]]; then
@@ -276,34 +295,40 @@ rmm() {
     eval $cmd_string
 }
 
+# reminder for tomorrow
 rmmty() {
     rmm --save --when "tomorrow" --title "$@"
 }
 
+# reminder for tomorrow
 rmmt() {
     remind --title "$*" --when "tomorrow"
 }
 
+# save reminder
 rmmy() {
     rmm --save "$@"
 }
 
+# reminder for later
 rmml() {
     remind --title "$*" --when "later"
 }
 
-# Plex
+# download yt to plex
 plex() {
     python3 ~/git/tools/youtube/main.py video "$@" -d ~/syncthing/video/YouTube
 }
 
 # Ollama
+# run llama model
 llama() {
   local input="$*"
   ollama run llama3:latest "$input"
 }
 
 # URL shortening
+# shorten url
 shorten() {
   if [ -z "$SHORTEN_TOKEN" ]; then
     echo "Set SHORTEN_TOKEN (export SHORTEN_TOKEN=...)" >&2
@@ -330,60 +355,80 @@ shorten() {
 # ----------------------
 
 # System aliases
-alias ls='ls -hal --color'
-alias cal='cal -B1 -A1; echo -e "\nUse ncal to display horizontally"'
-alias ncal='ncal -B1 -A1'
-alias vim='nvim'
-alias x='exit'
-alias cc='clear'
-alias b='cd ../'
+alias ls='ls -hal --color' # list
+alias cal='cal -B1 -A1; echo -e "\nUse ncal to display horizontally"' # calendar
+alias ncal='cal -3' # calendar horizontal
+# use nvim editor
+alias vim='nvim' # launcher-hidden
+# exit shell
+alias x='exit' # launcher-hidden
+# clear screen
+alias cc='clear' # clear
+# go back directory
+alias b='cd ../' # back
 
 # Directory navigation aliases
-alias cdh='cd ~'
-alias cdg='cd ~/git'
-alias cdc='cd ~/git/cabinet'
-alias cddo='cd ~/git/dotfiles'
-alias cdrm='cd ~/git/remindmail'
-alias cdto='cd ~/git/tools'
-alias cdw='cd ~/git/tyler.cloud'
-alias cdbe='cd ~/git/backend'
+alias cdh='cd ~' # home
+alias cdg='cd ~/git' # git
+alias cdc='cd ~/git/cabinet' # cabinet
+alias cddo='cd ~/git/dotfiles' # dotfiles
+alias cdrm='cd ~/git/remindmail' # remindmail
+alias cdto='cd ~/git/tools' # tools
+alias cdw='cd ~/git/tyler.cloud' # tyler.cloud
+alias cdbe='cd ~/git/backend' # backend
 
 # Git aliases
-alias glog='git log --graph --pretty=format:"%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset" --abbrev-commit --date=relative'
-alias gcm='git commit -m'
-alias gch='git fetch && git checkout'
-alias gb='git checkout -b'
+alias glog='git log --graph --pretty=format:"%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset" --abbrev-commit --date=relative' # git log
+alias gcm='git commit -m' # git commit
+alias gch='git fetch && git checkout' # git fetch/checkout
+alias gb='git checkout -b' # git new branch
 alias gs='git status'
-alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d'
+alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d' # remove old branches
 alias gd='git diff'
-alias gdd='git diff develop'
+alias gdd='git diff develop' # git diff develop
 alias gp='git pull'
 
 # Tool script aliases
-alias diary='python3 ~/git/tools/diary/main.py'
-alias yt='python3 ~/git/tools/youtube/main.py'
-alias pitest='python3 ~/git/testfolder/test.py'
-alias notes='nnn ~/syncthing/md/notes'
-alias docs='nnn ~/syncthing/md/docs'
-alias work='nnn ~/syncthing/md/work'
-alias lofi='zsh ~/git/tools/lofi.sh'
-alias v='python3 ~/git/voicegpt/main.py'
-alias bluesky='python3 ~/git/tools/bluesky/main.py'
-alias lifelog='python3 ~/git/tools/lifelog/main.py'
-alias foodlog='python3 ~/git/tools/foodlog/main.py'
-alias cabbie='python3 ~/git/tools/cabbie/main.py'
+alias diary='python3 ~/git/tools/diary/main.py' # diary
+alias yt='python3 ~/git/tools/youtube/main.py' # youtube downloader
+alias pitest='python3 ~/git/testfolder/test.py' # test python
+alias notes='nnn ~/syncthing/md/notes' # open notes
+alias docs='nnn ~/syncthing/md/docs' # open docs
+alias work='nnn ~/syncthing/md/work' # open work
+alias lofi='zsh ~/git/tools/lofi.sh' # 🎧
+alias bluesky='python3 ~/git/tools/bluesky/main.py' # start post
+alias lifelog='python3 ~/git/tools/lifelog/main.py' # log event
+alias foodlog='python3 ~/git/tools/foodlog/main.py' # log food
+alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
 
-# Remind aliases
-alias rmmt='rmmt'
-alias rmmy='rmmy'
-alias rmmty='rmmty'
-alias rmml='rmml'
-alias rmmsl='rmm --later'
-alias rmme='remind --edit'
-alias rmmst='remind --show-tomorrow'
-alias rmmsw='remind --show-week'
-alias one-hour-of-distraction='python3 /home/tyler/git/tools/pihole/one_hour_of_distraction.py'
-alias worka='worka'
+# launcher function
+unalias l 2>/dev/null || true
+l() {
+    # Create a temporary file for the command
+    local cmd_file=$(mktemp)
+    
+    # Run the launcher with the temp file path
+    python3 ~/git/dotfiles/launcher.py "$cmd_file"
+    
+    # Read and execute the command if it exists
+    if [[ -f "$cmd_file" && -s "$cmd_file" ]]; then
+        command=$(cat "$cmd_file")
+        rm "$cmd_file"
+        if [[ -n "$command" ]]; then
+            eval "$command"
+        fi
+    else
+        rm "$cmd_file"
+    fi
+}
+
+
+# These are now functions, not aliases
+alias rmmsl='rmm --later' # remind later
+alias rmme='remind --edit' # edit reminders
+alias rmmst='remind --show-tomorrow' # show tomorrow
+alias rmmsw='remind --show-week' # show week
+alias one-hour-of-distraction='python3 /home/tyler/git/tools/pihole/one_hour_of_distraction.py' # unblock pihole
 
 # 'not-cloud' aliases
 if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
@@ -394,7 +439,7 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     )
 
     for cmd in "${cloud_commands[@]}"; do
-        alias "$cmd"="cloud $cmd"
+        alias "$cmd"="cloud $cmd" # launcher-hidden
     done
 fi
 
