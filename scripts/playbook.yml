@@ -153,6 +153,7 @@
               - zoom
               - libreoffice
               - protonvpn
+              - notunes
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
