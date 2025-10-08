@@ -484,7 +484,7 @@
           ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             regexp: '^AuthorizedKeysFile'
-            line: "AuthorizedKeysFile %h/.ssh/authorized_keys {{ lookup('env', 'HOME') }}/docs/network/authorized_keys.md"
+            line: "AuthorizedKeysFile %h/.ssh/authorized_keys {{ lookup('env', 'HOME') }}/git/backend/authorized_keys.md"
             state: present
           become: true
           tags: ssh
@@ -493,7 +493,7 @@
           copy:
             content: |
               # this file is empty.
-              # authorized public keys are stored in ~/syncthing/md/docs/network/authorized_keys.md.
+              # authorized public keys are stored in ~/git/backend/authorized_keys.md.
               # For instructions, see `NOTION/Docs/selfhosted/ssh and sftp for cloud and rainbow` for instructions.
               # this notice was updated on 2025-10-07
             dest: "{{ lookup('env', 'HOME') }}/.ssh/authorized_keys"
