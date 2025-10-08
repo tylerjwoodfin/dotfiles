@@ -153,6 +153,7 @@
               - zoom
               - libreoffice
               - protonvpn
+              - notunes
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
@@ -160,6 +161,12 @@
 
         - name: Install Docker Desktop for MacOS
           shell: brew install --cask docker
+          become: false
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          tags: gui
+
+        - name: Configure NoTunes to replace Apple Music with Spotify
+          shell: defaults write digital.twisted.noTunes replacement /Applications/Spotify.app
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
           tags: gui
