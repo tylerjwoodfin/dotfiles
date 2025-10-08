@@ -494,9 +494,31 @@
             content: |
               # this file is empty.
               # authorized public keys are stored in ~/syncthing/md/docs/network/authorized_keys.md.
-              # For instructions, see ~/syncthing/md/docs/network/ssh for instructions.
+              # For instructions, see `NOTION/Docs/selfhosted/ssh and sftp for cloud and rainbow` for instructions.
+              # this notice was updated on 2025-10-07
             dest: "{{ lookup('env', 'HOME') }}/.ssh/authorized_keys"
             mode: '0644'
+          become: false
+          tags: ssh
+
+        - name: Set git directory permissions
+          file:
+            path: "{{ lookup('env', 'HOME') }}/git"
+            mode: '0755'
+          become: false
+          tags: ssh
+
+        - name: Set backend directory permissions
+          file:
+            path: "{{ lookup('env', 'HOME') }}/git/backend"
+            mode: '0755'
+          become: false
+          tags: ssh
+
+        - name: Set authorized_keys.md permissions
+          file:
+            path: "{{ lookup('env', 'HOME') }}/git/backend/authorized_keys.md"
+            mode: '0600'
           become: false
           tags: ssh
 
