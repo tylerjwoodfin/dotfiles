@@ -501,6 +501,27 @@
           become: false
           tags: ssh
 
+        - name: Set git directory permissions
+          file:
+            path: "{{ lookup('env', 'HOME') }}/git"
+            mode: '0755'
+          become: false
+          tags: ssh
+
+        - name: Set backend directory permissions
+          file:
+            path: "{{ lookup('env', 'HOME') }}/git/backend"
+            mode: '0755'
+          become: false
+          tags: ssh
+
+        - name: Set authorized_keys.md permissions
+          file:
+            path: "{{ lookup('env', 'HOME') }}/git/backend/authorized_keys.md"
+            mode: '0600'
+          become: false
+          tags: ssh
+
         - name: Ensure correct directory permissions
           ansible.builtin.file:
             path: "{{ lookup('env', 'HOME') }}"
