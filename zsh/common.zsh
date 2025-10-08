@@ -156,41 +156,6 @@ function gtag() {
   git push --tags
 }
 
-
-# Sprint management
-newsprint() {
-    # Extract the current sprint number
-    local currentnum=${${sprint:t}//[^0-9]/}
-    local nextnum=$((currentnum + 1))
-    
-    echo "Opening Sprint ${currentnum} to review. Press any key to continue."
-    read -k1
-    nvim "$sprint"
-    
-    echo "\nSprint ${currentnum} is closed! Press any key to begin Sprint ${nextnum}."
-    read -k1
-    
-    # Calculate the next sprint number and create the new sprint file path
-    local newsprint="$sprints/sprint $nextnum.md"
-    
-    # Copy the content of the current sprint to the new sprint file
-    cp "$sprint" "$newsprint"
-
-    # Generate the new first line and second line content
-    local today=$(date "+%B %d, %Y" | tr '[:upper:]' '[:lower:]')
-    local twoweeks=$(date -d "+14 days" "+%B %d, %Y" | tr '[:upper:]' '[:lower:]')
-    local new_first_line="# sprint ${nextnum}"
-    local new_second_line="- ${today} until mid-day ${twoweeks}"
-
-    # Update the first and second lines of the new sprint file
-    sed -i "1c\\${new_first_line}" "$newsprint"
-    sed -i "2c\\${new_second_line}" "$newsprint"
-    
-    # Open the new sprint file
-    nvim "$newsprint"
-    echo "Welcome to Sprint ${nextnum}!"
-}
-
 # Note editing
 vn() {
     [[ $# -eq 0 ]] && return
