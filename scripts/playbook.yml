@@ -165,6 +165,12 @@
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
           tags: gui
 
+        - name: Configure NoTunes to replace Apple Music with Spotify
+          shell: defaults write digital.twisted.noTunes replacement /Applications/Spotify.app
+          become: false
+          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          tags: gui
+
       when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
       tags: gui
       rescue:
