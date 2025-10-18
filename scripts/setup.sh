@@ -142,6 +142,7 @@ OPTIONS+=("python" "Install Cabinet and Remindmail via Pipx" OFF)
 OPTIONS+=("downloads" "Open external app download links" OFF)
 OPTIONS+=("borg" "Set BorgBackup passphrase" OFF)
 OPTIONS+=("clone" "Clone all GitHub repositories (run SEPARATELY after SSH!)" OFF)
+OPTIONS+=("stow" "Run Stow to symlink dotfiles" OFF)
 
 SELECTED=$(whiptail --title "Select Setup Options" --checklist \
 "Choose items to install (use Space to select, Enter to confirm):" 20 78 15 \
@@ -196,6 +197,11 @@ fi
 if [[ "$SELECTED" == *"borg"* ]]; then
     echo "Setting up Borg passphrase..."
     "$SCRIPT_DIR/borg_passphrase.sh"
+fi
+
+if [[ "$SELECTED" == *"stow"* ]]; then
+    echo "Running Stow to symlink dotfiles..."
+    python3 "$SCRIPT_DIR/apply_stow.py"
 fi
 
 # Final instructions
