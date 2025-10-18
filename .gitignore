@@ -68,6 +68,7 @@ cache.json
 *.key
 *.cert
 *.gpg
+*.bttlicense
 
 # ide
 .vs/

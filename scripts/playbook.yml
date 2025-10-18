@@ -75,6 +75,7 @@
               - borgbackup
               - node
               - stow
+              - pylint
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
@@ -114,6 +115,7 @@
               - input-remapper
               - ufw
               - stow
+              - pylint
             state: present
             update_cache: yes
           become: true
