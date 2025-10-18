@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+Apply stow configuration and sync BetterTouchTool settings.
+
+This script manages dotfiles using GNU stow, handles conflicts by moving
+them to a backup directory, and syncs BetterTouchTool settings bidirectionally.
+"""
 import subprocess
 import re
 import os
@@ -32,6 +38,7 @@ def run_stow():
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
+        check=False,
     )
     return result.stdout
 
@@ -61,7 +68,7 @@ def get_newest_mtime(directory):
         return 0
 
     newest = 0
-    for root, dirs, files in os.walk(directory):
+    for root, _, files in os.walk(directory):
         for file in files:
             filepath = Path(root) / file
             try:
@@ -113,24 +120,24 @@ def sync_bettertouchtool():
 
     try:
         print(f"Syncing BetterTouchTool settings: {direction}")
-        result = subprocess.run(cmd, text=True)
+        result = subprocess.run(cmd, text=True, check=False)
         if result.returncode == 0:
             print(f"✓ BetterTouchTool settings synced: {direction}")
             return True
-        else:
-            print(
-                f"✗ Failed to sync BetterTouchTool settings (exit code: {result.returncode})"
-            )
-            return False
+        print(
+            f"✗ Failed to sync BetterTouchTool settings (exit code: {result.returncode})"
+        )
+        return False
     except FileNotFoundError:
         print("✗ rsync command not found")
         return False
-    except Exception as e:
+    except OSError as e:
         print(f"✗ Error syncing BetterTouchTool: {e}")
         return False
 
 
 def main():
+    """Main function to apply stow and handle conflicts."""
     all_moved = []
     while True:
         output = run_stow()
