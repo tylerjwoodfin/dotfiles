@@ -8,17 +8,16 @@ import os
 import re
 import sys
 import pickle
-import time
+import subprocess
 from pathlib import Path
 from typing import List
 from dataclasses import dataclass
 
 try:
     from textual.app import App, ComposeResult
-    from textual.containers import Container, Horizontal, Vertical
+    from textual.containers import Container
     from textual.widgets import Header, Footer, Input, Static, ListView, ListItem, Label
     from textual.binding import Binding
-    from textual.message import Message
 except ImportError:
     print("Error: textual library not found. Install with: pip install textual")
     sys.exit(1)
@@ -49,6 +48,7 @@ class ZshParser:
         self.cache_file = Path.home() / ".cache" / "launcher_cache.pkl"
 
     def parse(self) -> List[Command]:
+        """Parse the zsh file and return a list of commands."""
         if not self.zsh_file_path.exists():
             raise FileNotFoundError(f"Zsh file not found: {self.zsh_file_path}")
 
@@ -83,7 +83,7 @@ class ZshParser:
             with open(self.cache_file, "rb") as f:
                 self.commands = pickle.load(f)
             return True
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             return False
 
     def _save_cache(self):
@@ -92,7 +92,7 @@ class ZshParser:
             self.cache_file.parent.mkdir(parents=True, exist_ok=True)
             with open(self.cache_file, "wb") as f:
                 pickle.dump(self.commands, f)
-        except Exception:
+        except Exception:  # pylint: disable=broad-exception-caught
             pass  # Ignore cache errors
 
     def _parse_functions(self, content: str):
@@ -121,7 +121,6 @@ class ZshParser:
                 end_pos += 1
 
             if brace_count == 0:
-                func_body = content[start_pos : end_pos - 1].strip()
                 description = comment.strip()
 
                 # Skip functions with launcher-hidden or launcher-hide description
@@ -201,6 +200,7 @@ class CommandItem(ListItem):
         super().__init__()
 
     def compose(self):
+        """Compose the command item widget."""
         yield Label(
             f"{self.command.name} - {self.command.description or 'No description'}"
         )
@@ -260,10 +260,10 @@ class LauncherApp(App):
                 self.action_select_item()
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
-        """Called when a list item is selected."""
-        # Don't auto-execute commands on selection
-        # Commands should only be executed when user presses Enter
-        pass
+        """Called when a list item is selected.
+        
+        Commands are executed only when Enter is pressed, not on selection.
+        """
 
     def action_move_up(self) -> None:
         """Move selection up."""
@@ -357,7 +357,7 @@ class LauncherApp(App):
         """Show a fake terminal with the command."""
         print(f"DEBUG: Executing command: {command.name} = {command.raw_command}")
         # Store the command to show in fake terminal
-        self._command_to_execute = command.raw_command
+        self._command_to_execute = command.raw_command  # pylint: disable=attribute-defined-outside-init
 
         # Exit the launcher
         self.exit()
@@ -401,8 +401,8 @@ class FakeTerminalApp(App):
     def _execute_command(self, command: str):
         """Execute the command and exit."""
         # Store the command to execute after the app exits
-        self._command_to_execute = command
-        self._zsh_file = self.zsh_file_path
+        self._command_to_execute = command  # pylint: disable=attribute-defined-outside-init
+        self._zsh_file = self.zsh_file_path  # pylint: disable=attribute-defined-outside-init
 
         # Exit the fake terminal
         self.exit()
@@ -424,11 +424,11 @@ class Launcher:
         if hasattr(app, "_command_to_execute"):
             if command_file:
                 # Being called from shell function, write command to file
-                with open(command_file, "w") as f:
-                    f.write(app._command_to_execute)
+                with open(command_file, "w", encoding="utf-8") as f:
+                    f.write(app._command_to_execute)  # pylint: disable=protected-access
             else:
                 # Being called directly, execute the command
-                self._execute_command_directly(app._command_to_execute)
+                self._execute_command_directly(app._command_to_execute)  # pylint: disable=protected-access
 
     def _show_fake_terminal(self, command: str):
         """Show a fake terminal with the command ready to execute."""
@@ -439,7 +439,7 @@ class Launcher:
         # Output the command for the shell function to execute
         if hasattr(fake_terminal, "_command_to_execute"):
             # Just output the command - the shell function will execute it
-            print(fake_terminal._command_to_execute)
+            print(fake_terminal._command_to_execute)  # pylint: disable=protected-access
 
     def _execute_command_directly(self, command: str):
         """Execute the command directly in the current shell context."""
@@ -448,13 +448,12 @@ class Launcher:
             print("-" * 40)
 
             # Execute the command using subprocess with shell=True to maintain shell context
-            import subprocess
-
-            result = subprocess.run(
+            subprocess.run(
                 command,
                 shell=True,
                 executable="/bin/zsh",  # Use zsh as the shell
                 cwd=os.getcwd(),  # Start from current directory
+                check=False,
             )
 
             # If it's a directory change command, we need to handle it specially
@@ -470,7 +469,7 @@ class Launcher:
                 else:
                     print(f"Directory not found: {expanded_dir}")
 
-        except Exception as e:
+        except (OSError, subprocess.SubprocessError) as e:
             print(f"\nError: {e}")
 
 
@@ -499,7 +498,7 @@ def main():
         command_file = sys.argv[1] if len(sys.argv) > 1 else None
         launcher.run(command_file)
 
-    except Exception as e:
+    except (FileNotFoundError, OSError, ValueError) as e:
         print(f"Error: {e}")
         sys.exit(1)
 
