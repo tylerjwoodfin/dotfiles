@@ -23,6 +23,7 @@ STOW_CMD = [
 # Ensure backup directory exists
 BACKUP_DIR.mkdir(exist_ok=True)
 
+
 def run_stow():
     """Run stow and return its stdout+stderr text."""
     result = subprocess.run(
@@ -34,10 +35,12 @@ def run_stow():
     )
     return result.stdout
 
+
 def parse_conflicts(output):
     """Extract conflicted file paths from stow output."""
     pattern = re.compile(r"over existing target ([^ ]+)")
     return pattern.findall(output)
+
 
 def move_conflicts(conflicts):
     """Move conflicting files to backup dir, preserving relative paths."""
@@ -51,11 +54,12 @@ def move_conflicts(conflicts):
             moved.append(rel_path)
     return moved
 
+
 def get_newest_mtime(directory):
     """Get the newest modification time from files in a directory."""
     if not directory.exists():
         return 0
-    
+
     newest = 0
     for root, dirs, files in os.walk(directory):
         for file in files:
@@ -68,26 +72,27 @@ def get_newest_mtime(directory):
                 pass
     return newest
 
+
 def sync_bettertouchtool():
     """Bidirectionally sync BetterTouchTool settings based on which is newer."""
     hostname = os.uname().nodename
     if hostname != "icecream":
         return None
-    
+
     library_dir = HOME / "Library" / "Application Support" / "BetterTouchTool"
     repo_dir = DOTFILES / "Library" / "Application Support" / "BetterTouchTool"
-    
+
     if not library_dir.exists():
         print("BetterTouchTool directory not found in Library, skipping sync.")
         return None
-    
+
     # Ensure repo directory parent exists
     repo_dir.parent.mkdir(parents=True, exist_ok=True)
-    
+
     # Get newest modification times
     library_mtime = get_newest_mtime(library_dir)
     repo_mtime = get_newest_mtime(repo_dir)
-    
+
     # Determine sync direction
     if library_mtime > repo_mtime:
         source = library_dir
@@ -97,22 +102,15 @@ def sync_bettertouchtool():
         source = repo_dir
         dest = library_dir
         direction = "Repo → Library"
-    
+
     # If repo doesn't exist yet, always sync from Library
     if not repo_dir.exists():
         source = library_dir
         dest = repo_dir
         direction = "Library → Repo (initial)"
-    
-    cmd = [
-        "rsync",
-        "-avh",
-        "--delete",
-        "--progress",
-        f"{source}/",
-        f"{dest}/"
-    ]
-    
+
+    cmd = ["rsync", "-avh", "--delete", "--progress", f"{source}/", f"{dest}/"]
+
     try:
         print(f"Syncing BetterTouchTool settings: {direction}")
         result = subprocess.run(cmd, text=True)
@@ -120,7 +118,9 @@ def sync_bettertouchtool():
             print(f"✓ BetterTouchTool settings synced: {direction}")
             return True
         else:
-            print(f"✗ Failed to sync BetterTouchTool settings (exit code: {result.returncode})")
+            print(
+                f"✗ Failed to sync BetterTouchTool settings (exit code: {result.returncode})"
+            )
             return False
     except FileNotFoundError:
         print("✗ rsync command not found")
@@ -128,6 +128,7 @@ def sync_bettertouchtool():
     except Exception as e:
         print(f"✗ Error syncing BetterTouchTool: {e}")
         return False
+
 
 def main():
     all_moved = []
@@ -145,9 +146,10 @@ def main():
             print(f"  {f}")
     else:
         print("No conflicts found. Stow completed cleanly.")
-    
+
     # Sync BetterTouchTool settings if on icecream
     sync_bettertouchtool()
+
 
 if __name__ == "__main__":
     main()
