@@ -20,6 +20,9 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " nnn " ]]; then
     export NNN_OPENER="$HOME/.config/nnn/nvim-opener.sh"
 fi
 
+# expand aliases to sudo
+alias sudo='sudo '
+
 # Editor configuration
 export EDITOR='nvim'
 
