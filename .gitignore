@@ -73,3 +73,7 @@ cache.json
 # ide
 .vs/
 *.code-workspace
+
+# logs
+*.log
+*/log/*
