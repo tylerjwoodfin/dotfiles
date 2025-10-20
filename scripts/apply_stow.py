@@ -19,10 +19,11 @@ BACKUP_DIR = HOME / "dotfiles-backup"
 # Find stow in common locations (needed for cron jobs with limited PATH)
 STOW_PATHS = [
     "/opt/homebrew/bin/stow",  # Apple Silicon Mac (Homebrew)
-    "/usr/local/bin/stow",      # Intel Mac (Homebrew)
-    "/usr/bin/stow",            # Linux (apt/yum/dnf)
-    "stow",                     # Fallback to PATH
+    "/usr/local/bin/stow",  # Intel Mac (Homebrew)
+    "/usr/bin/stow",  # Linux (apt/yum/dnf)
+    "stow",  # Fallback to PATH
 ]
+
 
 def get_stow_path():
     """Find the stow executable in common locations."""
@@ -35,6 +36,7 @@ def get_stow_path():
         elif os.path.exists(path):
             return path
     return None
+
 
 STOW_EXECUTABLE = get_stow_path()
 STOW_CMD = [
@@ -176,7 +178,7 @@ def main():
         print("  - Ubuntu/Debian: sudo apt-get install stow")
         print("  - Fedora: sudo dnf install stow")
         return 1
-    
+
     all_moved = []
     while True:
         output = run_stow()
@@ -203,4 +205,5 @@ def main():
 
 if __name__ == "__main__":
     import sys
+
     sys.exit(main())
