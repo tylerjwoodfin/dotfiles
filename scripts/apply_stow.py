@@ -8,6 +8,7 @@ them to a backup directory, and syncs BetterTouchTool settings bidirectionally.
 import subprocess
 import re
 import os
+import shutil
 from pathlib import Path
 
 # Config
@@ -15,8 +16,29 @@ HOME = Path.home()
 DOTFILES = HOME / "git" / "dotfiles"
 BACKUP_DIR = HOME / "dotfiles-backup"
 
+# Find stow in common locations (needed for cron jobs with limited PATH)
+STOW_PATHS = [
+    "/opt/homebrew/bin/stow",  # Apple Silicon Mac (Homebrew)
+    "/usr/local/bin/stow",      # Intel Mac (Homebrew)
+    "/usr/bin/stow",            # Linux (apt/yum/dnf)
+    "stow",                     # Fallback to PATH
+]
+
+def get_stow_path():
+    """Find the stow executable in common locations."""
+    for path in STOW_PATHS:
+        if path == "stow":
+            # Check if it's in PATH
+            found = shutil.which("stow")
+            if found:
+                return found
+        elif os.path.exists(path):
+            return path
+    return None
+
+STOW_EXECUTABLE = get_stow_path()
 STOW_CMD = [
-    "stow",
+    STOW_EXECUTABLE if STOW_EXECUTABLE else "stow",
     "-v",
     "--dotfiles",
     f"--target={HOME}",
@@ -30,17 +52,25 @@ STOW_CMD = [
 BACKUP_DIR.mkdir(exist_ok=True)
 
 
+def check_stow_available():
+    """Check if stow command is available."""
+    return STOW_EXECUTABLE is not None
+
+
 def run_stow():
     """Run stow and return its stdout+stderr text."""
-    result = subprocess.run(
-        STOW_CMD,
-        cwd=DOTFILES,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        check=False,
-    )
-    return result.stdout
+    try:
+        result = subprocess.run(
+            STOW_CMD,
+            cwd=DOTFILES,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            check=False,
+        )
+        return result.stdout
+    except FileNotFoundError:
+        return None
 
 
 def parse_conflicts(output):
@@ -138,9 +168,21 @@ def sync_bettertouchtool():
 
 def main():
     """Main function to apply stow and handle conflicts."""
+    # Check if stow is available
+    if not check_stow_available():
+        print("✗ Error: stow command not found")
+        print("Please install GNU stow:")
+        print("  - macOS: brew install stow")
+        print("  - Ubuntu/Debian: sudo apt-get install stow")
+        print("  - Fedora: sudo dnf install stow")
+        return 1
+    
     all_moved = []
     while True:
         output = run_stow()
+        if output is None:
+            print("✗ Error: Failed to run stow command")
+            return 1
         conflicts = parse_conflicts(output)
         if not conflicts:
             break
@@ -156,7 +198,9 @@ def main():
 
     # Sync BetterTouchTool settings if on icecream
     sync_bettertouchtool()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    sys.exit(main())

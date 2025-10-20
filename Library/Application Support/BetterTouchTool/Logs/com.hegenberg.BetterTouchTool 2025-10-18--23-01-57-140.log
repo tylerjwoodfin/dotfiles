@@ -1,0 +1,1920 @@
+2025/10/18 16:01:57:139|SYS|Running on macOS: 26.1.0|
+2025/10/18 16:01:57:139|SYS|BTT Version: 5.640|
+2025/10/18 16:01:57:139|SYS|Device: Mac16,12|
+2025/10/18 16:01:57:165|usage|loading todays usage|
+2025/10/18 16:01:57:165|ASL|0 elapsed 0.042036|
+2025/10/18 16:01:57:165|LAUNCH|DIDLaunch START NSConcreteNotification 0xb6535d140 {name = NSApplicationDidFinishLaunchingNotification; object = <BTTApplication: 0xb64400180>; userInfo = {
+    NSApplicationLaunchIsDefaultLaunchKey = 1;
+}}|
+2025/10/18 16:01:57:175|ASL|1 elapsed 0.051441|
+2025/10/18 16:01:57:175|ASL|2 elapsed 0.051481|
+2025/10/18 16:01:57:175|ASL|3 elapsed 0.051578|
+2025/10/18 16:01:57:175|ASL|4 elapsed 0.051643|
+2025/10/18 16:01:57:176|ASL|5 elapsed 0.052814|
+2025/10/18 16:01:57:176|ASL|6 elapsed 0.052847|
+2025/10/18 16:01:57:176|INIT|START PREVIOUSLYININIT|
+2025/10/18 16:01:57:176|ASL|sub 0 elapsed 0.000000 - prev|
+2025/10/18 16:01:57:179|ASL|sub 1 elapsed 0.002590 - prev|
+2025/10/18 16:01:57:179|ASL|sub 2 elapsed 0.002971 - prev|
+2025/10/18 16:01:57:179|ASL|sub 3 elapsed 0.003183 - prev|
+2025/10/18 16:01:57:181|ASL|sub 4 elapsed 0.004479 - prevk|
+2025/10/18 16:01:57:181|short|init|
+2025/10/18 16:01:57:342|KEY|initialized for keyboard Apple Internal Keyboard / Trackpad|
+2025/10/18 16:01:57:342|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:57:342|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:57:342|KEY|initialized for keyboard USB Gaming Mouse|
+2025/10/18 16:01:57:344|STORE|The store already exists in udefs|
+2025/10/18 16:01:57:344|xw|the new store already exists btt_data_store.version_5_640_build_2025091902|
+2025/10/18 16:01:57:350|migrate|fixing uuids2|
+2025/10/18 16:01:57:352|ASL|save|
+2025/10/18 16:01:57:352|LIC|idate 2025-04-11 02:52:26 +0000|
+2025/10/18 16:01:57:354|ASL|sub 5 elapsed 0.177612 - prevke|
+2025/10/18 16:01:57:354|INIT|FINISH PREVIOUSLYININIT|
+2025/10/18 16:01:57:354|ASL|7 elapsed 0.230488|
+2025/10/18 16:01:57:354|LIC|closing previous instance of BetterTouchTool relaunch|
+2025/10/18 16:01:57:354|ASL|8 elapsed 0.231013|
+2025/10/18 16:01:57:355|ASL|9 elapsed 0.231783|
+2025/10/18 16:01:57:355|ASL|10 elapsed 0.231895|
+2025/10/18 16:01:57:356|ASL|save|
+2025/10/18 16:01:57:356|ASL|11 elapsed 0.233075|
+2025/10/18 16:01:57:357|LIC|license appears to be valid|
+2025/10/18 16:01:57:357|LIC|license dictionary {
+    CheckoutName = mouthofrandom;
+    Email = "mouthofrandom@gmail.com";
+    LicenseType = "paddle_lifetime";
+    Licenses = 1;
+    Name = Tyler;
+    OrderID = cb2715ee9aa012bc2dec4238f8fe677e;
+    Product = BetterTouchTool;
+    Signature = {length = 128, bytes = 0x9498f0a2 5d691b7f f7e114d2 2c3c3657 ... 81973697 2f6aa9dc };
+    Timestamp = 1537841359;
+    TransactionID = "22626746-chre491e9f2202b-671bf8500a";
+}|
+2025/10/18 16:01:57:357|LIC|systemdate 2018-09-25 02:09:19 +0000|
+2025/10/18 16:01:57:357|LIC|using date 1537841359|
+2025/10/18 16:01:57:358|lic|newest date 2018-09-25 02:09:19 +0000|
+2025/10/18 16:01:57:358|lic|lict 22626746-chre491e9f2202b-671bf8500a|
+2025/10/18 16:01:57:358|lic|newest date 2018-09-25 02:09:19 +0000|
+2025/10/18 16:01:57:358|lic|lict 22626746-chre491e9f2202b-671bf8500a|
+2025/10/18 16:01:57:358|LIC|License is valid for this version|
+2025/10/18 16:01:57:359|ASL|12 elapsed 0.235517|
+2025/10/18 16:01:57:359|ASL|disablign app nap|
+2025/10/18 16:01:57:359|ASL|disabling app nap done|
+2025/10/18 16:01:57:359|ASL|13 elapsed 0.235546|
+2025/10/18 16:01:57:359|ASL|14 elapsed 0.235554|
+2025/10/18 16:01:57:359|ASL|15 elapsed 0.235585|
+2025/10/18 16:01:57:360|ASL|16 elapsed 0.237086|
+2025/10/18 16:01:57:360|ASL|17 elapsed 0.237098|
+2025/10/18 16:01:57:362|lic|newest date 2018-09-25 02:09:19 +0000|
+2025/10/18 16:01:57:362|lic|lict 22626746-chre491e9f2202b-671bf8500a|
+2025/10/18 16:01:57:362|ASL|18 elapsed 0.239032|
+2025/10/18 16:01:57:362|ASL|19 elapsed 0.239041|
+2025/10/18 16:01:57:362|ASL|20 elapsed 0.239105|
+2025/10/18 16:01:57:362|ASL|21 elapsed 0.239116|
+2025/10/18 16:01:57:362|ASL|22 elapsed 0.239123|
+2025/10/18 16:01:57:363|ASL|23 elapsed 0.239435|
+2025/10/18 16:01:57:363|ASL|24 elapsed 0.239443|
+2025/10/18 16:01:57:363|ASL|25 elapsed 0.239461|
+2025/10/18 16:01:57:363|ASL|26 elapsed 0.239505|
+2025/10/18 16:01:57:369|ASL|27 elapsed 0.245602|
+2025/10/18 16:01:57:370|lic|newest date 2018-09-25 02:09:19 +0000|
+2025/10/18 16:01:57:370|lic|lict 22626746-chre491e9f2202b-671bf8500a|
+2025/10/18 16:01:57:375|xw|is trusted|
+2025/10/18 16:01:57:398|short|call sharedInstance4|
+2025/10/18 16:01:57:475|ASL|register for disconnect notification2 28-2d-7f-be-1c-d4 AirPods Pro|
+2025/10/18 16:01:57:476|ASL|The Mac is connected to AC power.|
+2025/10/18 16:01:57:490|TB|touchbar screen size {1085, 30}|
+2025/10/18 16:01:57:491|ASL|28 elapsed 0.367395|
+2025/10/18 16:01:57:491|ASL|29 elapsed 0.367413|
+2025/10/18 16:01:57:491|ASL|30 elapsed 0.367421|
+2025/10/18 16:01:57:491|ASL|31 elapsed 0.367429|
+2025/10/18 16:01:57:492|ASL|32 elapsed 0.368660|
+2025/10/18 16:01:57:493|ASL|33 elapsed 0.370043|
+2025/10/18 16:01:57:494|ASL|34 elapsed 0.370428|
+2025/10/18 16:01:57:494|START|TB VISIBLE 0|
+2025/10/18 16:01:57:494|START|TB FORCED HIDDEN 0|
+2025/10/18 16:01:57:494|ASL|35 elapsed 0.370446|
+2025/10/18 16:01:57:497|ASL|36 elapsed 0.374272|
+2025/10/18 16:01:57:498|ASL|37 elapsed 0.374446|
+2025/10/18 16:01:57:498|ASL|38 elapsed 0.374464|
+2025/10/18 16:01:57:498|LAUNCH|DIDLaunch END frontmostApp: com.apple.finder, touchpadMode 0, windowSnappingDisabled 0, singleFingerScrollingDisabled 0, mmScrollingUsed 0, tpScrollingUsed 0, tpPinchUsed 0, tpRotateUsed 0|
+2025/10/18 16:01:57:498|ASL|39 elapsed 0.374519|
+2025/10/18 16:01:57:498|ASL|40 elapsed 0.374621|
+2025/10/18 16:01:57:503|ASL|keyboard added?|
+2025/10/18 16:01:57:641|KEY|initialized for keyboard Apple Internal Keyboard / Trackpad|
+2025/10/18 16:01:57:641|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:57:641|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:57:641|KEY|initialized for keyboard USB Gaming Mouse|
+2025/10/18 16:01:57:641|ASL|keyboard added?|
+2025/10/18 16:01:57:777|KEY|initialized for keyboard Apple Internal Keyboard / Trackpad|
+2025/10/18 16:01:57:777|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:57:777|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:57:778|KEY|initialized for keyboard USB Gaming Mouse|
+2025/10/18 16:01:57:778|ASL|keyboard added?|
+2025/10/18 16:01:57:910|KEY|initialized for keyboard Apple Internal Keyboard / Trackpad|
+2025/10/18 16:01:57:910|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:57:911|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:57:911|KEY|initialized for keyboard USB Gaming Mouse|
+2025/10/18 16:01:57:911|ASL|keyboard added?|
+2025/10/18 16:01:58:042|KEY|initialized for keyboard Apple Internal Keyboard / Trackpad|
+2025/10/18 16:01:58:042|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:58:042|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:58:042|KEY|initialized for keyboard USB Gaming Mouse|
+2025/10/18 16:01:58:042|ASL|keyboard added?|
+2025/10/18 16:01:58:173|KEY|initialized for keyboard Apple Internal Keyboard / Trackpad|
+2025/10/18 16:01:58:173|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:58:173|KEY|initialized for keyboard Keychron V6|
+2025/10/18 16:01:58:174|KEY|initialized for keyboard USB Gaming Mouse|
+2025/10/18 16:01:58:175|M|mt_stop10|
+2025/10/18 16:01:58:211|PERM|Can record screen 1|
+2025/10/18 16:01:58:233|SLEEP|FORCESHOWAFTERSLEEP2|
+2025/10/18 16:01:58:233|TB|Force show Touch Bar|
+2025/10/18 16:01:58:302|ASL|Hyper key used 0|
+2025/10/18 16:01:58:302|ASL|save|
+2025/10/18 16:01:58:302|ASL|saving|
+2025/10/18 16:01:58:367|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 16:01:58:367|M|register touchbar mbp trackpad|
+2025/10/18 16:01:58:367|STDEV|6e|
+2025/10/18 16:01:58:393|SLEEP|FORCESHOWAFTERSLEEP3B|
+2025/10/18 16:01:58:393|TB|Force show Touch Bar|
+2025/10/18 16:01:58:396|ASL|save|
+2025/10/18 16:01:58:431|ASL|app: com.apple.finder|
+2025/10/18 16:01:58:436|M|mt_stop2|
+2025/10/18 16:01:58:441|TB|PresentationMode appWithControlStrip (null)|
+2025/10/18 16:01:58:446|M|unregister tb trackpad|
+2025/10/18 16:01:58:446|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 16:01:58:447|M|register touchbar mbp trackpad|
+2025/10/18 16:01:58:447|STDEV|6e|
+2025/10/18 16:01:58:538|ASL|app: com.apple.finder|
+2025/10/18 16:01:58:690|short|eventtap success|
+2025/10/18 16:01:59:316|SNAPAREA|step1, 0 displays- match mode 0 - searching VG28UQL1A|
+2025/10/18 16:01:59:317|SNAPAREA|return existing (updated)|
+2025/10/18 16:01:59:317|SNAP|Did recognize 10400 16843009 dragpoints: 0 - 0|
+2025/10/18 16:02:00:559|M|mt_stop2|
+2025/10/18 16:02:00:564|M|unregister tb trackpad|
+2025/10/18 16:02:00:565|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 16:02:00:565|M|register touchbar mbp trackpad|
+2025/10/18 16:02:00:566|STDEV|6e|
+2025/10/18 16:02:02:487|xw|disabling touch for internal trackpad (clamshell)|
+2025/10/18 16:02:02:718|sync|using icloud drive|
+2025/10/18 16:02:02:718|sync|modelurl file:///Applications/BetterTouchTool.app/Contents/Resources/BetterTouchTool_DataModel.momd/|
+2025/10/18 16:02:03:585|M|mt_stop2|
+2025/10/18 16:02:03:592|M|unregister tb trackpad|
+2025/10/18 16:02:03:594|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 16:02:03:595|M|register touchbar mbp trackpad|
+2025/10/18 16:02:03:595|STDEV|6e|
+2025/10/18 16:02:03:629|ASL|app: com.hegenberg.BetterTouchTool|
+2025/10/18 16:02:03:633|ASL|Reopen triggered by event: NSEvent: type=KitDefined loc=(0,1440) time=275134.5 flags=0 win=0x0 winNum=0 ctxt=0x0 subtype=1 data1=2493 data2=0|
+2025/10/18 16:02:03:633|BTT|NOT handling reopen due to BTT start|
+2025/10/18 16:02:03:634|sync|became active|
+2025/10/18 16:02:03:996|sync|res (null)|
+2025/10/18 16:02:06:337|ASL|Reopen triggered by event: NSEvent: type=ProcessNotification loc=(0,1440) time=275137.2 flags=0 win=0x0 winNum=0 ctxt=0x0 subtype=32768 data1=0 data2=16769021|
+2025/10/18 16:02:06:337|BTT|NOT handling reopen due to BTT start|
+2025/10/18 16:02:08:576|ASL|Reopen triggered by event: NSEvent: type=SysDefined loc=(1739.92,19.6094) time=275139.5 flags=0 win=0x0 winNum=0 ctxt=0x0 subtype=7 data1=1 data2=0|
+2025/10/18 16:02:08:576|PREFS|applicationShouldHandleReopen|
+2025/10/18 16:02:08:576|PREFS|showing prefs (null)|
+2025/10/18 16:02:08:591|ASL|prepare <NSStoryboardSegue:0xb609677e0 identifier='(null)', source='<BTTMainUIStructureVC: 0xb648d2ca0>', destination='<BTTAppListVC: 0xb66840a00>'>|
+2025/10/18 16:02:08:594|ASL|Warning: Column selection is not supported in view-based table and outline views (<BTTPreferencesTableView: 0xb64374a00>).|
+2025/10/18 16:02:08:594|ASL|view did load BTTAppListVC|
+2025/10/18 16:02:08:594|ASL|previously selected 0|
+2025/10/18 16:02:08:594|ASL|previously selected 0|
+2025/10/18 16:02:08:595|ASL|prepare <NSStoryboardSegue:0xb60bd4120 identifier='EmbedTopMenuVC', source='<BTTMainUIStructureVC: 0xb648d2ca0>', destination='<BTTTopMenuVC: 0xb6444ba80>'>|
+2025/10/18 16:02:08:606|ASL|view did load BTTTopMenuVC|
+2025/10/18 16:02:08:609|ASL|window did load BTTRootPreferencesWC|
+2025/10/18 16:02:08:609|ASL|did set <BTTPrefsMenuContentContainerVC: 0xb6641e120> BTTPrefsMenuContentContainerVC|
+2025/10/18 16:02:08:609|ASL|did set <BTTMainUIStructureVC: 0xb648d2ca0> BTTMainUIStructureVC|
+2025/10/18 16:02:08:609|ASL|did set <BTTConfigurationVC: 0xb6444b480> BTTConfigurationVC|
+2025/10/18 16:02:08:609|ASL|did set <BTTLevel3VC: 0xb64071e00> BTTLevel3VC|
+2025/10/18 16:02:08:609|ASL|did set <BTTMainSplitViewController: 0xb6082aa00> BTTMainSplitViewController|
+2025/10/18 16:02:08:609|ASL|did set <BTTLevel1VC: 0xb66687e00> BTTLevel1VC|
+2025/10/18 16:02:08:609|ASL|did set <BTTConfigurationVC: 0xb6444b600> BTTConfigurationVC|
+2025/10/18 16:02:08:609|ASL|did set <BTTOutlineModeVC: 0xb66840400> BTTOutlineModeVC|
+2025/10/18 16:02:08:609|ASL|did set <BTTTopMenuVC: 0xb6444ba80> BTTTopMenuVC|
+2025/10/18 16:02:08:685|LIC|ADD REGISTER MENU ITEM|
+2025/10/18 16:02:08:689|LIC|ADD REGISTER MENU ITEM|
+2025/10/18 16:02:08:700|ASL|previously selected 9|
+2025/10/18 16:02:08:725|M|mt_stop2|
+2025/10/18 16:02:08:732|ASL|app: com.hegenberg.BetterTouchTool|
+2025/10/18 16:02:08:741|ASL|save|
+2025/10/18 16:02:08:741|SHORTCUT|SHORTCUT FETCH DISABLE 1|
+2025/10/18 16:02:08:765|ASL|app: com.apple.finder|
+2025/10/18 16:02:08:767|SHORTCUT|SHORTCUT FETCH DISABLE 1|
+2025/10/18 16:02:08:798|M|unregister tb trackpad|
+2025/10/18 16:02:08:799|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 16:02:08:799|M|register touchbar mbp trackpad|
+2025/10/18 16:02:08:799|STDEV|6e|
+2025/10/18 16:02:08:841|ASL|app: com.hegenberg.BetterTouchTool|
+2025/10/18 16:02:08:849|LIC|ADD REGISTER MENU ITEM|
+2025/10/18 16:02:08:856|sync|became active|
+2025/10/18 16:02:08:878|NEWUI|Loading Config Debounced|
+2025/10/18 16:02:08:909|ASL|did load level 3|
+2025/10/18 16:02:09:032|UI|Level 1 Focused|
+2025/10/18 16:02:09:056|FORM|4 UUID 7A2D0FD8-DF06-440F-AD73-25BD21791D5E == 2023C7BD-7CD8-4273-8E13-26B15CD217B5 editing 0 == 0|
+2025/10/18 16:02:09:117|FORM|4 UUID 7A2D0FD8-DF06-440F-AD73-25BD21791D5E == 7A2D0FD8-DF06-440F-AD73-25BD21791D5E editing 0 == 0|
+2025/10/18 16:02:09:117|ASL|did rebuild form|
+2025/10/18 16:02:09:271|ASL|did rebuild form|
+2025/10/18 16:02:09:789|UI|Level 3 Focused|
+2025/10/18 16:02:09:856|NEWUI|Loading Config Debounced|
+2025/10/18 16:02:09:857|FORM|1UUID 7A2D0FD8-DF06-440F-AD73-25BD21791D5E == 7A2D0FD8-DF06-440F-AD73-25BD21791D5E editing 1 == 0|
+2025/10/18 16:02:10:004|ASL|did rebuild form|
+2025/10/18 16:02:10:255|ASL|not including current flags|
+2025/10/18 16:02:10:256|ASL|posting with flags 1048576|
+2025/10/18 16:02:10:287|SHORTCUT|SHORTCUT FETCH DISABLE 1|
+2025/10/18 16:02:10:351|ASL|save|
+2025/10/18 16:02:10:351|ASL|saving|
+2025/10/18 16:02:10:352|SHORTCUT|SHORTCUT FETCH DISABLE 1|
+2025/10/18 16:02:10:389|ASL|app: com.apple.finder|
+2025/10/18 16:02:11:657|sync|x (null)|
+2025/10/18 16:02:11:812|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:02:13:619|ASL|performing 113|
+2025/10/18 16:02:13:620|ASL|triggering action Move Left a Space - 4D0F3809-7CA7-4071-A3A9-027596731473|
+2025/10/18 16:02:14:005|ASL|performing 113|
+2025/10/18 16:02:14:005|ASL|triggering action Move Left a Space - 4D0F3809-7CA7-4071-A3A9-027596731473|
+2025/10/18 16:02:14:744|ASL|performing 114|
+2025/10/18 16:02:14:744|ASL|triggering action Move Right a Space - 3D01E95D-89D6-4164-A937-B973DEEA8877|
+2025/10/18 16:02:14:919|ASL|performing 114|
+2025/10/18 16:02:14:920|ASL|triggering action Move Right a Space - 3D01E95D-89D6-4164-A937-B973DEEA8877|
+2025/10/18 16:02:15:085|ASL|performing 114|
+2025/10/18 16:02:15:085|ASL|triggering action Move Right a Space - 3D01E95D-89D6-4164-A937-B973DEEA8877|
+2025/10/18 16:02:15:243|ASL|performing 114|
+2025/10/18 16:02:15:243|ASL|triggering action Move Right a Space - 3D01E95D-89D6-4164-A937-B973DEEA8877|
+2025/10/18 16:02:16:463|ASL|app: com.spotify.client|
+2025/10/18 16:02:22:441|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:03:12:833|ASL|app: com.apple.finder|
+2025/10/18 16:03:19:005|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:03:26:133|ASL|app: com.apple.finder|
+2025/10/18 16:03:27:344|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:05:14:281|ASL|app: com.apple.finder|
+2025/10/18 16:05:18:845|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:05:22:399|ASL|app: org.mozilla.firefox|
+2025/10/18 16:05:24:951|ASL|app: com.apple.finder|
+2025/10/18 16:05:39:223|ASL|app: org.mozilla.firefox|
+2025/10/18 16:05:43:937|ASL|app: com.apple.MobileSMS|
+2025/10/18 16:05:44:641|ASL|app: com.apple.finder|
+2025/10/18 16:05:47:851|ASL|app: org.mozilla.firefox|
+2025/10/18 16:06:18:635|ASL|not including current flags|
+2025/10/18 16:06:18:638|ASL|posting with flags 1048576|
+2025/10/18 16:06:23:548|ASL|app: com.apple.MobileSMS|
+2025/10/18 16:06:52:515|ASL|app: org.mozilla.firefox|
+2025/10/18 16:06:56:830|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:08:49:468|ASL|app: com.apple.MobileSMS|
+2025/10/18 16:08:58:371|ASL|not including current flags|
+2025/10/18 16:08:58:372|ASL|posting with flags 1048576|
+2025/10/18 16:09:00:093|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:09:23:656|ASL|app: notion.id|
+2025/10/18 16:09:42:027|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:10:29:104|ASL|app: org.mozilla.firefox|
+2025/10/18 16:10:32:900|ASL|not including current flags|
+2025/10/18 16:10:32:901|ASL|posting with flags 1048576|
+2025/10/18 16:10:56:600|ASL|not including current flags|
+2025/10/18 16:10:56:601|ASL|posting with flags 1048576|
+2025/10/18 16:11:32:415|ASL|not including current flags|
+2025/10/18 16:11:32:416|ASL|posting with flags 1048576|
+2025/10/18 16:11:34:061|ASL|app: notion.id|
+2025/10/18 16:11:37:198|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:12:02:197|ASL|app: org.mozilla.firefox|
+2025/10/18 16:12:14:026|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:12:50:658|ASL|app: org.mozilla.firefox|
+2025/10/18 16:14:22:741|ASL|app: notion.id|
+2025/10/18 16:14:38:540|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:14:45:895|ASL|not including current flags|
+2025/10/18 16:14:45:896|ASL|posting with flags 1048576|
+2025/10/18 16:14:51:585|ASL|not including current flags|
+2025/10/18 16:14:51:586|ASL|posting with flags 1048576|
+2025/10/18 16:15:37:534|ASL|app: org.mozilla.firefox|
+2025/10/18 16:15:38:354|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:17:45:275|ASL|app: org.mozilla.firefox|
+2025/10/18 16:19:52:215|ASL|app: notion.id|
+2025/10/18 16:19:56:419|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:20:32:798|ASL|app: org.mozilla.firefox|
+2025/10/18 16:22:19:194|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:23:09:773|ASL|not including current flags|
+2025/10/18 16:23:09:774|ASL|posting with flags 1048576|
+2025/10/18 16:24:10:974|ASL|not including current flags|
+2025/10/18 16:24:10:975|ASL|posting with flags 1048576|
+2025/10/18 16:24:11:592|ASL|not including current flags|
+2025/10/18 16:24:11:592|ASL|posting with flags 1048576|
+2025/10/18 16:24:12:323|ASL|not including current flags|
+2025/10/18 16:24:12:324|ASL|posting with flags 1048576|
+2025/10/18 16:25:34:716|ASL|app: com.apple.MobileSMS|
+2025/10/18 16:25:38:659|ASL|performing 112|
+2025/10/18 16:25:38:659|ASL|triggering action Enter Fullscreen (If Supported) - 62E44031-1748-4CE8-8863-F1586C83E4DE|
+2025/10/18 16:26:01:428|ASL|not including current flags|
+2025/10/18 16:26:01:428|ASL|posting with flags 1048576|
+2025/10/18 16:26:07:789|ASL|not including current flags|
+2025/10/18 16:26:07:790|ASL|posting with flags 1048576|
+2025/10/18 16:27:03:023|ASL|not including current flags|
+2025/10/18 16:27:03:023|ASL|posting with flags 1048576|
+2025/10/18 16:27:04:621|ASL|app: notion.id|
+2025/10/18 16:27:12:777|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:27:51:567|ASL|app: org.mozilla.firefox|
+2025/10/18 16:29:09:937|ASL|app: com.apple.MobileSMS|
+2025/10/18 16:29:58:062|ASL|app: org.mozilla.firefox|
+2025/10/18 16:30:18:074|ASL|app: com.apple.finder|
+2025/10/18 16:32:09:297|ASL|app: com.apple.Preview|
+2025/10/18 16:34:28:132|ASL|app: com.apple.finder|
+2025/10/18 16:34:28:136|SWI|APPS EQUAL|
+2025/10/18 16:35:37:075|ASL|not including current flags|
+2025/10/18 16:35:37:075|ASL|posting with flags 1048576|
+2025/10/18 16:35:43:364|ASL|not including current flags|
+2025/10/18 16:35:43:364|ASL|posting with flags 1048576|
+2025/10/18 16:36:05:515|ASL|app: com.apple.archiveutility|
+2025/10/18 16:36:05:544|SWI|APPS EQUAL|
+2025/10/18 16:36:08:434|ASL|app: com.apple.finder|
+2025/10/18 16:36:08:473|SWI|APPS EQUAL|
+2025/10/18 16:36:55:813|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:36:57:420|ASL|not including current flags|
+2025/10/18 16:36:57:421|ASL|posting with flags 1048576|
+2025/10/18 16:36:58:175|ASL|not including current flags|
+2025/10/18 16:36:58:175|ASL|posting with flags 1048576|
+2025/10/18 16:36:58:447|ASL|not including current flags|
+2025/10/18 16:36:58:447|ASL|posting with flags 1048576|
+2025/10/18 16:39:03:177|ASL|app: com.apple.finder|
+2025/10/18 16:39:05:051|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:39:55:166|ASL|app: com.apple.MobileSMS|
+2025/10/18 16:39:57:942|ASL|app: org.mozilla.firefox|
+2025/10/18 16:40:02:334|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:41:48:398|ASL|app: com.apple.finder|
+2025/10/18 16:42:13:853|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:42:18:329|ASL|not including current flags|
+2025/10/18 16:42:18:329|ASL|posting with flags 1048576|
+2025/10/18 16:42:19:967|ASL|app: com.apple.finder|
+2025/10/18 16:43:11:919|ASL|app: com.apple.archiveutility|
+2025/10/18 16:43:11:969|SWI|APPS EQUAL|
+2025/10/18 16:43:13:915|ASL|app: com.apple.finder|
+2025/10/18 16:43:13:978|SWI|APPS EQUAL|
+2025/10/18 16:43:34:297|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:43:36:678|ASL|not including current flags|
+2025/10/18 16:43:36:678|ASL|posting with flags 1048576|
+2025/10/18 16:43:38:265|ASL|app: com.apple.finder|
+2025/10/18 16:43:48:043|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:44:07:641|ASL|not including current flags|
+2025/10/18 16:44:07:642|ASL|posting with flags 1048576|
+2025/10/18 16:44:09:294|ASL|app: com.spotify.client|
+2025/10/18 16:44:23:505|ASL|app: com.apple.finder|
+2025/10/18 16:45:38:475|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:45:48:280|ASL|app: com.apple.finder|
+2025/10/18 16:45:52:282|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:46:03:557|ASL|app: com.apple.finder|
+2025/10/18 16:46:06:595|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:47:06:248|ASL|app: org.mozilla.firefox|
+2025/10/18 16:47:20:441|ASL|app: com.apple.finder|
+2025/10/18 16:47:34:754|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:52:27:220|ASL|app: com.apple.finder|
+2025/10/18 16:52:34:536|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 16:52:39:595|ASL|app: com.apple.finder|
+2025/10/18 16:52:50:059|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 17:00:13:523|ASL|return 1|
+2025/10/18 17:36:32:093|ASL|app: org.mozilla.firefox|
+2025/10/18 17:36:40:344|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 17:38:34:708|ASL|not including current flags|
+2025/10/18 17:38:34:708|ASL|posting with flags 1048576|
+2025/10/18 17:42:57:956|ASL|app: com.carriez.rustdesk|
+2025/10/18 17:43:01:036|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 17:50:32:209|ASL|app: com.apple.finder|
+2025/10/18 17:50:35:337|ASL|app: com.carriez.rustdesk|
+2025/10/18 17:51:31:325|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 17:51:50:226|ASL|app: com.apple.finder|
+2025/10/18 17:53:18:202|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 17:54:29:135|ASL|app: com.apple.finder|
+2025/10/18 17:54:54:036|ASL|app: com.carriez.rustdesk|
+2025/10/18 17:55:00:603|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:00:25:505|ASL|app: com.carriez.rustdesk|
+2025/10/18 18:00:25:505|SWI|PID MISMATCH FIX|
+2025/10/18 18:00:25:513|ASL|app: com.carriez.rustdesk|
+2025/10/18 18:00:33:007|ASL|app: com.apple.finder|
+2025/10/18 18:00:35:950|WISNA|Focus doesn't match window pid|
+2025/10/18 18:00:40:686|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:01:35:939|ASL|app: com.apple.finder|
+2025/10/18 18:01:57:169|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:01:59:306|ASL|app: org.mozilla.firefox|
+2025/10/18 18:02:34:538|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:02:35:260|ASL|app: org.mozilla.firefox|
+2025/10/18 18:02:36:461|ASL|app: com.apple.finder|
+2025/10/18 18:02:40:581|ASL|app: org.mozilla.firefox|
+2025/10/18 18:02:54:100|ASL|app: com.apple.finder|
+2025/10/18 18:02:58:658|ASL|app: org.mozilla.firefox|
+2025/10/18 18:03:01:637|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:03:17:457|ASL|app: com.apple.finder|
+2025/10/18 18:03:18:981|ASL|app: org.mozilla.firefox|
+2025/10/18 18:03:28:921|ASL|app: com.apple.finder|
+2025/10/18 18:03:30:206|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:03:32:224|ASL|app: com.apple.finder|
+2025/10/18 18:03:33:879|ASL|app: org.mozilla.firefox|
+2025/10/18 18:04:50:165|ASL|app: com.apple.finder|
+2025/10/18 18:05:37:082|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:05:41:671|ASL|app: com.apple.finder|
+2025/10/18 18:05:51:141|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:06:17:345|ASL|app: org.mozilla.firefox|
+2025/10/18 18:06:41:705|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:06:47:759|ASL|app: org.mozilla.firefox|
+2025/10/18 18:07:08:996|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:07:12:525|ASL|app: org.mozilla.firefox|
+2025/10/18 18:07:13:660|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:07:20:885|ASL|app: org.mozilla.firefox|
+2025/10/18 18:09:29:192|ASL|app: com.apple.finder|
+2025/10/18 18:09:46:878|ASL|app: org.mozilla.firefox|
+2025/10/18 18:10:38:141|ASL|app: com.apple.finder|
+2025/10/18 18:11:14:311|ASL|app: org.mozilla.firefox|
+2025/10/18 18:12:23:185|ASL|app: com.apple.finder|
+2025/10/18 18:13:19:896|ASL|app: org.mozilla.firefox|
+2025/10/18 18:13:53:112|ASL|app: com.apple.finder|
+2025/10/18 18:14:13:804|ASL|app: org.mozilla.firefox|
+2025/10/18 18:14:56:844|ASL|app: com.apple.finder|
+2025/10/18 18:15:17:936|ASL|app: org.mozilla.firefox|
+2025/10/18 18:17:32:716|ASL|app: com.apple.finder|
+2025/10/18 18:17:49:382|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:17:51:438|ASL|not including current flags|
+2025/10/18 18:17:51:439|ASL|posting with flags 1048576|
+2025/10/18 18:17:52:466|ASL|not including current flags|
+2025/10/18 18:17:52:467|ASL|posting with flags 1048576|
+2025/10/18 18:17:54:070|ASL|app: com.apple.finder|
+2025/10/18 18:18:09:026|ASL|not including current flags|
+2025/10/18 18:18:09:027|ASL|posting with flags 1048576|
+2025/10/18 18:18:10:552|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:18:14:480|ASL|app: com.apple.finder|
+2025/10/18 18:18:15:527|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:18:38:404|ASL|app: com.apple.finder|
+2025/10/18 18:18:41:572|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:18:45:221|ASL|app: com.apple.finder|
+2025/10/18 18:19:09:185|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:19:13:555|ASL|app: com.apple.finder|
+2025/10/18 18:19:15:225|ASL|app: org.mozilla.firefox|
+2025/10/18 18:19:18:888|ASL|app: com.apple.finder|
+2025/10/18 18:19:20:427|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:20:40:890|SWI|APPS EQUAL|
+2025/10/18 18:20:41:975|SWI|APPS EQUAL|
+2025/10/18 18:21:27:163|ASL|app: com.spotify.client|
+2025/10/18 18:21:38:591|ASL|app: org.mozilla.firefox|
+2025/10/18 18:21:40:792|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:23:16:856|ASL|app: com.apple.finder|
+2025/10/18 18:24:00:501|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:27:14:990|ASL|app: com.apple.finder|
+2025/10/18 18:27:39:514|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:27:45:916|ASL|not including current flags|
+2025/10/18 18:27:45:917|ASL|posting with flags 1048576|
+2025/10/18 18:27:47:791|ASL|app: com.apple.finder|
+2025/10/18 18:28:20:566|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:29:17:079|ASL|app: com.apple.finder|
+2025/10/18 18:29:41:836|ASL|not including current flags|
+2025/10/18 18:29:41:836|ASL|posting with flags 1048576|
+2025/10/18 18:29:43:405|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:29:51:778|ASL|app: com.apple.finder|
+2025/10/18 18:30:05:370|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:30:08:476|ASL|app: com.apple.finder|
+2025/10/18 18:30:26:224|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:30:27:533|ASL|app: com.apple.finder|
+2025/10/18 18:30:33:461|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:30:54:602|ASL|app: com.apple.finder|
+2025/10/18 18:31:05:796|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:32:32:442|ASL|app: org.mozilla.firefox|
+2025/10/18 18:32:47:442|ASL|app: com.spotify.client|
+2025/10/18 18:32:50:002|ASL|app: org.mozilla.firefox|
+2025/10/18 18:32:50:003|SWI|PID MISMATCH FIX|
+2025/10/18 18:32:50:017|ASL|app: org.mozilla.firefox|
+2025/10/18 18:32:59:676|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:33:25:978|ASL|app: com.apple.finder|
+2025/10/18 18:34:05:172|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:34:14:148|ASL|app: com.spotify.client|
+2025/10/18 18:34:31:929|ASL|app: org.mozilla.firefox|
+2025/10/18 18:34:35:859|ASL|app: com.apple.finder|
+2025/10/18 18:34:50:153|ASL|app: org.mozilla.firefox|
+2025/10/18 18:35:22:142|ASL|not including current flags|
+2025/10/18 18:35:22:143|ASL|posting with flags 1048576|
+2025/10/18 18:35:41:995|ASL|app: com.apple.finder|
+2025/10/18 18:35:44:043|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:35:45:999|ASL|not including current flags|
+2025/10/18 18:35:45:999|ASL|posting with flags 1048576|
+2025/10/18 18:36:06:017|ASL|app: com.apple.finder|
+2025/10/18 18:36:06:888|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:36:07:935|ASL|app: org.mozilla.firefox|
+2025/10/18 18:36:12:621|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:36:17:761|ASL|app: org.mozilla.firefox|
+2025/10/18 18:36:18:440|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:43:10:159|ASL|app: com.apple.finder|
+2025/10/18 18:43:33:505|ASL|app: org.mozilla.firefox|
+2025/10/18 18:43:35:962|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:49:22:158|ASL|app: org.mozilla.firefox|
+2025/10/18 18:49:58:484|ASL|app: com.apple.finder|
+2025/10/18 18:50:08:478|ASL|app: org.mozilla.firefox|
+2025/10/18 18:50:29:879|ASL|app: com.apple.MobileSMS|
+2025/10/18 18:51:30:845|ASL|app: org.mozilla.firefox|
+2025/10/18 18:51:46:805|ASL|app: com.apple.finder|
+2025/10/18 18:51:59:763|ASL|app: org.mozilla.firefox|
+2025/10/18 18:54:34:817|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:54:36:411|ASL|app: org.mozilla.firefox|
+2025/10/18 18:54:47:770|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:59:34:067|ASL|app: com.spotify.client|
+2025/10/18 18:59:41:958|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 18:59:51:890|ASL|app: org.mozilla.firefox|
+2025/10/18 18:59:59:810|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:01:12:246|ASL|app: org.mozilla.firefox|
+2025/10/18 19:01:23:182|ASL|app: com.spotify.client|
+2025/10/18 19:01:25:407|ASL|app: org.mozilla.firefox|
+2025/10/18 19:01:59:680|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:02:20:600|ASL|app: org.mozilla.firefox|
+2025/10/18 19:03:52:640|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:03:53:855|ASL|app: org.mozilla.firefox|
+2025/10/18 19:04:14:243|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:04:16:140|ASL|app: com.apple.finder|
+2025/10/18 19:04:27:837|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:04:58:539|ASL|app: com.apple.finder|
+2025/10/18 19:05:33:730|ASL|not including current flags|
+2025/10/18 19:05:33:731|ASL|posting with flags 1048576|
+2025/10/18 19:05:35:969|ASL|not including current flags|
+2025/10/18 19:05:35:970|ASL|posting with flags 1048576|
+2025/10/18 19:06:22:384|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:06:23:980|ASL|not including current flags|
+2025/10/18 19:06:23:981|ASL|posting with flags 1048576|
+2025/10/18 19:06:32:863|ASL|app: org.mozilla.firefox|
+2025/10/18 19:06:39:245|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:07:31:351|ASL|app: com.apple.finder|
+2025/10/18 19:07:34:106|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:07:41:081|ASL|app: com.apple.finder|
+2025/10/18 19:07:41:706|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:08:09:700|ASL|app: com.apple.finder|
+2025/10/18 19:08:25:216|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:08:35:642|ASL|app: com.apple.finder|
+2025/10/18 19:08:48:187|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:08:54:573|ASL|app: com.apple.finder|
+2025/10/18 19:08:58:949|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:09:34:550|ASL|app: com.apple.finder|
+2025/10/18 19:10:14:801|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:10:33:445|ASL|app: com.apple.finder|
+2025/10/18 19:11:09:927|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:11:22:773|ASL|app: com.apple.finder|
+2025/10/18 19:11:45:544|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:11:53:525|ASL|app: com.apple.finder|
+2025/10/18 19:12:22:414|ASL|not including current flags|
+2025/10/18 19:12:22:415|ASL|posting with flags 1048576|
+2025/10/18 19:12:23:948|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:12:52:218|ASL|app: com.apple.finder|
+2025/10/18 19:12:56:243|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:15:46:385|ASL|app: com.apple.finder|
+2025/10/18 19:16:52:110|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:16:58:369|ASL|not including current flags|
+2025/10/18 19:16:58:370|ASL|posting with flags 1048576|
+2025/10/18 19:17:00:780|ASL|app: com.apple.finder|
+2025/10/18 19:17:10:117|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:17:19:680|ASL|app: org.mozilla.firefox|
+2025/10/18 19:17:23:903|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:24:21:956|ASL|app: com.spotify.client|
+2025/10/18 19:24:26:738|ASL|app: org.mozilla.firefox|
+2025/10/18 19:28:25:566|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:28:25:566|SWI|PID MISMATCH FIX|
+2025/10/18 19:28:25:575|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:30:43:513|ASL|app: org.mozilla.firefox|
+2025/10/18 19:31:43:741|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:33:45:043|ASL|app: com.spotify.client|
+2025/10/18 19:34:01:795|ASL|app: org.mozilla.firefox|
+2025/10/18 19:34:24:605|ASL|app: com.spotify.client|
+2025/10/18 19:34:35:776|ASL|app: org.mozilla.firefox|
+2025/10/18 19:34:44:491|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:40:34:711|ASL|app: org.mozilla.firefox|
+2025/10/18 19:40:41:745|ASL|not including current flags|
+2025/10/18 19:40:41:746|ASL|posting with flags 1048576|
+2025/10/18 19:40:44:120|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:40:53:024|ASL|app: org.mozilla.firefox|
+2025/10/18 19:41:31:464|ASL|not including current flags|
+2025/10/18 19:41:31:464|ASL|posting with flags 1048576|
+2025/10/18 19:41:37:362|ASL|not including current flags|
+2025/10/18 19:41:37:363|ASL|posting with flags 1048576|
+2025/10/18 19:41:48:567|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:42:02:007|ASL|app: org.mozilla.firefox|
+2025/10/18 19:42:02:007|SWI|PID MISMATCH FIX|
+2025/10/18 19:42:02:024|ASL|app: org.mozilla.firefox|
+2025/10/18 19:42:19:236|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:42:20:374|ASL|app: org.mozilla.firefox|
+2025/10/18 19:42:49:862|ASL|not including current flags|
+2025/10/18 19:42:49:863|ASL|posting with flags 1048576|
+2025/10/18 19:43:01:240|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:43:02:307|ASL|app: org.mozilla.firefox|
+2025/10/18 19:43:07:735|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:44:44:805|ASL|app: org.mozilla.firefox|
+2025/10/18 19:44:47:626|ASL|app: com.apple.finder|
+2025/10/18 19:45:34:596|ASL|app: notion.id|
+2025/10/18 19:45:37:161|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:46:27:376|ASL|app: com.apple.finder|
+2025/10/18 19:46:28:332|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:47:01:026|ASL|app: com.apple.finder|
+2025/10/18 19:47:07:148|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:47:35:074|ASL|app: org.mozilla.firefox|
+2025/10/18 19:47:37:446|ASL|not including current flags|
+2025/10/18 19:47:37:446|ASL|posting with flags 1048576|
+2025/10/18 19:48:33:109|ASL|app: com.apple.MobileSMS|
+2025/10/18 19:48:35:904|ASL|app: org.mozilla.firefox|
+2025/10/18 19:49:46:159|ASL|not including current flags|
+2025/10/18 19:49:46:160|ASL|posting with flags 1048576|
+2025/10/18 19:50:10:994|ASL|app: notion.id|
+2025/10/18 19:50:12:208|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:54:22:451|ASL|app: org.mozilla.firefox|
+2025/10/18 19:54:51:533|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:55:13:343|ASL|app: org.mozilla.firefox|
+2025/10/18 19:55:41:170|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:55:52:221|ASL|app: org.mozilla.firefox|
+2025/10/18 19:56:02:041|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:56:16:380|ASL|app: org.mozilla.firefox|
+2025/10/18 19:56:20:251|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:56:23:837|ASL|app: org.mozilla.firefox|
+2025/10/18 19:56:24:903|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:56:27:188|ASL|app: org.mozilla.firefox|
+2025/10/18 19:56:32:438|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:56:34:680|ASL|app: org.mozilla.firefox|
+2025/10/18 19:56:37:536|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:57:06:274|ASL|app: org.mozilla.firefox|
+2025/10/18 19:57:57:347|ASL|app: com.spotify.client|
+2025/10/18 19:58:00:677|ASL|app: org.mozilla.firefox|
+2025/10/18 19:58:39:647|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 19:59:07:425|ASL|app: org.mozilla.firefox|
+2025/10/18 20:00:02:464|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:00:12:617|ASL|app: org.mozilla.firefox|
+2025/10/18 20:02:06:992|ASL|app: notion.id|
+2025/10/18 20:02:08:743|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:02:30:021|ASL|app: notion.id|
+2025/10/18 20:02:31:149|ASL|app: org.mozilla.firefox|
+2025/10/18 20:02:34:408|ASL|app: com.apple.finder|
+2025/10/18 20:03:12:800|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:03:14:999|ASL|app: com.apple.finder|
+2025/10/18 20:03:55:248|ASL|app: notion.id|
+2025/10/18 20:03:58:652|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:04:21:195|ASL|not including current flags|
+2025/10/18 20:04:21:195|ASL|posting with flags 1048576|
+2025/10/18 20:04:21:954|ASL|not including current flags|
+2025/10/18 20:04:21:954|ASL|posting with flags 1048576|
+2025/10/18 20:04:23:293|ASL|app: org.mozilla.firefox|
+2025/10/18 20:04:25:633|ASL|not including current flags|
+2025/10/18 20:04:25:633|ASL|posting with flags 1048576|
+2025/10/18 20:04:26:052|ASL|not including current flags|
+2025/10/18 20:04:26:053|ASL|posting with flags 1048576|
+2025/10/18 20:04:26:512|ASL|not including current flags|
+2025/10/18 20:04:26:512|ASL|posting with flags 1048576|
+2025/10/18 20:04:29:464|ASL|not including current flags|
+2025/10/18 20:04:29:464|ASL|posting with flags 1048576|
+2025/10/18 20:05:36:266|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:05:38:285|ASL|app: notion.id|
+2025/10/18 20:05:41:826|ASL|app: com.apple.finder|
+2025/10/18 20:05:43:994|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:07:27:417|ASL|app: com.apple.finder|
+2025/10/18 20:07:35:365|ASL|app: com.apple.archiveutility|
+2025/10/18 20:07:35:369|SWI|APPS EQUAL|
+2025/10/18 20:07:35:665|ASL|app: com.apple.finder|
+2025/10/18 20:07:35:666|SWI|APPS EQUAL|
+2025/10/18 20:07:56:040|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:07:58:845|ASL|app: com.apple.finder|
+2025/10/18 20:08:27:271|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:08:34:722|ASL|app: com.apple.finder|
+2025/10/18 20:08:36:144|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:09:15:809|ASL|app: com.apple.finder|
+2025/10/18 20:09:22:482|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:09:39:485|ASL|app: com.apple.finder|
+2025/10/18 20:09:41:411|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:18:04:084|ASL|app: org.mozilla.firefox|
+2025/10/18 20:18:09:234|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:18:37:746|ASL|app: org.mozilla.firefox|
+2025/10/18 20:19:10:226|ASL|app: com.apple.FaceTime|
+2025/10/18 20:19:10:309|SWI|APPS EQUAL|
+2025/10/18 20:19:13:003|ASL|app: org.mozilla.firefox|
+2025/10/18 20:19:14:547|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:21:18:025|ASL|app: com.apple.finder|
+2025/10/18 20:21:19:022|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:21:24:049|ASL|app: com.apple.finder|
+2025/10/18 20:21:51:774|ASL|app: com.apple.archiveutility|
+2025/10/18 20:21:51:836|SWI|APPS EQUAL|
+2025/10/18 20:21:52:351|ASL|app: com.apple.finder|
+2025/10/18 20:21:52:352|SWI|APPS EQUAL|
+2025/10/18 20:22:19:884|ASL|not including current flags|
+2025/10/18 20:22:19:885|ASL|posting with flags 1048576|
+2025/10/18 20:26:09:819|ASL|app: com.apple.Preview|
+2025/10/18 20:26:09:826|SWI|APPS EQUAL|
+2025/10/18 20:26:13:026|ASL|app: com.apple.finder|
+2025/10/18 20:26:13:030|SWI|APPS EQUAL|
+2025/10/18 20:28:46:381|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:28:49:562|ASL|app: com.apple.finder|
+2025/10/18 20:28:51:048|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:29:04:091|ASL|app: com.apple.finder|
+2025/10/18 20:29:43:903|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:29:50:868|ASL|not including current flags|
+2025/10/18 20:29:50:868|ASL|posting with flags 1048576|
+2025/10/18 20:29:52:545|ASL|app: com.apple.finder|
+2025/10/18 20:30:38:796|ASL|app: com.apple.archiveutility|
+2025/10/18 20:30:38:832|SWI|APPS EQUAL|
+2025/10/18 20:30:43:064|ASL|app: com.apple.finder|
+2025/10/18 20:30:43:098|SWI|APPS EQUAL|
+2025/10/18 20:30:56:543|ASL|app: org.mozilla.firefox|
+2025/10/18 20:30:56:952|ASL|app: com.apple.UserNotificationCenter|
+2025/10/18 20:30:56:996|ASL|app: org.mozilla.firefox|
+2025/10/18 20:31:06:841|ASL|app: com.apple.finder|
+2025/10/18 20:31:12:163|ASL|app: org.mozilla.firefox|
+2025/10/18 20:31:17:815|ASL|app: com.apple.finder|
+2025/10/18 20:32:14:035|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:32:17:344|ASL|not including current flags|
+2025/10/18 20:32:17:345|ASL|posting with flags 1048576|
+2025/10/18 20:32:19:025|ASL|app: com.apple.finder|
+2025/10/18 20:33:21:519|ASL|app: com.apple.Preview|
+2025/10/18 20:33:21:538|SWI|APPS EQUAL|
+2025/10/18 20:33:27:023|ASL|app: com.apple.finder|
+2025/10/18 20:33:27:024|SWI|APPS EQUAL|
+2025/10/18 20:35:12:159|ASL|app: com.apple.Preview|
+2025/10/18 20:35:12:186|SWI|APPS EQUAL|
+2025/10/18 20:35:19:806|ASL|app: com.apple.finder|
+2025/10/18 20:35:19:807|SWI|APPS EQUAL|
+2025/10/18 20:36:23:867|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:37:07:764|ASL|not including current flags|
+2025/10/18 20:37:07:765|ASL|posting with flags 1048576|
+2025/10/18 20:37:10:476|ASL|not including current flags|
+2025/10/18 20:37:10:476|ASL|posting with flags 1048576|
+2025/10/18 20:39:05:419|ASL|not including current flags|
+2025/10/18 20:39:05:419|ASL|posting with flags 1048576|
+2025/10/18 20:39:05:592|ASL|not including current flags|
+2025/10/18 20:39:05:593|ASL|posting with flags 1048576|
+2025/10/18 20:39:06:021|ASL|not including current flags|
+2025/10/18 20:39:06:022|ASL|posting with flags 1048576|
+2025/10/18 20:42:58:146|ASL|app: com.apple.finder|
+2025/10/18 20:42:59:109|ASL|app: org.mozilla.firefox|
+2025/10/18 20:43:09:972|ASL|app: com.apple.finder|
+2025/10/18 20:43:11:264|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:45:10:566|ASL|app: org.mozilla.firefox|
+2025/10/18 20:45:15:417|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:45:17:145|ASL|app: org.mozilla.firefox|
+2025/10/18 20:45:18:563|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:45:20:052|ASL|app: org.mozilla.firefox|
+2025/10/18 20:45:21:268|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:46:17:110|ASL|app: org.mozilla.firefox|
+2025/10/18 20:46:30:534|ASL|app: com.apple.finder|
+2025/10/18 20:46:59:556|ASL|app: org.mozilla.firefox|
+2025/10/18 20:47:01:692|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:47:06:342|ASL|app: org.mozilla.firefox|
+2025/10/18 20:47:18:725|ASL|app: com.apple.finder|
+2025/10/18 20:47:19:661|ASL|app: org.mozilla.firefox|
+2025/10/18 20:48:52:334|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:49:40:499|ASL|app: org.mozilla.firefox|
+2025/10/18 20:49:45:204|ASL|app: notion.id|
+2025/10/18 20:50:49:858|ASL|app: org.mozilla.firefox|
+2025/10/18 20:51:21:594|ASL|not including current flags|
+2025/10/18 20:51:21:594|ASL|posting with flags 1048576|
+2025/10/18 20:51:28:012|ASL|not including current flags|
+2025/10/18 20:51:28:012|ASL|posting with flags 1048576|
+2025/10/18 20:51:38:288|ASL|not including current flags|
+2025/10/18 20:51:38:289|ASL|posting with flags 1048576|
+2025/10/18 20:51:40:815|ASL|app: notion.id|
+2025/10/18 20:52:20:727|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:52:29:897|ASL|not including current flags|
+2025/10/18 20:52:29:897|ASL|posting with flags 1048576|
+2025/10/18 20:52:30:083|ASL|not including current flags|
+2025/10/18 20:52:30:084|ASL|posting with flags 1048576|
+2025/10/18 20:52:55:491|ASL|app: org.mozilla.firefox|
+2025/10/18 20:52:56:346|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:53:06:308|ASL|not including current flags|
+2025/10/18 20:53:06:308|ASL|posting with flags 1048576|
+2025/10/18 20:53:42:711|ASL|not including current flags|
+2025/10/18 20:53:42:712|ASL|posting with flags 1048576|
+2025/10/18 20:54:25:367|ASL|app: org.mozilla.firefox|
+2025/10/18 20:55:38:268|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:56:18:629|ASL|app: org.mozilla.firefox|
+2025/10/18 20:56:28:590|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:56:38:492|ASL|app: org.mozilla.firefox|
+2025/10/18 20:56:40:357|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:56:44:919|ASL|app: org.mozilla.firefox|
+2025/10/18 20:56:48:858|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:57:23:128|ASL|app: org.mozilla.firefox|
+2025/10/18 20:58:08:798|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:58:50:982|ASL|app: notion.id|
+2025/10/18 20:58:53:144|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:58:55:993|ASL|app: notion.id|
+2025/10/18 20:59:01:399|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 20:59:17:900|ASL|app: org.mozilla.firefox|
+2025/10/18 20:59:36:248|ASL|app: notion.id|
+2025/10/18 21:00:53:834|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:00:55:164|ASL|not including current flags|
+2025/10/18 21:00:55:165|ASL|posting with flags 1048576|
+2025/10/18 21:01:11:646|ASL|app: notion.id|
+2025/10/18 21:01:12:583|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:01:33:337|ASL|app: notion.id|
+2025/10/18 21:01:34:821|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:01:35:531|ASL|app: notion.id|
+2025/10/18 21:01:41:984|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:02:45:883|ASL|app: notion.id|
+2025/10/18 21:02:53:452|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:08:17:154|ASL|app: org.mozilla.firefox|
+2025/10/18 21:08:20:558|ASL|app: notion.id|
+2025/10/18 21:08:24:840|ASL|app: org.mozilla.firefox|
+2025/10/18 21:08:27:209|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:08:35:367|ASL|app: org.mozilla.firefox|
+2025/10/18 21:08:36:483|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:08:37:628|ASL|app: notion.id|
+2025/10/18 21:08:38:902|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:09:56:893|ASL|app: org.mozilla.firefox|
+2025/10/18 21:09:59:906|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:10:03:134|ASL|app: org.mozilla.firefox|
+2025/10/18 21:10:14:588|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:10:30:705|ASL|app: org.mozilla.firefox|
+2025/10/18 21:11:27:067|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:11:41:772|ASL|app: org.mozilla.firefox|
+2025/10/18 21:11:49:578|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:12:44:315|ASL|app: notion.id|
+2025/10/18 21:12:46:228|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:13:01:714|ASL|app: org.mozilla.firefox|
+2025/10/18 21:13:01:718|SWI|PID MISMATCH FIX|
+2025/10/18 21:13:01:722|ASL|app: org.mozilla.firefox|
+2025/10/18 21:13:02:723|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:13:15:697|ASL|app: org.mozilla.firefox|
+2025/10/18 21:13:27:713|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:13:32:682|ASL|app: org.mozilla.firefox|
+2025/10/18 21:13:37:405|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:14:17:103|ASL|app: org.mozilla.firefox|
+2025/10/18 21:14:22:729|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 21:14:45:534|ASL|app: org.mozilla.firefox|
+2025/10/18 21:14:48:362|ASL|app: notion.id|
+2025/10/18 21:15:14:086|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:086|USB|Device "USB2.0 Hub" disconnected, Vendor ID: 0x00001d5c Product ID: 0x00005801, Serial (null)|
+2025/10/18 21:15:14:087|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:087|USB|Device "USB2.1 Hub" disconnected, Vendor ID: 0x000005e3 Product ID: 0x00000610, Serial (null)|
+2025/10/18 21:15:14:089|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:090|USB|Device "TBT4-HUB3C" disconnected, Vendor ID: 0x00002230 Product ID: 0x00002012, Serial 11AD1D0A83C63D170C140B00|
+2025/10/18 21:15:14:093|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:093|USB|Device "USB2.1 Hub" disconnected, Vendor ID: 0x000005e3 Product ID: 0x00000610, Serial (null)|
+2025/10/18 21:15:14:100|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:100|USB|Device "Keychron V6" disconnected, Vendor ID: 0x00003434 Product ID: 0x00000361, Serial (null)|
+2025/10/18 21:15:14:101|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:102|USB|Device "USB3.0 Hub" disconnected, Vendor ID: 0x00008087 Product ID: 0x00000b40, Serial (null)|
+2025/10/18 21:15:14:106|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:106|USB|Device "USB3.2 Hub" disconnected, Vendor ID: 0x000005e3 Product ID: 0x00000625, Serial (null)|
+2025/10/18 21:15:14:121|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:121|USB|Device "USB Gaming Mouse" disconnected, Vendor ID: 0x000004d9 Product ID: 0x0000fc4d, Serial (null)|
+2025/10/18 21:15:14:134|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:134|USB|Device "USB3.2 Hub" disconnected, Vendor ID: 0x000005e3 Product ID: 0x00000625, Serial (null)|
+2025/10/18 21:15:14:134|USB|Device "USB3.2 Hub" disconnected, Vendor ID: 0x000005e3 Product ID: 0x00000625, Serial (null)|
+2025/10/18 21:15:14:141|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:141|USB|Device "USB CAMERA" disconnected, Vendor ID: 0x000032e6 Product ID: 0x00009221, Serial 240725172848|
+2025/10/18 21:15:14:145|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:145|USB|Device "IOUSBHostDevice" disconnected, Vendor ID: 0x0000413d Product ID: 0x00002107, Serial (null)|
+2025/10/18 21:15:14:153|SYS|USB DEVICE DISCONNECTED|
+2025/10/18 21:15:14:153|USB|Device "USB2.1 Hub" disconnected, Vendor ID: 0x000005e3 Product ID: 0x00000610, Serial (null)|
+2025/10/18 21:15:15:161|ASL|The Mac is running on battery power.|
+2025/10/18 21:15:15:165|SLEEP|messageType e0000280, arg 4d4b007b|
+2025/10/18 21:15:15:169|ASL|disablign app nap|
+2025/10/18 21:15:15:169|ASL|disabling app nap done|
+2025/10/18 21:15:15:174|SLEEP|WILLSLEEP|
+2025/10/18 21:15:15:329|ASL|app: com.apple.loginwindow|
+2025/10/18 21:15:19:913|SEC|SecureInputActive com.apple.loginwindow 401|
+2025/10/18 21:15:24:574|ASL|return 1|
+2025/10/18 21:15:37:172|SLEEP|messageType e0000320, arg 00000000|
+2025/10/18 21:15:37:187|SLEEP|messageType e0000300, arg 00000000|
+2025/10/18 21:15:37:187|ASL|disablign app nap|
+2025/10/18 21:15:37:187|ASL|disabling app nap done|
+2025/10/18 21:15:37:187|SLEEP|WOKE VIA IOKIT|
+2025/10/18 21:15:37:187|ASL|toggle after sleep 0|
+2025/10/18 21:15:37:187|BTT|DISABLE15|
+2025/10/18 21:15:37:187|xw|disable_|
+2025/10/18 21:15:37:283|xw|enable|
+2025/10/18 21:15:37:295|ASL|unregister d|
+2025/10/18 21:15:37:302|WAKE|EVENTHANDLER RESET|
+2025/10/18 21:15:37:310|M|mt_stop2|
+2025/10/18 21:15:37:311|SNAP|Did reset snap areas 0 0|
+2025/10/18 21:15:37:311|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 1|
+2025/10/18 21:15:37:312|ASL|Display configuration changed.|
+2025/10/18 21:15:37:326|ASL|Display configuration changed.|
+2025/10/18 21:15:37:347|ASL|Display connected: Built-in Retina Display|
+2025/10/18 21:15:37:367|ASL|Display configuration changed.|
+2025/10/18 21:15:37:491|ASL|app: com.apple.loginwindow|
+2025/10/18 21:15:37:499|M|unregister tb trackpad|
+2025/10/18 21:15:37:499|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 21:15:37:500|M|register touchbar mbp trackpad|
+2025/10/18 21:15:37:500|STDEV|6e|
+2025/10/18 21:15:37:586|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 21:15:37:586|TB|Force show Touch Bar|
+2025/10/18 21:15:37:677|WAKE|DIDWAKE|
+2025/10/18 21:15:37:677|ASL|disablign app nap|
+2025/10/18 21:15:37:677|ASL|disabling app nap done|
+2025/10/18 21:15:37:687|ASL|app: com.apple.loginwindow|
+2025/10/18 21:15:37:687|WAKE|DIDWAKE2|
+2025/10/18 21:15:37:689|WAKE|NO RESTART|
+2025/10/18 21:15:37:689|ASL|toggle after sleep 1|
+2025/10/18 21:15:37:689|BTT|DISABLE15|
+2025/10/18 21:15:37:689|xw|disable_|
+2025/10/18 21:15:37:693|xw|enable|
+2025/10/18 21:15:37:693|ASL|unregister d|
+2025/10/18 21:15:37:696|WAKE|EVENTHANDLER RESET|
+2025/10/18 21:15:37:697|M|mt_stop2|
+2025/10/18 21:15:37:698|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 21:15:37:700|SNAPAREA|return existing (updated)|
+2025/10/18 21:15:37:700|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 21:15:37:700|SNAP|Did reset snap areas 0 0|
+2025/10/18 21:15:37:701|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 2|
+2025/10/18 21:15:37:705|ASL|Display configuration changed.|
+2025/10/18 21:15:37:705|ASL|Display configuration changed.|
+2025/10/18 21:15:37:709|ASL|Display disconnected: (null)|
+2025/10/18 21:15:37:713|ASL|Display configuration changed.|
+2025/10/18 21:15:37:790|SEC|SecureInputDisabled com.apple.loginwindow|
+2025/10/18 21:15:37:795|ASL|app: com.apple.loginwindow|
+2025/10/18 21:15:37:798|M|unregister tb trackpad|
+2025/10/18 21:15:37:799|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 21:15:37:800|M|register touchbar mbp trackpad|
+2025/10/18 21:15:37:800|STDEV|6e|
+2025/10/18 21:15:37:902|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 21:15:37:902|TB|Force show Touch Bar|
+2025/10/18 21:15:37:967|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 21:15:37:970|SNAPAREA|return existing (updated)|
+2025/10/18 21:15:37:970|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 21:15:37:970|SNAP|Did reset snap areas 0 0|
+2025/10/18 21:15:38:384|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 21:15:38:386|SNAPAREA|return existing (updated)|
+2025/10/18 21:15:38:387|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 21:15:38:387|SNAP|Did reset snap areas 0 0|
+2025/10/18 21:15:38:929|ASL|app: notion.id|
+2025/10/18 21:15:39:203|ASL|trigger after login screen 2 - /Applications/Notion.app - notion.id|
+2025/10/18 21:15:39:203|LOGIN|triggerAfterLoginScreenActions|
+2025/10/18 21:15:39:203|LOGIN|RELOAD AFTER LOGINWINDOW|
+2025/10/18 21:15:39:203|ASL|reset after login screen 2|
+2025/10/18 21:15:39:203|WAKE|EVENTHANDLER RESET|
+2025/10/18 21:15:39:207|M|mt_stop2|
+2025/10/18 21:15:39:207|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 21:15:39:209|SNAPAREA|return existing (updated)|
+2025/10/18 21:15:39:209|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 21:15:39:210|SNAP|Did reset snap areas 0 0|
+2025/10/18 21:15:39:210|ASL|toggle after sleep 2|
+2025/10/18 21:15:39:210|BTT|DISABLE15|
+2025/10/18 21:15:39:210|xw|disable_|
+2025/10/18 21:15:39:216|xw|enable|
+2025/10/18 21:15:39:217|ASL|unregister d|
+2025/10/18 21:15:39:222|WAKE|EVENTHANDLER RESET|
+2025/10/18 21:15:39:226|M|mt_stop2|
+2025/10/18 21:15:39:227|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 21:15:39:229|SNAPAREA|return existing (updated)|
+2025/10/18 21:15:39:229|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 21:15:39:229|SNAP|Did reset snap areas 0 0|
+2025/10/18 21:15:39:229|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 3|
+2025/10/18 21:15:39:233|ASL|performing after wake actions|
+2025/10/18 21:15:39:234|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 21:15:39:234|TB|Force show Touch Bar|
+2025/10/18 21:15:39:236|M|unregister tb trackpad|
+2025/10/18 21:15:39:242|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 21:15:39:244|M|register touchbar mbp trackpad|
+2025/10/18 21:15:39:244|STDEV|6e|
+2025/10/18 21:15:39:249|ASL|app: notion.id|
+2025/10/18 21:15:39:250|M|unregister tb trackpad|
+2025/10/18 21:15:39:254|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 21:15:39:254|M|register touchbar mbp trackpad|
+2025/10/18 21:15:39:254|STDEV|6e|
+2025/10/18 21:15:39:438|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 21:15:39:438|TB|Force show Touch Bar|
+2025/10/18 21:15:40:471|sync|x (null)|
+2025/10/18 21:15:40:746|ASL|app: notion.id|
+2025/10/18 21:15:41:729|ASL|app: com.apple.finder|
+2025/10/18 21:15:43:270|ASL|app: org.mozilla.firefox|
+2025/10/18 21:15:44:237|ASL|not including current flags|
+2025/10/18 21:15:44:237|ASL|posting with flags 1048576|
+2025/10/18 21:15:44:861|ASL|performing 112|
+2025/10/18 21:15:44:861|ASL|triggering action Enter Fullscreen (If Supported) - D6276820-7488-4C50-B112-657A91FABEEF|
+2025/10/18 21:15:45:621|ASL|performing 112|
+2025/10/18 21:15:45:621|ASL|triggering action Enter Fullscreen (If Supported) - D6276820-7488-4C50-B112-657A91FABEEF|
+2025/10/18 21:15:46:735|ASL|not including current flags|
+2025/10/18 21:15:46:736|ASL|posting with flags 1048576|
+2025/10/18 21:15:47:292|ASL|not including current flags|
+2025/10/18 21:15:47:293|ASL|posting with flags 1048576|
+2025/10/18 21:15:52:732|ASL|not including current flags|
+2025/10/18 21:15:52:733|ASL|posting with flags 1048576|
+2025/10/18 21:17:37:029|ASL|The Mac is running on battery power.|
+2025/10/18 21:18:37:024|ASL|The Mac is running on battery power.|
+2025/10/18 21:19:37:030|ASL|The Mac is running on battery power.|
+2025/10/18 21:20:37:032|ASL|The Mac is running on battery power.|
+2025/10/18 21:21:37:036|ASL|The Mac is running on battery power.|
+2025/10/18 21:22:37:041|ASL|The Mac is running on battery power.|
+2025/10/18 21:23:37:034|ASL|The Mac is running on battery power.|
+2025/10/18 21:24:37:030|ASL|The Mac is running on battery power.|
+2025/10/18 21:25:37:046|ASL|The Mac is running on battery power.|
+2025/10/18 21:26:37:037|ASL|The Mac is running on battery power.|
+2025/10/18 21:27:37:033|ASL|The Mac is running on battery power.|
+2025/10/18 21:28:37:034|ASL|The Mac is running on battery power.|
+2025/10/18 21:29:37:036|ASL|The Mac is running on battery power.|
+2025/10/18 21:30:37:037|ASL|The Mac is running on battery power.|
+2025/10/18 21:31:37:043|ASL|The Mac is running on battery power.|
+2025/10/18 21:32:37:041|ASL|The Mac is running on battery power.|
+2025/10/18 21:33:36:997|ASL|performing 24|
+2025/10/18 21:33:36:997|ASL|triggering action Volume Up - 170482EC-D88F-45A9-B283-047D5972B292|
+2025/10/18 21:33:37:039|ASL|The Mac is running on battery power.|
+2025/10/18 21:33:38:057|ASL|performing 24|
+2025/10/18 21:33:38:057|ASL|triggering action Volume Up - 170482EC-D88F-45A9-B283-047D5972B292|
+2025/10/18 21:33:57:713|ASL|found at position 1, last typed 0|
+2025/10/18 21:33:57:802|ASL|found at position 1, last typed 0|
+2025/10/18 21:33:57:802|ASL|found at position 3, last typed 0|
+2025/10/18 21:33:57:802|ASL|performing 133|
+2025/10/18 21:33:57:802|ASL|triggering action F16 - 65962868-0D26-4140-A91C-C0D94D410FFA|
+2025/10/18 21:33:57:803|ASL|not including current flags|
+2025/10/18 21:33:57:803|ASL|posting with flags 8388608|
+2025/10/18 21:33:59:766|ASL|return 1|
+2025/10/18 21:34:37:038|ASL|The Mac is running on battery power.|
+2025/10/18 21:34:58:319|ASL|found at position 1, last typed 0|
+2025/10/18 21:34:58:419|ASL|found at position 1, last typed 0|
+2025/10/18 21:34:58:419|ASL|found at position 3, last typed 0|
+2025/10/18 21:34:58:419|ASL|performing 133|
+2025/10/18 21:34:58:419|ASL|triggering action F16 - 65962868-0D26-4140-A91C-C0D94D410FFA|
+2025/10/18 21:34:58:420|ASL|not including current flags|
+2025/10/18 21:34:58:421|ASL|posting with flags 8388608|
+2025/10/18 21:35:04:822|ASL|performing 1|
+2025/10/18 21:35:04:822|ASL|triggering action Middle Click (At Current Mouse Position) - 9F4CD8C5-D502-4E84-9EFE-C957BD546955|
+2025/10/18 21:35:37:054|ASL|The Mac is running on battery power.|
+2025/10/18 21:36:21:485|ASL|performing 1|
+2025/10/18 21:36:21:485|ASL|triggering action Middle Click (At Current Mouse Position) - 9F4CD8C5-D502-4E84-9EFE-C957BD546955|
+2025/10/18 21:36:37:040|ASL|The Mac is running on battery power.|
+2025/10/18 21:36:40:873|ASL|not including current flags|
+2025/10/18 21:36:40:873|ASL|posting with flags 1048576|
+2025/10/18 21:37:07:596|ASL|not including current flags|
+2025/10/18 21:37:07:596|ASL|posting with flags 1048576|
+2025/10/18 21:37:37:031|ASL|The Mac is running on battery power.|
+2025/10/18 21:38:37:040|ASL|The Mac is running on battery power.|
+2025/10/18 21:39:37:026|ASL|The Mac is running on battery power.|
+2025/10/18 21:39:54:755|ASL|performing 24|
+2025/10/18 21:39:54:756|ASL|triggering action Volume Up - 170482EC-D88F-45A9-B283-047D5972B292|
+2025/10/18 21:39:54:868|c00|5|
+2025/10/18 21:40:37:035|ASL|The Mac is running on battery power.|
+2025/10/18 21:41:33:279|ASL|The Mac is running on battery power.|
+2025/10/18 21:42:33:031|ASL|The Mac is running on battery power.|
+2025/10/18 21:43:33:039|ASL|The Mac is running on battery power.|
+2025/10/18 21:44:26:844|ASL|performing 25|
+2025/10/18 21:44:26:845|ASL|triggering action Volume Down - FC1075DB-4024-449C-BD84-1AC978D46569|
+2025/10/18 21:44:27:274|ASL|performing 25|
+2025/10/18 21:44:27:274|ASL|triggering action Volume Down - FC1075DB-4024-449C-BD84-1AC978D46569|
+2025/10/18 21:44:33:016|ASL|The Mac is running on battery power.|
+2025/10/18 21:44:40:380|ASL|found at position 1, last typed 0|
+2025/10/18 21:44:40:496|ASL|found at position 1, last typed 0|
+2025/10/18 21:44:40:496|ASL|found at position 3, last typed 0|
+2025/10/18 21:44:40:496|ASL|performing 133|
+2025/10/18 21:44:40:496|ASL|triggering action F16 - 65962868-0D26-4140-A91C-C0D94D410FFA|
+2025/10/18 21:44:40:501|ASL|not including current flags|
+2025/10/18 21:44:40:502|ASL|posting with flags 8388608|
+2025/10/18 21:44:47:813|ASL|found at position 1, last typed 0|
+2025/10/18 21:44:47:935|ASL|found at position 1, last typed 0|
+2025/10/18 21:44:47:935|ASL|found at position 3, last typed 0|
+2025/10/18 21:44:47:935|ASL|performing 133|
+2025/10/18 21:44:47:935|ASL|triggering action F16 - 65962868-0D26-4140-A91C-C0D94D410FFA|
+2025/10/18 21:44:47:935|ASL|not including current flags|
+2025/10/18 21:44:47:936|ASL|posting with flags 8388608|
+2025/10/18 21:45:33:059|ASL|The Mac is running on battery power.|
+2025/10/18 21:45:52:339|ASL|performing 1|
+2025/10/18 21:45:52:339|ASL|triggering action Middle Click (At Current Mouse Position) - 9F4CD8C5-D502-4E84-9EFE-C957BD546955|
+2025/10/18 21:45:58:180|ASL|performing 1|
+2025/10/18 21:45:58:180|ASL|triggering action Middle Click (At Current Mouse Position) - 9F4CD8C5-D502-4E84-9EFE-C957BD546955|
+2025/10/18 21:46:33:042|ASL|The Mac is running on battery power.|
+2025/10/18 21:47:20:944|ASL|performing 24|
+2025/10/18 21:47:20:944|ASL|triggering action Volume Up - 170482EC-D88F-45A9-B283-047D5972B292|
+2025/10/18 21:47:24:229|ASL|performing 25|
+2025/10/18 21:47:24:229|ASL|triggering action Volume Down - FC1075DB-4024-449C-BD84-1AC978D46569|
+2025/10/18 21:47:33:027|ASL|The Mac is running on battery power.|
+2025/10/18 21:48:33:033|ASL|The Mac is running on battery power.|
+2025/10/18 21:49:33:024|ASL|The Mac is running on battery power.|
+2025/10/18 21:49:51:249|ASL|The Mac is running on battery power.|
+2025/10/18 21:50:51:030|ASL|The Mac is running on battery power.|
+2025/10/18 21:51:51:034|ASL|The Mac is running on battery power.|
+2025/10/18 21:52:51:033|ASL|The Mac is running on battery power.|
+2025/10/18 21:53:51:040|ASL|The Mac is running on battery power.|
+2025/10/18 21:54:51:037|ASL|The Mac is running on battery power.|
+2025/10/18 21:55:40:040|ASL|not including current flags|
+2025/10/18 21:55:40:040|ASL|posting with flags 1048576|
+2025/10/18 21:55:48:369|ASL|not including current flags|
+2025/10/18 21:55:48:370|ASL|posting with flags 1048576|
+2025/10/18 21:55:51:055|ASL|The Mac is running on battery power.|
+2025/10/18 21:56:51:036|ASL|The Mac is running on battery power.|
+2025/10/18 21:57:18:246|ASL|The Mac is running on battery power.|
+2025/10/18 21:58:18:040|ASL|The Mac is running on battery power.|
+2025/10/18 21:59:18:028|ASL|The Mac is running on battery power.|
+2025/10/18 22:00:18:031|ASL|The Mac is running on battery power.|
+2025/10/18 22:01:18:033|ASL|The Mac is running on battery power.|
+2025/10/18 22:01:56:418|ASL|not including current flags|
+2025/10/18 22:01:56:419|ASL|posting with flags 1048576|
+2025/10/18 22:02:18:039|ASL|The Mac is running on battery power.|
+2025/10/18 22:02:22:563|ASL|performing 1|
+2025/10/18 22:02:22:563|ASL|triggering action Middle Click (At Current Mouse Position) - 9F4CD8C5-D502-4E84-9EFE-C957BD546955|
+2025/10/18 22:03:18:034|ASL|The Mac is running on battery power.|
+2025/10/18 22:04:18:036|ASL|The Mac is running on battery power.|
+2025/10/18 22:05:18:030|ASL|The Mac is running on battery power.|
+2025/10/18 22:05:32:257|ASL|The Mac is running on battery power.|
+2025/10/18 22:06:32:056|ASL|The Mac is running on battery power.|
+2025/10/18 22:07:32:033|ASL|The Mac is running on battery power.|
+2025/10/18 22:08:31:971|ASL|The Mac is running on battery power.|
+2025/10/18 22:09:31:038|ASL|The Mac is running on battery power.|
+2025/10/18 22:10:31:043|ASL|The Mac is running on battery power.|
+2025/10/18 22:11:31:037|ASL|The Mac is running on battery power.|
+2025/10/18 22:12:31:038|ASL|The Mac is running on battery power.|
+2025/10/18 22:13:25:166|ASL|The Mac is running on battery power.|
+2025/10/18 22:14:25:035|ASL|The Mac is running on battery power.|
+2025/10/18 22:15:25:034|ASL|The Mac is running on battery power.|
+2025/10/18 22:15:43:598|ASL|app: com.apple.MobileSMS|
+2025/10/18 22:15:45:250|ASL|app: org.mozilla.firefox|
+2025/10/18 22:16:25:032|ASL|The Mac is running on battery power.|
+2025/10/18 22:17:25:050|ASL|The Mac is running on battery power.|
+2025/10/18 22:18:25:024|ASL|The Mac is running on battery power.|
+2025/10/18 22:19:25:036|ASL|The Mac is running on battery power.|
+2025/10/18 22:20:25:028|ASL|The Mac is running on battery power.|
+2025/10/18 22:21:14:161|ASL|The Mac is running on battery power.|
+2025/10/18 22:22:14:029|ASL|The Mac is running on battery power.|
+2025/10/18 22:22:33:243|ASL|app: com.apple.MobileSMS|
+2025/10/18 22:22:40:480|ASL|app: com.carriez.rustdesk|
+2025/10/18 22:22:55:854|ASL|app: com.spotify.client|
+2025/10/18 22:22:56:624|ASL|app: com.todesktop.230313mzl4w4u92|
+2025/10/18 22:22:58:020|ASL|app: com.apple.MobileSMS|
+2025/10/18 22:22:58:859|ASL|app: org.mozilla.firefox|
+2025/10/18 22:23:05:870|ASL|performing 24|
+2025/10/18 22:23:05:870|ASL|triggering action Volume Up - 170482EC-D88F-45A9-B283-047D5972B292|
+2025/10/18 22:23:14:025|ASL|The Mac is running on battery power.|
+2025/10/18 22:24:14:023|ASL|The Mac is running on battery power.|
+2025/10/18 22:24:33:348|ASL|not including current flags|
+2025/10/18 22:24:33:348|ASL|posting with flags 1048576|
+2025/10/18 22:24:34:545|ASL|not including current flags|
+2025/10/18 22:24:34:546|ASL|posting with flags 1048576|
+2025/10/18 22:24:35:651|ASL|not including current flags|
+2025/10/18 22:24:35:652|ASL|posting with flags 1048576|
+2025/10/18 22:24:36:554|ASL|not including current flags|
+2025/10/18 22:24:36:555|ASL|posting with flags 1048576|
+2025/10/18 22:24:37:232|ASL|not including current flags|
+2025/10/18 22:24:37:233|ASL|posting with flags 1048576|
+2025/10/18 22:24:41:838|ASL|not including current flags|
+2025/10/18 22:24:41:839|ASL|posting with flags 1048576|
+2025/10/18 22:24:43:378|ASL|performing 1|
+2025/10/18 22:24:43:379|ASL|triggering action Middle Click (At Current Mouse Position) - 9F4CD8C5-D502-4E84-9EFE-C957BD546955|
+2025/10/18 22:24:57:641|ASL|performing 1|
+2025/10/18 22:24:57:641|ASL|triggering action Middle Click (At Current Mouse Position) - 9F4CD8C5-D502-4E84-9EFE-C957BD546955|
+2025/10/18 22:25:12:768|ASL|not including current flags|
+2025/10/18 22:25:12:768|ASL|posting with flags 1048576|
+2025/10/18 22:25:14:021|ASL|The Mac is running on battery power.|
+2025/10/18 22:25:28:438|ASL|performing 25|
+2025/10/18 22:25:28:438|ASL|triggering action Volume Down - FC1075DB-4024-449C-BD84-1AC978D46569|
+2025/10/18 22:25:29:229|ASL|performing 25|
+2025/10/18 22:25:29:229|ASL|triggering action Volume Down - FC1075DB-4024-449C-BD84-1AC978D46569|
+2025/10/18 22:25:30:011|ASL|performing 24|
+2025/10/18 22:25:30:011|ASL|triggering action Volume Up - 170482EC-D88F-45A9-B283-047D5972B292|
+2025/10/18 22:25:41:031|ASL|app: notion.id|
+2025/10/18 22:26:01:370|ASL|app: org.mozilla.firefox|
+2025/10/18 22:26:14:029|ASL|The Mac is running on battery power.|
+2025/10/18 22:27:14:032|ASL|The Mac is running on battery power.|
+2025/10/18 22:27:56:162|ASL|The Mac is running on battery power.|
+2025/10/18 22:27:56:206|ASL|The Mac is running on battery power.|
+2025/10/18 22:28:56:029|ASL|The Mac is running on battery power.|
+2025/10/18 22:29:56:030|ASL|The Mac is running on battery power.|
+2025/10/18 22:30:56:029|ASL|The Mac is running on battery power.|
+2025/10/18 22:31:56:126|ASL|The Mac is running on battery power.|
+2025/10/18 22:32:56:026|ASL|The Mac is running on battery power.|
+2025/10/18 22:33:56:043|ASL|The Mac is running on battery power.|
+2025/10/18 22:34:56:031|ASL|The Mac is running on battery power.|
+2025/10/18 22:35:56:043|ASL|The Mac is running on battery power.|
+2025/10/18 22:36:11:244|ASL|The Mac is running on battery power.|
+2025/10/18 22:37:11:037|ASL|The Mac is running on battery power.|
+2025/10/18 22:38:11:048|ASL|The Mac is running on battery power.|
+2025/10/18 22:39:11:040|ASL|The Mac is running on battery power.|
+2025/10/18 22:40:11:041|ASL|The Mac is running on battery power.|
+2025/10/18 22:41:11:034|ASL|The Mac is running on battery power.|
+2025/10/18 22:42:11:035|ASL|The Mac is running on battery power.|
+2025/10/18 22:43:11:035|ASL|The Mac is running on battery power.|
+2025/10/18 22:44:11:041|ASL|The Mac is running on battery power.|
+2025/10/18 22:44:26:240|ASL|The Mac is running on battery power.|
+2025/10/18 22:45:26:042|ASL|The Mac is running on battery power.|
+2025/10/18 22:46:26:034|ASL|The Mac is running on battery power.|
+2025/10/18 22:47:26:043|ASL|The Mac is running on battery power.|
+2025/10/18 22:48:26:043|ASL|The Mac is running on battery power.|
+2025/10/18 22:49:26:037|ASL|The Mac is running on battery power.|
+2025/10/18 22:50:26:031|ASL|The Mac is running on battery power.|
+2025/10/18 22:50:31:375|ASL|not including current flags|
+2025/10/18 22:50:31:375|ASL|posting with flags 1048576|
+2025/10/18 22:50:31:883|ASL|not including current flags|
+2025/10/18 22:50:31:883|ASL|posting with flags 1048576|
+2025/10/18 22:50:32:673|ASL|not including current flags|
+2025/10/18 22:50:32:674|ASL|posting with flags 1048576|
+2025/10/18 22:50:33:811|ASL|not including current flags|
+2025/10/18 22:50:33:812|ASL|posting with flags 1048576|
+2025/10/18 22:50:36:482|ASL|performing 1|
+2025/10/18 22:50:36:482|ASL|triggering action Middle Click (At Current Mouse Position) - 9F4CD8C5-D502-4E84-9EFE-C957BD546955|
+2025/10/18 22:51:03:244|ASL|The Mac is running on battery power.|
+2025/10/18 22:52:03:018|ASL|The Mac is running on battery power.|
+2025/10/18 22:52:07:519|ASL|performing 24|
+2025/10/18 22:52:07:519|ASL|triggering action Volume Up - 170482EC-D88F-45A9-B283-047D5972B292|
+2025/10/18 22:54:03:029|ASL|The Mac is running on battery power.|
+2025/10/18 22:55:03:037|ASL|The Mac is running on battery power.|
+2025/10/18 22:56:03:037|ASL|The Mac is running on battery power.|
+2025/10/18 22:57:03:035|ASL|The Mac is running on battery power.|
+2025/10/18 22:58:03:031|ASL|The Mac is running on battery power.|
+2025/10/18 22:58:49:257|ASL|The Mac is running on battery power.|
+2025/10/18 22:58:49:285|ASL|The Mac is running on battery power.|
+2025/10/18 22:59:49:039|ASL|The Mac is running on battery power.|
+2025/10/18 23:00:49:021|ASL|The Mac is running on battery power.|
+2025/10/18 23:01:49:032|ASL|The Mac is running on battery power.|
+2025/10/18 23:02:49:029|ASL|The Mac is running on battery power.|
+2025/10/18 23:03:49:029|ASL|The Mac is running on battery power.|
+2025/10/18 23:04:49:034|ASL|The Mac is running on battery power.|
+2025/10/18 23:05:49:031|ASL|The Mac is running on battery power.|
+2025/10/18 23:06:49:043|ASL|The Mac is running on battery power.|
+2025/10/18 23:06:50:235|ASL|The Mac is running on battery power.|
+2025/10/18 23:07:50:040|ASL|The Mac is running on battery power.|
+2025/10/18 23:08:50:057|ASL|The Mac is running on battery power.|
+2025/10/18 23:09:50:037|ASL|The Mac is running on battery power.|
+2025/10/18 23:10:50:038|ASL|The Mac is running on battery power.|
+2025/10/18 23:11:50:043|ASL|The Mac is running on battery power.|
+2025/10/18 23:12:50:037|ASL|The Mac is running on battery power.|
+2025/10/18 23:13:50:038|ASL|The Mac is running on battery power.|
+2025/10/18 23:14:50:041|ASL|The Mac is running on battery power.|
+2025/10/18 23:15:40:234|ASL|The Mac is running on battery power.|
+2025/10/18 23:16:40:036|ASL|The Mac is running on battery power.|
+2025/10/18 23:17:40:035|ASL|The Mac is running on battery power.|
+2025/10/18 23:18:40:035|ASL|The Mac is running on battery power.|
+2025/10/18 23:19:40:040|ASL|The Mac is running on battery power.|
+2025/10/18 23:20:40:034|ASL|The Mac is running on battery power.|
+2025/10/18 23:20:43:566|ASL|performing 25|
+2025/10/18 23:20:43:566|ASL|triggering action Volume Down - FC1075DB-4024-449C-BD84-1AC978D46569|
+2025/10/18 23:21:40:034|ASL|The Mac is running on battery power.|
+2025/10/18 23:22:40:032|ASL|The Mac is running on battery power.|
+2025/10/18 23:22:52:226|ASL|The Mac is running on battery power.|
+2025/10/18 23:23:52:033|ASL|The Mac is running on battery power.|
+2025/10/18 23:24:52:038|ASL|The Mac is running on battery power.|
+2025/10/18 23:25:52:029|ASL|The Mac is running on battery power.|
+2025/10/18 23:26:52:036|ASL|The Mac is running on battery power.|
+2025/10/18 23:27:52:033|ASL|The Mac is running on battery power.|
+2025/10/18 23:28:52:033|ASL|The Mac is running on battery power.|
+2025/10/18 23:29:52:051|ASL|The Mac is running on battery power.|
+2025/10/18 23:30:52:032|ASL|The Mac is running on battery power.|
+2025/10/18 23:31:27:226|ASL|The Mac is running on battery power.|
+2025/10/18 23:32:27:035|ASL|The Mac is running on battery power.|
+2025/10/18 23:33:27:035|ASL|The Mac is running on battery power.|
+2025/10/18 23:34:27:035|ASL|The Mac is running on battery power.|
+2025/10/18 23:35:27:030|ASL|The Mac is running on battery power.|
+2025/10/18 23:35:37:067|ASL|not including current flags|
+2025/10/18 23:35:37:068|ASL|posting with flags 1048576|
+2025/10/18 23:35:49:344|ASL|performing 1|
+2025/10/18 23:35:49:344|ASL|triggering action Middle Click (At Current Mouse Position) - 9F4CD8C5-D502-4E84-9EFE-C957BD546955|
+2025/10/18 23:36:10:568|ASL|not including current flags|
+2025/10/18 23:36:10:569|ASL|posting with flags 1048576|
+2025/10/18 23:36:25:773|ASL|not including current flags|
+2025/10/18 23:36:25:773|ASL|posting with flags 1048576|
+2025/10/18 23:36:27:031|ASL|The Mac is running on battery power.|
+2025/10/18 23:36:27:742|ASL|performing 1|
+2025/10/18 23:36:27:742|ASL|triggering action Middle Click (At Current Mouse Position) - 9F4CD8C5-D502-4E84-9EFE-C957BD546955|
+2025/10/18 23:36:46:458|ASL|app: com.apple.MobileSMS|
+2025/10/18 23:36:48:662|ASL|app: org.mozilla.firefox|
+2025/10/18 23:36:50:522|ASL|found at position 1, last typed 0|
+2025/10/18 23:36:50:610|ASL|found at position 1, last typed 0|
+2025/10/18 23:36:50:611|ASL|found at position 3, last typed 0|
+2025/10/18 23:36:50:611|ASL|performing 133|
+2025/10/18 23:36:50:611|ASL|triggering action F16 - 65962868-0D26-4140-A91C-C0D94D410FFA|
+2025/10/18 23:36:50:611|ASL|not including current flags|
+2025/10/18 23:36:50:612|ASL|posting with flags 8388608|
+2025/10/18 23:37:07:150|ASL|found at position 1, last typed 0|
+2025/10/18 23:37:07:246|ASL|found at position 1, last typed 0|
+2025/10/18 23:37:07:246|ASL|found at position 3, last typed 0|
+2025/10/18 23:37:07:247|ASL|performing 133|
+2025/10/18 23:37:07:247|ASL|triggering action F16 - 65962868-0D26-4140-A91C-C0D94D410FFA|
+2025/10/18 23:37:07:247|ASL|not including current flags|
+2025/10/18 23:37:07:247|ASL|posting with flags 8388608|
+2025/10/18 23:37:27:037|ASL|The Mac is running on battery power.|
+2025/10/18 23:38:01:681|ASL|found at position 1, last typed 0|
+2025/10/18 23:38:01:750|ASL|found at position 1, last typed 0|
+2025/10/18 23:38:01:750|ASL|found at position 3, last typed 0|
+2025/10/18 23:38:01:750|ASL|performing 133|
+2025/10/18 23:38:01:750|ASL|triggering action F16 - 65962868-0D26-4140-A91C-C0D94D410FFA|
+2025/10/18 23:38:01:751|ASL|not including current flags|
+2025/10/18 23:38:01:751|ASL|posting with flags 8388608|
+2025/10/18 23:38:20:161|ASL|found at position 1, last typed 0|
+2025/10/18 23:38:20:269|ASL|found at position 1, last typed 0|
+2025/10/18 23:38:20:269|ASL|found at position 3, last typed 0|
+2025/10/18 23:38:20:269|ASL|performing 133|
+2025/10/18 23:38:20:269|ASL|triggering action F16 - 65962868-0D26-4140-A91C-C0D94D410FFA|
+2025/10/18 23:38:20:269|ASL|not including current flags|
+2025/10/18 23:38:20:269|ASL|posting with flags 8388608|
+2025/10/18 23:38:27:033|ASL|The Mac is running on battery power.|
+2025/10/18 23:39:07:222|ASL|The Mac is running on battery power.|
+2025/10/18 23:40:07:047|ASL|The Mac is running on battery power.|
+2025/10/18 23:41:07:025|ASL|The Mac is running on battery power.|
+2025/10/18 23:42:07:022|ASL|The Mac is running on battery power.|
+2025/10/18 23:43:06:862|ASL|not including current flags|
+2025/10/18 23:43:06:863|ASL|posting with flags 1048576|
+2025/10/18 23:43:07:028|ASL|The Mac is running on battery power.|
+2025/10/18 23:44:07:024|ASL|The Mac is running on battery power.|
+2025/10/18 23:45:07:026|ASL|The Mac is running on battery power.|
+2025/10/18 23:45:11:227|ASL|The Mac is running on battery power.|
+2025/10/18 23:46:11:033|ASL|The Mac is running on battery power.|
+2025/10/18 23:46:57:871|ASL|not including current flags|
+2025/10/18 23:46:57:872|ASL|posting with flags 1048576|
+2025/10/18 23:47:11:030|ASL|The Mac is running on battery power.|
+2025/10/18 23:48:11:030|ASL|The Mac is running on battery power.|
+2025/10/18 23:49:11:040|ASL|The Mac is running on battery power.|
+2025/10/18 23:50:11:046|ASL|The Mac is running on battery power.|
+2025/10/18 23:50:35:919|ASL|not including current flags|
+2025/10/18 23:50:35:920|ASL|posting with flags 1048576|
+2025/10/18 23:50:37:719|ASL|not including current flags|
+2025/10/18 23:50:37:719|ASL|posting with flags 1048576|
+2025/10/18 23:50:40:214|SLEEP|messageType e0000280, arg 4d5e0079|
+2025/10/18 23:50:40:219|ASL|disablign app nap|
+2025/10/18 23:50:40:219|ASL|disabling app nap done|
+2025/10/18 23:50:40:221|SLEEP|WILLSLEEP|
+2025/10/18 23:50:40:443|ASL|app: com.apple.loginwindow|
+2025/10/18 23:50:41:957|SLEEP|messageType e0000320, arg 00000000|
+2025/10/18 23:50:42:000|SLEEP|messageType e0000300, arg 00000000|
+2025/10/18 23:50:42:000|ASL|disablign app nap|
+2025/10/18 23:50:42:000|ASL|disabling app nap done|
+2025/10/18 23:50:42:000|SLEEP|WOKE VIA IOKIT|
+2025/10/18 23:50:42:000|ASL|toggle after sleep 3|
+2025/10/18 23:50:42:000|BTT|DISABLE15|
+2025/10/18 23:50:42:000|xw|disable_|
+2025/10/18 23:50:42:039|xw|enable|
+2025/10/18 23:50:42:039|ASL|unregister d|
+2025/10/18 23:50:42:045|WAKE|EVENTHANDLER RESET|
+2025/10/18 23:50:42:047|M|mt_stop2|
+2025/10/18 23:50:42:047|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 23:50:42:050|SNAPAREA|return existing (updated)|
+2025/10/18 23:50:42:050|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 23:50:42:050|SNAP|Did reset snap areas 0 0|
+2025/10/18 23:50:42:050|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 4|
+2025/10/18 23:50:42:062|SEC|SecureInputActive com.apple.loginwindow 401|
+2025/10/18 23:50:42:065|ASL|app: com.apple.loginwindow|
+2025/10/18 23:50:42:067|M|unregister tb trackpad|
+2025/10/18 23:50:42:068|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 23:50:42:068|M|register touchbar mbp trackpad|
+2025/10/18 23:50:42:068|STDEV|6e|
+2025/10/18 23:50:42:073|sync|x (null)|
+2025/10/18 23:50:42:100|WAKE|DIDWAKE|
+2025/10/18 23:50:42:100|ASL|disablign app nap|
+2025/10/18 23:50:42:100|ASL|disabling app nap done|
+2025/10/18 23:50:42:101|SEC|SecureInputDisabled com.apple.loginwindow|
+2025/10/18 23:50:42:103|ASL|app: com.apple.loginwindow|
+2025/10/18 23:50:42:103|WAKE|DIDWAKE2|
+2025/10/18 23:50:42:104|WAKE|NO RESTART|
+2025/10/18 23:50:42:104|ASL|toggle after sleep 4|
+2025/10/18 23:50:42:104|BTT|DISABLE15|
+2025/10/18 23:50:42:104|xw|disable_|
+2025/10/18 23:50:42:105|xw|enable|
+2025/10/18 23:50:42:106|ASL|unregister d|
+2025/10/18 23:50:42:108|WAKE|EVENTHANDLER RESET|
+2025/10/18 23:50:42:108|M|mt_stop2|
+2025/10/18 23:50:42:108|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 23:50:42:109|SNAPAREA|return existing (updated)|
+2025/10/18 23:50:42:109|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 23:50:42:109|SNAP|Did reset snap areas 0 0|
+2025/10/18 23:50:42:109|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 5|
+2025/10/18 23:50:42:110|ASL|The Mac is running on battery power.|
+2025/10/18 23:50:42:117|ASL|app: com.apple.loginwindow|
+2025/10/18 23:50:42:118|M|unregister tb trackpad|
+2025/10/18 23:50:42:119|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 23:50:42:119|M|register touchbar mbp trackpad|
+2025/10/18 23:50:42:119|STDEV|6e|
+2025/10/18 23:50:42:257|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 23:50:42:257|TB|Force show Touch Bar|
+2025/10/18 23:50:42:320|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 23:50:42:320|TB|Force show Touch Bar|
+2025/10/18 23:50:43:338|sync|x (null)|
+2025/10/18 23:50:44:007|ASL|app: org.mozilla.firefox|
+2025/10/18 23:50:44:214|ASL|trigger after login screen 5 - /Applications/Firefox.app - org.mozilla.firefox|
+2025/10/18 23:50:44:214|LOGIN|triggerAfterLoginScreenActions|
+2025/10/18 23:50:44:214|LOGIN|RELOAD AFTER LOGINWINDOW|
+2025/10/18 23:50:44:214|ASL|reset after login screen 5|
+2025/10/18 23:50:44:214|WAKE|EVENTHANDLER RESET|
+2025/10/18 23:50:44:218|M|mt_stop2|
+2025/10/18 23:50:44:219|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 23:50:44:222|SNAPAREA|return existing (updated)|
+2025/10/18 23:50:44:222|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 23:50:44:222|SNAP|Did reset snap areas 0 0|
+2025/10/18 23:50:44:222|ASL|toggle after sleep 5|
+2025/10/18 23:50:44:222|BTT|DISABLE15|
+2025/10/18 23:50:44:222|xw|disable_|
+2025/10/18 23:50:44:225|xw|enable|
+2025/10/18 23:50:44:227|ASL|unregister d|
+2025/10/18 23:50:44:235|WAKE|EVENTHANDLER RESET|
+2025/10/18 23:50:44:236|M|mt_stop2|
+2025/10/18 23:50:44:237|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 23:50:44:240|SNAPAREA|return existing (updated)|
+2025/10/18 23:50:44:240|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 23:50:44:240|SNAP|Did reset snap areas 0 0|
+2025/10/18 23:50:44:240|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 6|
+2025/10/18 23:50:44:246|ASL|performing after wake actions|
+2025/10/18 23:50:44:247|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 23:50:44:247|TB|Force show Touch Bar|
+2025/10/18 23:50:44:250|M|unregister tb trackpad|
+2025/10/18 23:50:44:251|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 23:50:44:251|M|register touchbar mbp trackpad|
+2025/10/18 23:50:44:252|STDEV|6e|
+2025/10/18 23:50:44:254|ASL|app: org.mozilla.firefox|
+2025/10/18 23:50:44:255|M|unregister tb trackpad|
+2025/10/18 23:50:44:256|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 23:50:44:256|M|register touchbar mbp trackpad|
+2025/10/18 23:50:44:256|STDEV|6e|
+2025/10/18 23:50:44:448|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 23:50:44:448|TB|Force show Touch Bar|
+2025/10/18 23:50:45:139|SLEEP|messageType e0000280, arg 4d670079|
+2025/10/18 23:50:45:144|ASL|disablign app nap|
+2025/10/18 23:50:45:144|ASL|disabling app nap done|
+2025/10/18 23:50:45:151|SLEEP|WILLSLEEP|
+2025/10/18 23:50:45:168|ASL|app: org.mozilla.firefox|
+2025/10/18 23:50:45:313|ASL|app: com.apple.loginwindow|
+2025/10/18 23:50:45:481|sync|x (null)|
+2025/10/18 23:50:45:960|SLEEP|messageType e0000320, arg 00000000|
+2025/10/18 23:50:45:981|SLEEP|messageType e0000300, arg 00000000|
+2025/10/18 23:50:45:981|ASL|disablign app nap|
+2025/10/18 23:50:45:981|ASL|disabling app nap done|
+2025/10/18 23:50:45:981|SLEEP|WOKE VIA IOKIT|
+2025/10/18 23:50:45:981|ASL|toggle after sleep 6|
+2025/10/18 23:50:45:981|BTT|DISABLE15|
+2025/10/18 23:50:45:981|xw|disable_|
+2025/10/18 23:50:46:040|xw|enable|
+2025/10/18 23:50:46:041|ASL|unregister d|
+2025/10/18 23:50:46:046|WAKE|EVENTHANDLER RESET|
+2025/10/18 23:50:46:047|M|mt_stop2|
+2025/10/18 23:50:46:048|SNAP|Did reset snap areas 0 0|
+2025/10/18 23:50:46:048|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 7|
+2025/10/18 23:50:46:059|SEC|SecureInputActive com.apple.loginwindow 401|
+2025/10/18 23:50:46:062|ASL|app: com.apple.loginwindow|
+2025/10/18 23:50:46:064|M|unregister tb trackpad|
+2025/10/18 23:50:46:066|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 23:50:46:066|M|register touchbar mbp trackpad|
+2025/10/18 23:50:46:066|STDEV|6e|
+2025/10/18 23:50:46:148|WAKE|DIDWAKE|
+2025/10/18 23:50:46:148|ASL|disablign app nap|
+2025/10/18 23:50:46:148|ASL|disabling app nap done|
+2025/10/18 23:50:46:150|SEC|SecureInputDisabled com.apple.loginwindow|
+2025/10/18 23:50:46:152|ASL|app: com.apple.loginwindow|
+2025/10/18 23:50:46:152|WAKE|DIDWAKE2|
+2025/10/18 23:50:46:153|WAKE|NO RESTART|
+2025/10/18 23:50:46:153|ASL|toggle after sleep 7|
+2025/10/18 23:50:46:153|BTT|DISABLE15|
+2025/10/18 23:50:46:153|xw|disable_|
+2025/10/18 23:50:46:156|xw|enable|
+2025/10/18 23:50:46:157|ASL|unregister d|
+2025/10/18 23:50:46:159|WAKE|EVENTHANDLER RESET|
+2025/10/18 23:50:46:166|M|mt_stop2|
+2025/10/18 23:50:46:168|SNAP|Did reset snap areas 0 0|
+2025/10/18 23:50:46:168|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 8|
+2025/10/18 23:50:46:176|ASL|app: com.apple.loginwindow|
+2025/10/18 23:50:46:177|M|unregister tb trackpad|
+2025/10/18 23:50:46:178|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 23:50:46:178|M|register touchbar mbp trackpad|
+2025/10/18 23:50:46:178|STDEV|6e|
+2025/10/18 23:50:46:258|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 23:50:46:258|TB|Force show Touch Bar|
+2025/10/18 23:50:46:377|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 23:50:46:377|TB|Force show Touch Bar|
+2025/10/18 23:50:49:112|ASL|app: org.mozilla.firefox|
+2025/10/18 23:50:49:173|ASL|trigger after login screen 8 - /Applications/Firefox.app - org.mozilla.firefox|
+2025/10/18 23:50:49:173|LOGIN|triggerAfterLoginScreenActions|
+2025/10/18 23:50:49:174|LOGIN|RELOAD AFTER LOGINWINDOW|
+2025/10/18 23:50:49:174|ASL|reset after login screen 8|
+2025/10/18 23:50:49:174|WAKE|EVENTHANDLER RESET|
+2025/10/18 23:50:49:178|M|mt_stop2|
+2025/10/18 23:50:49:179|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 23:50:49:183|SNAPAREA|return existing (updated)|
+2025/10/18 23:50:49:183|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 23:50:49:183|SNAP|Did reset snap areas 0 0|
+2025/10/18 23:50:49:183|ASL|toggle after sleep 8|
+2025/10/18 23:50:49:183|BTT|DISABLE15|
+2025/10/18 23:50:49:183|xw|disable_|
+2025/10/18 23:50:49:186|xw|enable|
+2025/10/18 23:50:49:189|ASL|unregister d|
+2025/10/18 23:50:49:197|WAKE|EVENTHANDLER RESET|
+2025/10/18 23:50:49:199|M|mt_stop2|
+2025/10/18 23:50:49:200|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/18 23:50:49:205|SNAPAREA|return existing (updated)|
+2025/10/18 23:50:49:205|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/18 23:50:49:205|SNAP|Did reset snap areas 0 0|
+2025/10/18 23:50:49:205|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 9|
+2025/10/18 23:50:49:210|ASL|performing after wake actions|
+2025/10/18 23:50:49:211|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 23:50:49:211|TB|Force show Touch Bar|
+2025/10/18 23:50:49:217|ASL|app: org.mozilla.firefox|
+2025/10/18 23:50:49:220|M|unregister tb trackpad|
+2025/10/18 23:50:49:222|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 23:50:49:222|M|register touchbar mbp trackpad|
+2025/10/18 23:50:49:222|STDEV|6e|
+2025/10/18 23:50:49:225|ASL|app: org.mozilla.firefox|
+2025/10/18 23:50:49:227|M|unregister tb trackpad|
+2025/10/18 23:50:49:228|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/18 23:50:49:229|M|register touchbar mbp trackpad|
+2025/10/18 23:50:49:229|STDEV|6e|
+2025/10/18 23:50:49:412|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/18 23:50:49:412|TB|Force show Touch Bar|
+2025/10/18 23:50:50:432|sync|x (null)|
+2025/10/18 23:50:52:115|SLEEP|messageType e0000280, arg 4d700079|
+2025/10/18 23:50:52:119|ASL|disablign app nap|
+2025/10/18 23:50:52:119|ASL|disabling app nap done|
+2025/10/18 23:50:52:126|SLEEP|WILLSLEEP|
+2025/10/18 23:50:52:305|ASL|app: com.apple.loginwindow|
+2025/10/18 23:50:55:491|SEC|SecureInputActive com.apple.loginwindow 401|
+2025/10/19 00:20:00:257|ASL|The Mac is running on battery power.|
+2025/10/19 00:53:32:064|usage|loading todays usage|
+2025/10/19 06:07:02:213|SWI|APPS EQUAL|
+2025/10/19 06:30:15:726|SWI|APPS EQUAL|
+2025/10/19 07:38:25:803|ASL|The Mac is running on battery power.|
+2025/10/19 11:28:34:174|ASL|The Mac is running on battery power.|
+2025/10/19 14:45:39:313|ASL|The Mac is connected to AC power.|
+2025/10/19 14:45:39:334|SLEEP|messageType e0000320, arg 00000000|
+2025/10/19 14:45:40:393|ASL|keyboard added?|
+2025/10/19 14:45:40:583|KEY|initialized for keyboard Apple Internal Keyboard / Trackpad|
+2025/10/19 14:45:40:583|KEY|initialized for keyboard Keychron V6|
+2025/10/19 14:45:40:583|ASL|keyboard added?|
+2025/10/19 14:45:40:711|KEY|initialized for keyboard Apple Internal Keyboard / Trackpad|
+2025/10/19 14:45:40:711|KEY|initialized for keyboard Keychron V6|
+2025/10/19 14:45:40:711|KEY|initialized for keyboard Keychron V6|
+2025/10/19 14:45:40:711|KEY|initialized for keyboard USB Gaming Mouse|
+2025/10/19 14:45:40:711|ASL|keyboard added?|
+2025/10/19 14:45:40:835|KEY|initialized for keyboard Apple Internal Keyboard / Trackpad|
+2025/10/19 14:45:40:835|KEY|initialized for keyboard Keychron V6|
+2025/10/19 14:45:40:835|KEY|initialized for keyboard Keychron V6|
+2025/10/19 14:45:40:835|KEY|initialized for keyboard USB Gaming Mouse|
+2025/10/19 14:45:40:836|SLEEP|messageType e0000300, arg 00000000|
+2025/10/19 14:45:40:836|ASL|disablign app nap|
+2025/10/19 14:45:40:836|ASL|disabling app nap done|
+2025/10/19 14:45:40:836|SLEEP|WOKE VIA IOKIT|
+2025/10/19 14:45:40:836|ASL|toggle after sleep 9|
+2025/10/19 14:45:40:836|BTT|DISABLE15|
+2025/10/19 14:45:40:836|xw|disable_|
+2025/10/19 14:45:40:837|xw|enable|
+2025/10/19 14:45:40:837|ASL|unregister d|
+2025/10/19 14:45:40:839|WAKE|EVENTHANDLER RESET|
+2025/10/19 14:45:40:840|M|mt_stop2|
+2025/10/19 14:45:40:840|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/19 14:45:40:842|SNAPAREA|return existing (updated)|
+2025/10/19 14:45:40:842|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/19 14:45:40:842|SNAP|Did reset snap areas 0 0|
+2025/10/19 14:45:40:842|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 10|
+2025/10/19 14:45:40:850|ASL|app: com.apple.loginwindow|
+2025/10/19 14:45:40:853|M|unregister tb trackpad|
+2025/10/19 14:45:40:854|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/19 14:45:40:854|M|register touchbar mbp trackpad|
+2025/10/19 14:45:40:854|STDEV|6e|
+2025/10/19 14:45:40:890|sync|x (null)|
+2025/10/19 14:45:40:936|WAKE|DIDWAKE|
+2025/10/19 14:45:40:936|ASL|disablign app nap|
+2025/10/19 14:45:40:936|ASL|disabling app nap done|
+2025/10/19 14:45:40:937|SEC|SecureInputDisabled com.apple.loginwindow|
+2025/10/19 14:45:40:939|ASL|app: com.apple.loginwindow|
+2025/10/19 14:45:40:940|WAKE|DIDWAKE2|
+2025/10/19 14:45:40:940|WAKE|NO RESTART|
+2025/10/19 14:45:40:940|ASL|toggle after sleep 10|
+2025/10/19 14:45:40:940|BTT|DISABLE15|
+2025/10/19 14:45:40:940|xw|disable_|
+2025/10/19 14:45:40:942|xw|enable|
+2025/10/19 14:45:40:943|ASL|unregister d|
+2025/10/19 14:45:40:945|WAKE|EVENTHANDLER RESET|
+2025/10/19 14:45:40:945|M|mt_stop2|
+2025/10/19 14:45:40:946|SNAPAREA|step1, 0 displays- match mode 0 - searching Built-in Retina Display|
+2025/10/19 14:45:40:947|SNAPAREA|return existing (updated)|
+2025/10/19 14:45:40:947|SNAP|Did recognize 41059 4251086178 dragpoints: 0 - 0|
+2025/10/19 14:45:40:947|SNAP|Did reset snap areas 0 0|
+2025/10/19 14:45:40:947|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 11|
+2025/10/19 14:45:40:957|ASL|The Mac is connected to AC power.|
+2025/10/19 14:45:40:966|ASL|app: com.apple.loginwindow|
+2025/10/19 14:45:40:967|M|unregister tb trackpad|
+2025/10/19 14:45:40:968|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/19 14:45:40:968|M|register touchbar mbp trackpad|
+2025/10/19 14:45:40:968|STDEV|6e|
+2025/10/19 14:45:41:049|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/19 14:45:41:049|TB|Force show Touch Bar|
+2025/10/19 14:45:41:154|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/19 14:45:41:154|TB|Force show Touch Bar|
+2025/10/19 14:45:42:378|ASL|Display configuration changed.|
+2025/10/19 14:45:42:378|ASL|Display configuration changed.|
+2025/10/19 14:45:42:444|ASL|Display connected: VG28UQL1A|
+2025/10/19 14:45:42:450|ASL|Display disconnected: (null)|
+2025/10/19 14:45:42:973|sync|x (null)|
+2025/10/19 14:45:43:130|ASL|app: org.mozilla.firefox|
+2025/10/19 14:45:43:134|ASL|trigger after login screen 11 - /Applications/Firefox.app - org.mozilla.firefox|
+2025/10/19 14:45:43:134|LOGIN|triggerAfterLoginScreenActions|
+2025/10/19 14:45:43:134|LOGIN|RELOAD AFTER LOGINWINDOW|
+2025/10/19 14:45:43:134|ASL|reset after login screen 11|
+2025/10/19 14:45:43:134|WAKE|EVENTHANDLER RESET|
+2025/10/19 14:45:43:137|M|mt_stop2|
+2025/10/19 14:45:43:137|SNAPAREA|step1, 0 displays- match mode 0 - searching VG28UQL1A|
+2025/10/19 14:45:43:139|SNAPAREA|return existing (updated)|
+2025/10/19 14:45:43:140|SNAP|Did recognize 10400 16843009 dragpoints: 0 - 0|
+2025/10/19 14:45:43:140|SNAP|Did reset snap areas 0 0|
+2025/10/19 14:45:43:140|ASL|toggle after sleep 11|
+2025/10/19 14:45:43:140|BTT|DISABLE15|
+2025/10/19 14:45:43:140|xw|disable_|
+2025/10/19 14:45:43:142|xw|enable|
+2025/10/19 14:45:43:142|ASL|unregister d|
+2025/10/19 14:45:43:145|WAKE|EVENTHANDLER RESET|
+2025/10/19 14:45:43:147|M|mt_stop2|
+2025/10/19 14:45:43:148|SNAPAREA|step1, 0 displays- match mode 0 - searching VG28UQL1A|
+2025/10/19 14:45:43:149|SNAPAREA|return existing (updated)|
+2025/10/19 14:45:43:149|SNAP|Did recognize 10400 16843009 dragpoints: 0 - 0|
+2025/10/19 14:45:43:149|SNAP|Did reset snap areas 0 0|
+2025/10/19 14:45:43:149|SLEEP|DIDRESETAFTERSLEEP_TOGGLED_ENABLE 12|
+2025/10/19 14:45:43:180|ASL|performing after wake actions|
+2025/10/19 14:45:43:183|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/19 14:45:43:183|TB|Force show Touch Bar|
+2025/10/19 14:45:43:185|M|unregister tb trackpad|
+2025/10/19 14:45:43:194|ASL|app: org.mozilla.firefox|
+2025/10/19 14:45:43:201|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/19 14:45:43:201|M|register touchbar mbp trackpad|
+2025/10/19 14:45:43:202|STDEV|6e|
+2025/10/19 14:45:43:204|M|unregister tb trackpad|
+2025/10/19 14:45:43:207|BTT|mt device 0x07000000000000B3,0x6e - 110 - internal 1 - force 1|
+2025/10/19 14:45:43:208|M|register touchbar mbp trackpad|
+2025/10/19 14:45:43:208|STDEV|6e|
+2025/10/19 14:45:43:359|SLEEP|FORCESHOWAFTERSESSIONBEGIN|
+2025/10/19 14:45:43:359|TB|Force show Touch Bar|
+2025/10/19 14:45:43:507|SNAPAREA|step1, 0 displays- match mode 0 - searching VG28UQL1A|
+2025/10/19 14:45:43:509|SNAPAREA|return existing (updated)|
+2025/10/19 14:45:43:509|SNAP|Did recognize 10400 16843009 dragpoints: 0 - 0|
+2025/10/19 14:45:43:509|SNAP|Did reset snap areas 0 0|
+2025/10/19 14:45:43:976|ASL|app: org.mozilla.firefox|
+2025/10/19 14:45:44:817|sync|x (null)|
+2025/10/19 14:45:49:114|xw|disabling touch for internal trackpad (clamshell)|
+2025/10/19 14:46:05:854|ASL|not including current flags|
+2025/10/19 14:46:05:854|ASL|posting with flags 1048576|
+2025/10/19 14:47:40:022|ASL|The Mac is connected to AC power.|
+2025/10/19 14:48:40:037|ASL|The Mac is connected to AC power.|
+2025/10/19 14:48:49:584|ASL|performing 112|
+2025/10/19 14:48:49:584|ASL|triggering action Enter Fullscreen (If Supported) - 62E44031-1748-4CE8-8863-F1586C83E4DE|
+2025/10/19 14:48:50:978|ASL|performing 112|
+2025/10/19 14:48:50:978|ASL|triggering action Enter Fullscreen (If Supported) - 62E44031-1748-4CE8-8863-F1586C83E4DE|
+2025/10/19 14:49:40:026|ASL|The Mac is connected to AC power.|
+2025/10/19 14:49:44:403|ASL|app: com.carriez.rustdesk|
+2025/10/19 14:50:19:357|ASL|app: org.mozilla.firefox|
+2025/10/19 14:50:23:414|ASL|app: com.carriez.rustdesk|
+2025/10/19 14:50:23:414|SWI|PID MISMATCH FIX|
+2025/10/19 14:50:23:423|ASL|app: com.carriez.rustdesk|
+2025/10/19 14:50:28:153|ASL|app: org.mozilla.firefox|
+2025/10/19 14:50:40:026|ASL|The Mac is connected to AC power.|
+2025/10/19 14:50:50:903|ASL|performing 113|
+2025/10/19 14:50:50:903|ASL|triggering action Move Left a Space - 4D0F3809-7CA7-4071-A3A9-027596731473|
+2025/10/19 14:51:33:026|ASL|app: com.carriez.rustdesk|
+2025/10/19 14:51:38:786|ASL|app: org.mozilla.firefox|
+2025/10/19 14:51:38:786|SWI|APPS EQUAL|
+2025/10/19 14:51:40:029|ASL|The Mac is connected to AC power.|
+2025/10/19 14:51:40:488|ASL|app: com.apple.MobileSMS|
+2025/10/19 14:51:40:924|ASL|performing 114|
+2025/10/19 14:51:40:924|ASL|triggering action Move Right a Space - 3D01E95D-89D6-4164-A937-B973DEEA8877|
+2025/10/19 14:51:41:264|ASL|performing 114|
+2025/10/19 14:51:41:264|ASL|triggering action Move Right a Space - 3D01E95D-89D6-4164-A937-B973DEEA8877|
+2025/10/19 14:51:41:442|ASL|performing 114|
+2025/10/19 14:51:41:442|ASL|triggering action Move Right a Space - 3D01E95D-89D6-4164-A937-B973DEEA8877|
+2025/10/19 14:51:42:535|ASL|app: org.mozilla.firefox|
+2025/10/19 14:51:55:131|ASL|The Mac is connected to AC power.|
+2025/10/19 14:52:45:406|ASL|not including current flags|
+2025/10/19 14:52:45:406|ASL|posting with flags 1048576|
+2025/10/19 14:52:47:131|ASL|not including current flags|
+2025/10/19 14:52:47:131|ASL|posting with flags 1048576|
+2025/10/19 14:52:55:028|ASL|The Mac is connected to AC power.|
+2025/10/19 14:53:19:130|ASL|The Mac is connected to AC power.|
+2025/10/19 14:53:29:187|ASL|not including current flags|
+2025/10/19 14:53:29:188|ASL|posting with flags 1048576|
+2025/10/19 14:53:39:763|ASL|not including current flags|
+2025/10/19 14:53:39:764|ASL|posting with flags 1048576|
+2025/10/19 14:53:54:002|ASL|not including current flags|
+2025/10/19 14:53:54:003|ASL|posting with flags 1048576|
+2025/10/19 14:54:06:794|ASL|not including current flags|
+2025/10/19 14:54:06:795|ASL|posting with flags 1048576|
+2025/10/19 14:54:19:028|ASL|The Mac is connected to AC power.|
+2025/10/19 14:54:24:879|ASL|not including current flags|
+2025/10/19 14:54:24:880|ASL|posting with flags 1048576|
+2025/10/19 14:54:44:129|ASL|The Mac is connected to AC power.|
+2025/10/19 14:54:44:638|ASL|not including current flags|
+2025/10/19 14:54:44:639|ASL|posting with flags 1048576|
+2025/10/19 14:55:01:301|ASL|not including current flags|
+2025/10/19 14:55:01:301|ASL|posting with flags 1048576|
+2025/10/19 14:55:44:045|ASL|The Mac is connected to AC power.|
+2025/10/19 14:55:50:297|ASL|not including current flags|
+2025/10/19 14:55:50:298|ASL|posting with flags 1048576|
+2025/10/19 14:56:10:130|ASL|The Mac is connected to AC power.|
+2025/10/19 14:56:10:418|ASL|not including current flags|
+2025/10/19 14:56:10:418|ASL|posting with flags 1048576|
+2025/10/19 14:56:27:493|ASL|not including current flags|
+2025/10/19 14:56:27:493|ASL|posting with flags 1048576|
+2025/10/19 14:57:10:032|ASL|The Mac is connected to AC power.|
+2025/10/19 14:57:19:648|ASL|not including current flags|
+2025/10/19 14:57:19:649|ASL|posting with flags 1048576|
+2025/10/19 14:57:33:131|ASL|The Mac is connected to AC power.|
+2025/10/19 14:57:50:704|ASL|not including current flags|
+2025/10/19 14:57:50:704|ASL|posting with flags 1048576|
+2025/10/19 14:58:16:029|ASL|not including current flags|
+2025/10/19 14:58:16:030|ASL|posting with flags 1048576|
+2025/10/19 14:58:33:032|ASL|The Mac is connected to AC power.|
+2025/10/19 14:58:43:159|ASL|not including current flags|
+2025/10/19 14:58:43:159|ASL|posting with flags 1048576|
+2025/10/19 14:58:59:135|ASL|The Mac is connected to AC power.|
+2025/10/19 14:59:11:392|ASL|not including current flags|
+2025/10/19 14:59:11:392|ASL|posting with flags 1048576|
+2025/10/19 14:59:59:032|ASL|The Mac is connected to AC power.|
+2025/10/19 15:00:05:393|ASL|not including current flags|
+2025/10/19 15:00:05:393|ASL|posting with flags 1048576|
+2025/10/19 15:00:21:394|ASL|not including current flags|
+2025/10/19 15:00:21:395|ASL|posting with flags 1048576|
+2025/10/19 15:00:23:136|ASL|The Mac is connected to AC power.|
+2025/10/19 15:00:47:480|ASL|not including current flags|
+2025/10/19 15:00:47:480|ASL|posting with flags 1048576|
+2025/10/19 15:01:01:852|ASL|not including current flags|
+2025/10/19 15:01:01:853|ASL|posting with flags 1048576|
+2025/10/19 15:01:23:027|ASL|The Mac is connected to AC power.|
+2025/10/19 15:01:27:748|ASL|not including current flags|
+2025/10/19 15:01:27:749|ASL|posting with flags 1048576|
+2025/10/19 15:01:43:984|ASL|not including current flags|
+2025/10/19 15:01:43:985|ASL|posting with flags 1048576|
+2025/10/19 15:01:47:129|ASL|The Mac is connected to AC power.|
+2025/10/19 15:02:47:027|ASL|The Mac is connected to AC power.|
+2025/10/19 15:03:11:131|ASL|The Mac is connected to AC power.|
+2025/10/19 15:03:29:854|ASL|not including current flags|
+2025/10/19 15:03:29:855|ASL|posting with flags 1048576|
+2025/10/19 15:03:59:044|ASL|not including current flags|
+2025/10/19 15:03:59:045|ASL|posting with flags 1048576|
+2025/10/19 15:04:11:029|ASL|The Mac is connected to AC power.|
+2025/10/19 15:04:23:320|ASL|not including current flags|
+2025/10/19 15:04:23:320|ASL|posting with flags 1048576|
+2025/10/19 15:04:35:393|ASL|not including current flags|
+2025/10/19 15:04:35:394|ASL|posting with flags 1048576|
+2025/10/19 15:04:37:134|ASL|The Mac is connected to AC power.|
+2025/10/19 15:04:50:784|ASL|not including current flags|
+2025/10/19 15:04:50:785|ASL|posting with flags 1048576|
+2025/10/19 15:05:21:956|ASL|not including current flags|
+2025/10/19 15:05:21:956|ASL|posting with flags 1048576|
+2025/10/19 15:05:37:033|ASL|The Mac is connected to AC power.|
+2025/10/19 15:05:53:991|ASL|not including current flags|
+2025/10/19 15:05:53:991|ASL|posting with flags 1048576|
+2025/10/19 15:06:01:131|ASL|The Mac is connected to AC power.|
+2025/10/19 15:06:09:547|ASL|not including current flags|
+2025/10/19 15:06:09:548|ASL|posting with flags 1048576|
+2025/10/19 15:06:51:440|ASL|not including current flags|
+2025/10/19 15:06:51:441|ASL|posting with flags 1048576|
+2025/10/19 15:07:01:028|ASL|The Mac is connected to AC power.|
+2025/10/19 15:07:08:343|ASL|not including current flags|
+2025/10/19 15:07:08:343|ASL|posting with flags 1048576|
+2025/10/19 15:07:15:817|ASL|not including current flags|
+2025/10/19 15:07:15:818|ASL|posting with flags 1048576|
+2025/10/19 15:07:44:128|ASL|The Mac is connected to AC power.|
+2025/10/19 15:07:46:732|ASL|not including current flags|
+2025/10/19 15:07:46:733|ASL|posting with flags 1048576|
+2025/10/19 15:07:58:897|ASL|not including current flags|
+2025/10/19 15:07:58:898|ASL|posting with flags 1048576|
+2025/10/19 15:08:04:508|ASL|not including current flags|
+2025/10/19 15:08:04:509|ASL|posting with flags 1048576|
+2025/10/19 15:08:44:033|ASL|The Mac is connected to AC power.|
+2025/10/19 15:08:52:651|ASL|not including current flags|
+2025/10/19 15:08:52:652|ASL|posting with flags 1048576|
+2025/10/19 15:09:18:131|ASL|The Mac is connected to AC power.|
+2025/10/19 15:09:20:813|ASL|not including current flags|
+2025/10/19 15:09:20:814|ASL|posting with flags 1048576|
+2025/10/19 15:09:34:720|ASL|not including current flags|
+2025/10/19 15:09:34:720|ASL|posting with flags 1048576|
+2025/10/19 15:10:18:031|ASL|The Mac is connected to AC power.|
+2025/10/19 15:11:02:130|ASL|The Mac is connected to AC power.|
+2025/10/19 15:11:22:247|ASL|not including current flags|
+2025/10/19 15:11:22:247|ASL|posting with flags 1048576|
+2025/10/19 15:12:02:032|ASL|The Mac is connected to AC power.|
+2025/10/19 15:12:20:232|ASL|not including current flags|
+2025/10/19 15:12:20:233|ASL|posting with flags 1048576|
+2025/10/19 15:12:44:698|ASL|not including current flags|
+2025/10/19 15:12:44:699|ASL|posting with flags 1048576|
+2025/10/19 15:12:56:737|ASL|not including current flags|
+2025/10/19 15:12:56:737|ASL|posting with flags 1048576|
+2025/10/19 15:13:01:132|ASL|The Mac is connected to AC power.|
+2025/10/19 15:13:03:228|ASL|not including current flags|
+2025/10/19 15:13:03:228|ASL|posting with flags 1048576|
+2025/10/19 15:13:32:301|ASL|not including current flags|
+2025/10/19 15:13:32:301|ASL|posting with flags 1048576|
+2025/10/19 15:13:43:246|ASL|not including current flags|
+2025/10/19 15:13:43:247|ASL|posting with flags 1048576|
+2025/10/19 15:14:01:029|ASL|The Mac is connected to AC power.|
+2025/10/19 15:14:04:630|ASL|not including current flags|
+2025/10/19 15:14:04:631|ASL|posting with flags 1048576|
+2025/10/19 15:14:23:743|ASL|not including current flags|
+2025/10/19 15:14:23:743|ASL|posting with flags 1048576|
+2025/10/19 15:15:01:027|ASL|The Mac is connected to AC power.|
+2025/10/19 15:15:17:129|ASL|The Mac is connected to AC power.|
+2025/10/19 15:15:32:828|ASL|not including current flags|
+2025/10/19 15:15:32:828|ASL|posting with flags 1048576|
+2025/10/19 15:15:53:664|ASL|not including current flags|
+2025/10/19 15:15:53:665|ASL|posting with flags 1048576|
+2025/10/19 15:15:56:250|ASL|app: com.spotify.client|
+2025/10/19 15:16:17:043|ASL|The Mac is connected to AC power.|
+2025/10/19 15:17:02:990|ASL|app: org.mozilla.firefox|
+2025/10/19 15:17:45:212|ASL|app: com.spotify.client|
+2025/10/19 15:17:48:218|ASL|app: com.apple.finder|
+2025/10/19 15:18:01:138|ASL|The Mac is connected to AC power.|
+2025/10/19 15:19:01:034|ASL|The Mac is connected to AC power.|
+2025/10/19 15:19:59:937|ASL|app: org.mozilla.firefox|
+2025/10/19 15:21:01:032|ASL|The Mac is connected to AC power.|
+2025/10/19 15:21:18:137|ASL|The Mac is connected to AC power.|
+2025/10/19 15:21:45:456|ASL|not including current flags|
+2025/10/19 15:21:45:456|ASL|posting with flags 1048576|
+2025/10/19 15:21:46:248|ASL|not including current flags|
+2025/10/19 15:21:46:249|ASL|posting with flags 1048576|
+2025/10/19 15:22:18:023|ASL|The Mac is connected to AC power.|
+2025/10/19 15:23:18:028|ASL|The Mac is connected to AC power.|
+2025/10/19 15:24:18:034|ASL|The Mac is connected to AC power.|
+2025/10/19 15:25:05:239|ASL|app: com.spotify.client|
+2025/10/19 15:25:08:463|ASL|app: org.mozilla.firefox|
+2025/10/19 15:25:18:033|ASL|The Mac is connected to AC power.|
+2025/10/19 15:25:19:144|ASL|The Mac is connected to AC power.|
+2025/10/19 15:27:19:031|ASL|The Mac is connected to AC power.|
+2025/10/19 15:29:19:035|ASL|The Mac is connected to AC power.|
+2025/10/19 15:29:40:744|ASL|not including current flags|
+2025/10/19 15:29:40:744|ASL|posting with flags 1048576|
+2025/10/19 15:30:19:035|ASL|The Mac is connected to AC power.|
+2025/10/19 15:31:19:038|ASL|The Mac is connected to AC power.|
+2025/10/19 15:32:19:036|ASL|The Mac is connected to AC power.|
+2025/10/19 15:33:19:036|ASL|The Mac is connected to AC power.|
+2025/10/19 15:34:19:036|ASL|The Mac is connected to AC power.|
+2025/10/19 15:35:19:031|ASL|The Mac is connected to AC power.|
+2025/10/19 15:36:19:053|ASL|The Mac is connected to AC power.|
+2025/10/19 15:37:19:043|ASL|The Mac is connected to AC power.|
+2025/10/19 15:37:42:128|ASL|not including current flags|
+2025/10/19 15:37:42:128|ASL|posting with flags 1048576|
+2025/10/19 15:37:42:585|ASL|not including current flags|
+2025/10/19 15:37:42:586|ASL|posting with flags 1048576|
+2025/10/19 15:37:42:947|ASL|not including current flags|
+2025/10/19 15:37:42:948|ASL|posting with flags 1048576|
+2025/10/19 15:41:17:902|ASL|app: com.apple.MobileSMS|
+2025/10/19 15:41:22:471|ASL|app: org.mozilla.firefox|
+2025/10/19 15:42:23:527|ASL|app: com.spotify.client|
+2025/10/19 15:42:23:528|SWI|PID MISMATCH FIX|
+2025/10/19 15:42:23:539|ASL|app: com.spotify.client|
+2025/10/19 15:42:27:815|ASL|app: org.mozilla.firefox|
+2025/10/19 15:42:54:884|ASL|performing 167|
+2025/10/19 15:42:54:884|ASL|triggering action Show Emoji & Symbol / Character Palette - EF3171F5-B07C-4CB5-AC1F-D8F45892F748|
+2025/10/19 15:42:54:884|ASL|not including current flags|
+2025/10/19 15:42:54:885|ASL|posting with flags 1310720|
+2025/10/19 15:42:58:821|ASL|performing 167|
+2025/10/19 15:42:58:822|ASL|triggering action Show Emoji & Symbol / Character Palette - EF3171F5-B07C-4CB5-AC1F-D8F45892F748|
+2025/10/19 15:42:58:822|ASL|not including current flags|
+2025/10/19 15:42:58:823|ASL|posting with flags 1310720|
+2025/10/19 15:43:02:466|ASL|app: com.hegenberg.BetterTouchTool|
+2025/10/19 15:43:02:473|ASL|Reopen triggered by event: NSEvent: type=KitDefined loc=(0,1440) time=308630.3 flags=0 win=0x0 winNum=0 ctxt=0x0 subtype=1 data1=2979 data2=0|
+2025/10/19 15:43:02:473|PREFS|applicationShouldHandleReopen|
+2025/10/19 15:43:02:473|PREFS|showing prefs (null)|
+2025/10/19 15:43:02:493|ASL|prepare <NSStoryboardSegue:0xb5fd20900 identifier='(null)', source='<BTTMainUIStructureVC: 0xb606d9420>', destination='<BTTAppListVC: 0xb67420800>'>|
+2025/10/19 15:43:02:496|ASL|view did load BTTAppListVC|
+2025/10/19 15:43:02:500|ASL|previously selected 0|
+2025/10/19 15:43:02:500|ASL|previously selected 0|
+2025/10/19 15:43:02:503|ASL|prepare <NSStoryboardSegue:0xb5fcf8ed0 identifier='EmbedTopMenuVC', source='<BTTMainUIStructureVC: 0xb606d9420>', destination='<BTTTopMenuVC: 0xb64525680>'>|
+2025/10/19 15:43:02:509|ASL|view did load BTTTopMenuVC|
+2025/10/19 15:43:02:513|ASL|window did load BTTRootPreferencesWC|
+2025/10/19 15:43:02:513|ASL|did set <BTTPrefsMenuContentContainerVC: 0xb662b7e80> BTTPrefsMenuContentContainerVC|
+2025/10/19 15:43:02:513|ASL|did set <BTTMainUIStructureVC: 0xb606d9420> BTTMainUIStructureVC|
+2025/10/19 15:43:02:513|ASL|did set <BTTLevel3VC: 0xb6415ad00> BTTLevel3VC|
+2025/10/19 15:43:02:513|ASL|did set <BTTMainSplitViewController: 0xb64bcfc60> BTTMainSplitViewController|
+2025/10/19 15:43:02:513|ASL|did set <BTTLevel1VC: 0xb67422a00> BTTLevel1VC|
+2025/10/19 15:43:02:513|ASL|did set <BTTConfigurationVC: 0xb64524f00> BTTConfigurationVC|
+2025/10/19 15:43:02:513|ASL|did set <BTTOutlineModeVC: 0xb67421600> BTTOutlineModeVC|
+2025/10/19 15:43:02:513|ASL|did set <BTTConfigurationVC: 0xb64525200> BTTConfigurationVC|
+2025/10/19 15:43:02:513|ASL|did set <BTTTopMenuVC: 0xb64525680> BTTTopMenuVC|
+2025/10/19 15:43:02:584|LIC|ADD REGISTER MENU ITEM|
+2025/10/19 15:43:02:595|LIC|ADD REGISTER MENU ITEM|
+2025/10/19 15:43:02:610|ASL|previously selected 9|
+2025/10/19 15:43:02:628|sync|became active|
+2025/10/19 15:43:02:709|ASL|app: com.hegenberg.BetterTouchTool|
+2025/10/19 15:43:02:718|ASL|save|
+2025/10/19 15:43:02:718|ASL|saving|
+2025/10/19 15:43:02:719|SHORTCUT|SHORTCUT FETCH DISABLE 1|
+2025/10/19 15:43:02:741|ASL|app: org.mozilla.firefox|
+2025/10/19 15:43:02:743|SHORTCUT|SHORTCUT FETCH DISABLE 1|
+2025/10/19 15:43:02:831|ASL|app: com.hegenberg.BetterTouchTool|
+2025/10/19 15:43:02:835|LIC|ADD REGISTER MENU ITEM|
+2025/10/19 15:43:02:841|sync|became active|
+2025/10/19 15:43:02:863|ASL|did load level 3|
+2025/10/19 15:43:02:875|NEWUI|Loading Config Debounced|
+2025/10/19 15:43:02:879|NEWUI|Loading Config Debounced|
+2025/10/19 15:43:02:879|FORM|1UUID 7A2D0FD8-DF06-440F-AD73-25BD21791D5E == A95E17FC-30B1-4473-AF6A-8CF4D82F8C9F editing 1 == 1|
+2025/10/19 15:43:02:947|UI|Level 1 Focused|
+2025/10/19 15:43:02:963|FORM|4 UUID 7A2D0FD8-DF06-440F-AD73-25BD21791D5E == 2023C7BD-7CD8-4273-8E13-26B15CD217B5 editing 0 == 0|
+2025/10/19 15:43:02:964|FORM|4 UUID 7A2D0FD8-DF06-440F-AD73-25BD21791D5E == 7A2D0FD8-DF06-440F-AD73-25BD21791D5E editing 0 == 0|
+2025/10/19 15:43:03:067|NEWUI|Loading Config Debounced|
+2025/10/19 15:43:03:067|FORM|1UUID 7A2D0FD8-DF06-440F-AD73-25BD21791D5E == 7A2D0FD8-DF06-440F-AD73-25BD21791D5E editing 0 == 0|
+2025/10/19 15:43:03:106|ASL|did rebuild form|
+2025/10/19 15:43:03:183|ASL|did rebuild form|
+2025/10/19 15:43:03:866|ASL|previously selected 9|
+2025/10/19 15:43:03:931|NEWUI|Loading Config Debounced|
+2025/10/19 15:43:04:029|sync|x (null)|
+2025/10/19 15:43:04:086|ASL|did rebuild form|
+2025/10/19 15:43:04:163|ASL|not including current flags|
+2025/10/19 15:43:04:163|ASL|posting with flags 1048576|
+2025/10/19 15:43:04:186|SHORTCUT|SHORTCUT FETCH DISABLE 1|
+2025/10/19 15:43:04:213|ASL|save|
+2025/10/19 15:43:04:213|ASL|saving|
+2025/10/19 15:43:04:214|SHORTCUT|SHORTCUT FETCH DISABLE 1|
+2025/10/19 15:43:04:241|ASL|app: org.mozilla.firefox|
+2025/10/19 15:43:05:462|sync|x (null)|
+2025/10/19 15:43:06:391|ASL|performing 167|
+2025/10/19 15:43:06:391|ASL|triggering action Show Emoji & Symbol / Character Palette - EF3171F5-B07C-4CB5-AC1F-D8F45892F748|
+2025/10/19 15:43:06:391|ASL|not including current flags|
+2025/10/19 15:43:06:392|ASL|posting with flags 1310720|
+2025/10/19 15:44:42:342|ASL|not including current flags|
+2025/10/19 15:44:42:343|ASL|posting with flags 1048576|
+2025/10/19 15:46:19:137|ASL|The Mac is connected to AC power.|
+2025/10/19 15:46:28:523|ASL|not including current flags|
+2025/10/19 15:46:28:524|ASL|posting with flags 1048576|
+2025/10/19 15:46:29:440|ASL|not including current flags|
+2025/10/19 15:46:29:441|ASL|posting with flags 1048576|
+2025/10/19 15:46:48:528|ASL|not including current flags|
+2025/10/19 15:46:48:529|ASL|posting with flags 1048576|
+2025/10/19 15:49:26:575|ASL|not including current flags|
+2025/10/19 15:49:26:576|ASL|posting with flags 1048576|
+2025/10/19 16:04:19:041|ASL|The Mac is connected to AC power.|
+2025/10/19 16:30:01:908|ASL|not including current flags|
+2025/10/19 16:30:01:909|ASL|posting with flags 1048576|
+2025/10/19 16:49:36:796|ASL|not including current flags|
+2025/10/19 16:49:36:796|ASL|posting with flags 1048576|
+2025/10/19 17:42:22:766|ASL|not including current flags|
+2025/10/19 17:42:22:766|ASL|posting with flags 1048576|
+2025/10/19 17:42:24:239|ASL|not including current flags|
+2025/10/19 17:42:24:239|ASL|posting with flags 1048576|
+2025/10/19 17:42:30:253|ASL|not including current flags|
+2025/10/19 17:42:30:254|ASL|posting with flags 1048576|
+2025/10/19 17:43:22:550|ASL|app: com.apple.finder|
+2025/10/19 17:43:23:929|ASL|not including current flags|
+2025/10/19 17:43:23:930|ASL|posting with flags 1048576|
+2025/10/19 17:43:26:530|ASL|app: org.mozilla.firefox|
+2025/10/19 17:43:55:817|ASL|app: com.apple.finder|
+2025/10/19 17:48:55:190|ASL|app: com.todesktop.230313mzl4w4u92|
