@@ -14,16 +14,16 @@ from typing import List
 from dataclasses import dataclass
 
 try:
-    from textual.app import App, ComposeResult
-    from textual.containers import Container
-    from textual.widgets import Header, Footer, Input, Static, ListView, ListItem, Label
-    from textual.binding import Binding
+    from textual.app import App, ComposeResult  # pyright: ignore[reportMissingImports]
+    from textual.containers import Container  # pyright: ignore[reportMissingImports]
+    from textual.widgets import Header, Footer, Input, Static, ListView, ListItem, Label # pyright: ignore[reportMissingImports] # pylint: disable=line-too-long
+    from textual.binding import Binding  # pyright: ignore[reportMissingImports]
 except ImportError:
     print("Error: textual library not found. Install with: pip install textual")
     sys.exit(1)
 
 try:
-    from fuzzywuzzy import fuzz, process
+    from fuzzywuzzy import fuzz, process # pyright: ignore[reportMissingImports]
 except ImportError:
     print("Error: fuzzywuzzy library not found. Install with: pip install fuzzywuzzy")
     sys.exit(1)
@@ -261,7 +261,7 @@ class LauncherApp(App):
 
     def on_list_view_selected(self, event: ListView.Selected) -> None:
         """Called when a list item is selected.
-        
+
         Commands are executed only when Enter is pressed, not on selection.
         """
 
@@ -357,7 +357,9 @@ class LauncherApp(App):
         """Show a fake terminal with the command."""
         print(f"DEBUG: Executing command: {command.name} = {command.raw_command}")
         # Store the command to show in fake terminal
-        self._command_to_execute = command.raw_command  # pylint: disable=attribute-defined-outside-init
+        self._command_to_execute = ( # pylint: disable=attribute-defined-outside-init
+            command.raw_command
+        )
 
         # Exit the launcher
         self.exit()
@@ -401,8 +403,12 @@ class FakeTerminalApp(App):
     def _execute_command(self, command: str):
         """Execute the command and exit."""
         # Store the command to execute after the app exits
-        self._command_to_execute = command  # pylint: disable=attribute-defined-outside-init
-        self._zsh_file = self.zsh_file_path  # pylint: disable=attribute-defined-outside-init
+        self._command_to_execute = ( # pylint: disable=attribute-defined-outside-init
+            command
+        )
+        self._zsh_file = ( # pylint: disable=attribute-defined-outside-init
+            self.zsh_file_path
+        )
 
         # Exit the fake terminal
         self.exit()
@@ -428,7 +434,9 @@ class Launcher:
                     f.write(app._command_to_execute)  # pylint: disable=protected-access
             else:
                 # Being called directly, execute the command
-                self._execute_command_directly(app._command_to_execute)  # pylint: disable=protected-access
+                self._execute_command_directly(
+                    app._command_to_execute # pylint: disable=protected-access
+                )
 
     def _show_fake_terminal(self, command: str):
         """Show a fake terminal with the command ready to execute."""
