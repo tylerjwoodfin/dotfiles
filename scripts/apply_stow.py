@@ -8,6 +8,8 @@ them to a backup directory, and syncs BetterTouchTool settings bidirectionally.
 import subprocess
 import re
 import os
+import sys
+import shutil
 from pathlib import Path
 
 # Config
@@ -15,8 +17,31 @@ HOME = Path.home()
 DOTFILES = HOME / "git" / "dotfiles"
 BACKUP_DIR = HOME / "dotfiles-backup"
 
+# Find stow executable - check Homebrew paths for macOS
+def find_stow():
+    """Find the stow executable, checking common paths including Homebrew."""
+    # First try which/shutil.which with current PATH
+    stow_path = shutil.which("stow")
+    if stow_path:
+        return stow_path
+
+    # If not found, check common Homebrew paths on macOS
+    if sys.platform == "darwin":
+        homebrew_paths = [
+            "/opt/homebrew/bin/stow",  # Apple Silicon
+            "/usr/local/bin/stow",     # Intel Mac
+        ]
+        for path in homebrew_paths:
+            if os.path.exists(path):
+                return path
+
+    # Fall back to just "stow" and let subprocess fail with a clear error
+    return "stow"
+
+STOW_EXECUTABLE = find_stow()
+
 STOW_CMD = [
-    "stow",
+    STOW_EXECUTABLE,
     "-v",
     "--dotfiles",
     f"--target={HOME}",
