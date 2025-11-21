@@ -167,6 +167,53 @@ function gtag() {
   git push --tags
 }
 
+# if you've committed to the wrong branch, this will help you fix it
+function wrong-branch() {
+    
+    # Get current branch name
+    local old_branch=$(git symbolic-ref --short HEAD)
+    
+    # Check if there are unpushed commits
+    local unpushed_count=$(git rev-list --count @{u}.. 2>/dev/null)
+    if [[ $? -ne 0 ]]; then
+        echo "Error: No upstream branch found. This might be a new branch that hasn't been pushed yet."
+        echo "Current branch: $old_branch"
+        read "correct_branch?Enter the correct branch name: "
+    elif [[ $unpushed_count -eq 0 ]]; then
+        echo "No unpushed commits found on branch '$old_branch'."
+        return 1
+    else
+        echo "Found $unpushed_count unpushed commit(s) on branch '$old_branch'."
+        read "correct_branch?Enter the correct branch name: "
+    fi
+    
+    # Validate input
+    if [[ -z "$correct_branch" ]]; then
+        echo "No branch name provided. Aborting."
+        return 1
+    fi
+    
+    # Create new branch with correct name from current position
+    echo "Creating new branch '$correct_branch' with your commits..."
+    git branch "$correct_branch" || { echo "Error creating branch"; return 1; }
+    
+    # Switch to new branch
+    echo "Switching to '$correct_branch'..."
+    git checkout "$correct_branch" || { echo "Error switching branches"; return 1; }
+    
+    # Ask if user wants to reset the old branch
+    echo ""
+    read "reset_old?Do you want to reset '$old_branch' to match remote? (y/n): "
+    if [[ "$reset_old" == "y" ]]; then
+        git checkout "$old_branch" || { echo "Error switching back to old branch"; return 1; }
+        git reset --hard @{u} || { echo "Error resetting branch"; return 1; }
+        git checkout "$correct_branch"
+        echo "Successfully moved commits to '$correct_branch' and reset '$old_branch'."
+    else
+        echo "Successfully moved commits to '$correct_branch'. Old branch '$old_branch' left unchanged."
+    fi
+}
+
 # Note editing
 # edit note file
 vn() {
