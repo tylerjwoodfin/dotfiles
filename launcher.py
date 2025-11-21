@@ -98,7 +98,8 @@ class ZshParser:
     def _parse_functions(self, content: str):
         """Parse function definitions and their comments."""
         # Pattern to match function definitions with optional comments
-        function_pattern = r"(?:^#\s*(.+)\s*$)?\s*(?:function\s+)?(\w+)\s*\(\s*\)\s*\{"
+        # Note: [\w-]+ allows hyphens in function names
+        function_pattern = r"(?:^#\s*([^\n]+)\s*$)?\s*(?:function\s+)?([\w-]+)\s*\(\s*\)\s*\{"
 
         for match in re.finditer(function_pattern, content, re.MULTILINE):
             comment = match.group(1) or ""

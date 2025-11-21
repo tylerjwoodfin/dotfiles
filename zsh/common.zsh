@@ -167,6 +167,76 @@ function gtag() {
   git push --tags
 }
 
+# if you've committed to the wrong branch, this will help you fix it
+function wrong-branch() {
+    
+    # Get current branch name
+    local old_branch=$(git symbolic-ref --short HEAD)
+    
+    # Check if upstream branch exists
+    if git rev-parse --abbrev-ref @{u} >/dev/null 2>&1; then
+        # Upstream exists, count commits ahead of upstream
+        local unpushed_count=$(git rev-list --count @{u}..HEAD)
+        if [[ $unpushed_count -eq 0 ]]; then
+            echo "No unpushed commits found on branch '$old_branch'."
+            return 1
+        else
+            echo "Found $unpushed_count unpushed commit(s) on branch '$old_branch'."
+            read "correct_branch?Enter the correct branch name: "
+        fi
+    else
+        # No upstream branch - check if there are any commits on this branch
+        # by comparing to main/master
+        local base_branch=""
+        if git rev-parse --verify main >/dev/null 2>&1; then
+            base_branch="main"
+        elif git rev-parse --verify master >/dev/null 2>&1; then
+            base_branch="master"
+        fi
+        
+        if [[ -n "$base_branch" ]]; then
+            local commit_count=$(git rev-list --count ${base_branch}..HEAD 2>/dev/null || echo "0")
+            if [[ $commit_count -eq 0 ]]; then
+                echo "No commits found on branch '$old_branch' (compared to $base_branch)."
+                return 1
+            else
+                echo "Found $commit_count commit(s) on branch '$old_branch' (not on $base_branch)."
+                read "correct_branch?Enter the correct branch name: "
+            fi
+        else
+            # Can't determine base branch, just ask
+            echo "Branch '$old_branch' has no upstream. Unable to determine commit count."
+            read "correct_branch?Enter the correct branch name: "
+        fi
+    fi
+    
+    # Validate input
+    if [[ -z "$correct_branch" ]]; then
+        echo "No branch name provided. Aborting."
+        return 1
+    fi
+    
+    # Create new branch with correct name from current position
+    echo "Creating new branch '$correct_branch' with your commits..."
+    git branch "$correct_branch" || { echo "Error creating branch"; return 1; }
+    
+    # Switch to new branch
+    echo "Switching to '$correct_branch'..."
+    git checkout "$correct_branch" || { echo "Error switching branches"; return 1; }
+    
+    # Ask if user wants to reset the old branch
+    echo ""
+    read "reset_old?Do you want to reset '$old_branch' to match remote? (y/n): "
+    if [[ "$reset_old" == "y" ]]; then
+        git checkout "$old_branch" || { echo "Error switching back to old branch"; return 1; }
+        git reset --hard @{u} || { echo "Error resetting branch"; return 1; }
+        git checkout "$correct_branch"
+        echo "Successfully moved commits to '$correct_branch' and reset '$old_branch'."
+    else
+        echo "Successfully moved commits to '$correct_branch'. Old branch '$old_branch' left unchanged."
+    fi
+}
+
 # Note editing
 # edit note file
 vn() {
