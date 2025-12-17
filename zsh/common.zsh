@@ -454,7 +454,7 @@ alias cdto='cd ~/git/tools' # tools
 alias cdw='cd ~/git/tyler.cloud' # tyler.cloud
 alias cdbe='cd ~/git/backend' # backend
 alias cds='cd ~/syncthing' # syncthing
-alias cdd='cd ~/docker' # docker
+alias cdd='cd ~/git/docker' # docker
 
 # Git aliases
 alias glog='git log --graph --pretty=format:"%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset" --abbrev-commit --date=relative' # git log
