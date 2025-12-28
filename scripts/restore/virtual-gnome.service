@@ -1,0 +1,14 @@
+[Unit]
+Description=Headless GNOME Desktop with RustDesk on :99
+After=network.target systemd-user-sessions.service
+
+[Service]
+User=tyler
+Environment=DISPLAY=:99
+ExecStartPre=/bin/bash -c 'Xvfb :99 -screen 0 2560x1440x24 & sleep 1'
+ExecStart=/bin/bash -c 'sleep 2 && dbus-run-session gnome-session & sleep 10 && /usr/lib/rustdesk/rustdesk'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+

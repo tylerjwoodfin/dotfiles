@@ -76,4 +76,4 @@ cache.json
 
 # logs
 *.log
-*/log/*
+*/log/*scripts/.setup_config
