@@ -103,12 +103,3 @@ vim.keymap.set('n', '<leader>dy', function()
   vim.cmd(start .. ',' .. (finish - 1) .. 'delete')
 end, { noremap = true, silent = true })
 
--- <leader># to check/uncheck items in packing list
-vim.keymap.set("n", "<leader>3", function()
-  vim.cmd([[s/^    /    # /]])
-end, { noremap = true, silent = true })
-
--- <leader>x to use x instead of # in packing list
-vim.keymap.set("n", "<leader>x", function()
-  vim.cmd([[s/^    /    x /]])
-end, { noremap = true, silent = true })
