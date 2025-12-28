@@ -1,0 +1,13 @@
+[Unit]
+Description=Proton WireGuard VPN inside vpnns
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/start-proton-vpnns.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+

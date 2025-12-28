@@ -1,0 +1,13 @@
+[Unit]
+Description=Monitor ProtonVPN and apply MongoDB routes
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/mongodb-vpn-watcher.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
