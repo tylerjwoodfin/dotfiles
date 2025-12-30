@@ -89,6 +89,23 @@
 
     - name: Install Ubuntu CLI tools
       block:
+        - name: Check if snap Docker is installed
+          command: snap list docker
+          register: snap_docker_check
+          failed_when: false
+          changed_when: false
+          become: false
+          tags: cli
+
+        - name: Remove snap Docker if installed
+          shell: snap remove docker
+          become: false
+          failed_when: false
+          when: 
+            - ansible_facts['os_family'] == "Debian"
+            - snap_docker_check.rc == 0
+          tags: cli
+
         - name: Remove conflicting containerd package (if exists)
           apt:
             name: containerd
@@ -107,6 +124,7 @@
               - jq
               - make
               - docker.io
+              - docker-compose-plugin
               - nnn
               - syncthing
               - borgbackup
@@ -126,6 +144,50 @@
               - inotify-tools
             state: present
             update_cache: yes
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: cli
+
+        - name: Check if docker group exists
+          command: getent group docker
+          register: docker_group_check
+          failed_when: false
+          changed_when: false
+          become: false
+          tags: cli
+
+        - name: Create docker group if it doesn't exist
+          group:
+            name: docker
+            state: present
+          become: true
+          when: docker_group_check.rc != 0
+          tags: cli
+
+        - name: Add user to docker group
+          user:
+            name: "{{ lookup('env', 'USER') }}"
+            groups: docker
+            append: yes
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: cli
+
+        - name: Ensure Docker socket has correct permissions
+          file:
+            path: /var/run/docker.sock
+            owner: root
+            group: docker
+            mode: '0660'
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: cli
+
+        - name: Ensure Docker service is enabled and started
+          systemd:
+            name: docker
+            state: started
+            enabled: yes
           become: true
           when: ansible_facts['os_family'] == "Debian"
           tags: cli
@@ -397,13 +459,12 @@
           tags: python
 
     - name: Ensure pipx is in PATH
-      ansible.builtin.shell: |
-        pipx_path=$(pipx environment | grep -o 'PIPX_HOME=.*' | cut -d'=' -f2)
-        echo "export PATH=\"$pipx_path/bin:$PATH\"" >> ~/.zshrc
-        source ~/.zshrc
-      args:
-        executable: /bin/zsh
-      changed_when: false
+      ansible.builtin.blockinfile:
+        path: "{{ lookup('env', 'HOME') }}/.zshrc"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - PIPX"
+        block: |
+          export PATH="$HOME/.local/bin:$PATH"
+        create: yes
       become: false
       tags: python
 
@@ -802,6 +863,14 @@
     # 🔹 Install NVM and Node.js (for Immich script)
     - name: Install NVM and Node.js
       block:
+        - name: Ensure native curl is installed (not snap)
+          apt:
+            name: curl
+            state: present
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: nvm
+
         - name: Check if NVM is already installed
           stat:
             path: "{{ lookup('env', 'HOME') }}/.nvm"
@@ -811,15 +880,39 @@
 
         - name: Install NVM
           shell: |
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+            export PATH="/usr/bin:/bin:$PATH"
+            /usr/bin/curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
           args:
             executable: /bin/bash
           become: false
           when: not nvm_dir.stat.exists
           tags: nvm
 
+        - name: Ensure NVM cache directory has correct permissions
+          file:
+            path: "{{ lookup('env', 'HOME') }}/.nvm/.cache"
+            state: directory
+            mode: '0755'
+            owner: "{{ lookup('env', 'USER') }}"
+            recurse: yes
+          become: false
+          tags: nvm
+
+        - name: Ensure NVM is configured in .zshrc
+          ansible.builtin.blockinfile:
+            path: "{{ lookup('env', 'HOME') }}/.zshrc"
+            marker: "# {mark} ANSIBLE MANAGED BLOCK - NVM"
+            block: |
+              export NVM_DIR="$HOME/.nvm"
+              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+              [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            create: yes
+          become: false
+          tags: nvm
+
         - name: Source NVM and install Node.js v20.18.0
           shell: |
+            export PATH="/usr/bin:/bin:$PATH"
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm install 20.18.0
@@ -828,6 +921,8 @@
           args:
             executable: /bin/bash
           become: false
+          environment:
+            PATH: "/usr/bin:/bin:{{ ansible_env.PATH }}"
           tags: nvm
 
       when: ansible_facts['os_family'] == "Debian"
@@ -1002,7 +1097,7 @@
 
         - name: Restore docker repository from rainbow
           ansible.builtin.shell: |
-            rsync -av --exclude='.git' tyler@{{ rainbow_ip }}:~/git/docker/ {{ lookup('env', 'HOME') }}/git/docker/
+            rsync -av --exclude='.git' --rsync-path="sudo rsync" tyler@{{ rainbow_ip }}:~/git/docker/ {{ lookup('env', 'HOME') }}/git/docker/ || true
           become: false
           when: not docker_dir.stat.exists
           tags: gitea-restore
@@ -1216,3 +1311,30 @@
           fi
         create: yes
       tags: zshrc
+
+    # 🔹 Configure Neovim
+    - name: Configure Neovim init.lua
+      block:
+        - name: Ensure .config/nvim directory exists
+          ansible.builtin.file:
+            path: "{{ lookup('env', 'HOME') }}/.config/nvim"
+            state: directory
+            mode: '0755'
+            owner: "{{ lookup('env', 'USER') }}"
+          become: false
+          tags: nvim
+
+        - name: Symlink Neovim init.lua configuration
+          ansible.builtin.file:
+            src: "{{ lookup('env', 'HOME') }}/git/dotfiles/.config/nvim/init.lua"
+            dest: "{{ lookup('env', 'HOME') }}/.config/nvim/init.lua"
+            state: link
+            force: yes
+          become: false
+          tags: nvim
+
+      rescue:
+        - name: Log Neovim configuration failure
+          debug:
+            msg: "⚠️ Neovim configuration failed, continuing."
+          tags: nvim
