@@ -26,6 +26,11 @@ alias sudo='sudo '
 # Editor configuration
 export EDITOR='nvim'
 
+# Ensure cursor is visible (fix for terminals that hide cursor)
+if [[ -t 1 ]]; then
+    tput cnorm 2>/dev/null || printf '\033[?25h' >&2
+fi
+
 # Git configuration
 git config --global push.default current
 

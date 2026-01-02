@@ -160,6 +160,7 @@ OPTIONS+=("ssh" "Setup SSH (does not overwrite existing keys)" OFF)
 OPTIONS+=("git" "Setup Git (user email, .gitignore, etc.)" OFF)
 OPTIONS+=("zsh" "Set the default shell to ZSH" OFF)
 OPTIONS+=("zshrc" "Add common.zsh to .zshrc" OFF)
+OPTIONS+=("nvim" "Symlink Neovim init.lua configuration" OFF)
 
 # Optional services
 OPTIONS+=("pihole" "Install Pihole (overwrites!)" OFF)
