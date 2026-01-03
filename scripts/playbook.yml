@@ -89,6 +89,23 @@
 
     - name: Install Ubuntu CLI tools
       block:
+        - name: Check if snap Docker is installed
+          command: snap list docker
+          register: snap_docker_check
+          failed_when: false
+          changed_when: false
+          become: false
+          tags: cli
+
+        - name: Remove snap Docker if installed
+          shell: snap remove docker
+          become: false
+          failed_when: false
+          when: 
+            - ansible_facts['os_family'] == "Debian"
+            - snap_docker_check.rc == 0
+          tags: cli
+
         - name: Remove conflicting containerd package (if exists)
           apt:
             name: containerd
@@ -107,6 +124,7 @@
               - jq
               - make
               - docker.io
+              - docker-compose-plugin
               - nnn
               - syncthing
               - borgbackup
@@ -116,8 +134,60 @@
               - ufw
               - stow
               - pylint
+              - qbittorrent-nox
+              - transmission-daemon
+              - plexmediaserver
+              - redis-server
+              - openvpn
+              - wireguard
+              - wireguard-tools
+              - inotify-tools
             state: present
             update_cache: yes
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: cli
+
+        - name: Check if docker group exists
+          command: getent group docker
+          register: docker_group_check
+          failed_when: false
+          changed_when: false
+          become: false
+          tags: cli
+
+        - name: Create docker group if it doesn't exist
+          group:
+            name: docker
+            state: present
+          become: true
+          when: docker_group_check.rc != 0
+          tags: cli
+
+        - name: Add user to docker group
+          user:
+            name: "{{ lookup('env', 'USER') }}"
+            groups: docker
+            append: yes
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: cli
+
+        - name: Ensure Docker socket has correct permissions
+          file:
+            path: /var/run/docker.sock
+            owner: root
+            group: docker
+            mode: '0660'
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: cli
+
+        - name: Ensure Docker service is enabled and started
+          systemd:
+            name: docker
+            state: started
+            enabled: yes
           become: true
           when: ansible_facts['os_family'] == "Debian"
           tags: cli
@@ -389,13 +459,12 @@
           tags: python
 
     - name: Ensure pipx is in PATH
-      ansible.builtin.shell: |
-        pipx_path=$(pipx environment | grep -o 'PIPX_HOME=.*' | cut -d'=' -f2)
-        echo "export PATH=\"$pipx_path/bin:$PATH\"" >> ~/.zshrc
-        source ~/.zshrc
-      args:
-        executable: /bin/zsh
-      changed_when: false
+      ansible.builtin.blockinfile:
+        path: "{{ lookup('env', 'HOME') }}/.zshrc"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - PIPX"
+        block: |
+          export PATH="$HOME/.local/bin:$PATH"
+        create: yes
       become: false
       tags: python
 
@@ -646,6 +715,590 @@
             msg: "⚠️ Failed to set Zsh as the default shell, continuing."
           tags: zsh
 
+    # 🔹 Install Ollama
+    - name: Install Ollama
+      block:
+        - name: Check if Ollama is already installed
+          stat:
+            path: /usr/local/bin/ollama
+          register: ollama_binary
+          tags: ollama
+
+        - name: Download and install Ollama
+          shell: |
+            curl -fsSL https://ollama.com/install.sh | sh
+          become: true
+          when: not ollama_binary.stat.exists
+          tags: ollama
+
+        - name: Create ollama user and group
+          user:
+            name: ollama
+            group: ollama
+            system: yes
+            shell: /bin/false
+            create_home: no
+          become: true
+          when: not ollama_binary.stat.exists
+          tags: ollama
+
+        - name: Create Ollama systemd service
+          copy:
+            content: |
+              [Unit]
+              Description=Ollama Service
+              After=network-online.target
+
+              [Service]
+              ExecStart=/usr/local/bin/ollama serve
+              User=ollama
+              Group=ollama
+              Restart=always
+              RestartSec=3
+              Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/tyler/.local/bin"
+
+              [Install]
+              WantedBy=default.target
+            dest: /etc/systemd/system/ollama.service
+            mode: '0644'
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: ollama
+
+        - name: Enable and start Ollama service
+          systemd:
+            name: ollama
+            state: started
+            enabled: yes
+            daemon_reload: yes
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: ollama
+
+      when: ansible_facts['os_family'] == "Debian"
+      tags: ollama
+      rescue:
+        - name: Log Ollama installation failure
+          debug:
+            msg: "⚠️ Ollama installation failed, continuing."
+          tags: ollama
+
+    # 🔹 Install Cloudflared
+    - name: Install Cloudflared
+      block:
+        - name: Check if Cloudflared is already installed
+          stat:
+            path: /usr/local/bin/cloudflared
+          register: cloudflared_binary
+          tags: cloudflared
+
+        - name: Download Cloudflared
+          get_url:
+            url: https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+            dest: /tmp/cloudflared
+            mode: '0755'
+          become: true
+          when: not cloudflared_binary.stat.exists
+          tags: cloudflared
+
+        - name: Install Cloudflared binary
+          copy:
+            src: /tmp/cloudflared
+            dest: /usr/local/bin/cloudflared
+            mode: '0755'
+            remote_src: yes
+          become: true
+          when: not cloudflared_binary.stat.exists
+          tags: cloudflared
+
+        - name: Create Cloudflared systemd service
+          copy:
+            content: |
+              [Unit]
+              Description=cloudflared
+              After=network-online.target
+              Wants=network-online.target
+
+              [Service]
+              TimeoutStartSec=0
+              Type=notify
+              ExecStart=/usr/local/bin/cloudflared --no-autoupdate tunnel run --token {{ cloudflared_token | default('YOUR_TOKEN_HERE') }}
+              Restart=on-failure
+              RestartSec=5s
+
+              [Install]
+              WantedBy=multi-user.target
+            dest: /etc/systemd/system/cloudflared.service
+            mode: '0644'
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: cloudflared
+
+        - name: Note about Cloudflared token configuration
+          debug:
+            msg: |
+              ⚠️ IMPORTANT: Cloudflared configuration required:
+              - Edit /etc/systemd/system/cloudflared.service and replace YOUR_TOKEN_HERE with your tunnel token
+              - OR if using config files, restore /etc/cloudflared/*.yml config files
+              - Template services (cloudflared@gitea.service, cloudflared@immich.service) require config files in /etc/cloudflared/
+          tags: cloudflared
+
+        - name: Enable Cloudflared service (user must configure token first)
+          systemd:
+            name: cloudflared
+            enabled: yes
+            daemon_reload: yes
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: cloudflared
+
+      when: ansible_facts['os_family'] == "Debian"
+      tags: cloudflared
+      rescue:
+        - name: Log Cloudflared installation failure
+          debug:
+            msg: "⚠️ Cloudflared installation failed, continuing."
+          tags: cloudflared
+
+    # 🔹 Install NVM and Node.js (for Immich script)
+    - name: Install NVM and Node.js
+      block:
+        - name: Ensure native curl is installed (not snap)
+          apt:
+            name: curl
+            state: present
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: nvm
+
+        - name: Check if NVM is already installed
+          stat:
+            path: "{{ lookup('env', 'HOME') }}/.nvm"
+          register: nvm_dir
+          become: false
+          tags: nvm
+
+        - name: Install NVM
+          shell: |
+            export PATH="/usr/bin:/bin:$PATH"
+            /usr/bin/curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+          args:
+            executable: /bin/bash
+          become: false
+          when: not nvm_dir.stat.exists
+          tags: nvm
+
+        - name: Ensure NVM cache directory has correct permissions
+          file:
+            path: "{{ lookup('env', 'HOME') }}/.nvm/.cache"
+            state: directory
+            mode: '0755'
+            owner: "{{ lookup('env', 'USER') }}"
+            recurse: yes
+          become: false
+          tags: nvm
+
+        - name: Ensure NVM is configured in .zshrc
+          ansible.builtin.blockinfile:
+            path: "{{ lookup('env', 'HOME') }}/.zshrc"
+            marker: "# {mark} ANSIBLE MANAGED BLOCK - NVM"
+            block: |
+              export NVM_DIR="$HOME/.nvm"
+              [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+              [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            create: yes
+          become: false
+          tags: nvm
+
+        - name: Source NVM and install Node.js v20.18.0
+          shell: |
+            export PATH="/usr/bin:/bin:$PATH"
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install 20.18.0
+            nvm use 20.18.0
+            nvm alias default 20.18.0
+          args:
+            executable: /bin/bash
+          become: false
+          environment:
+            PATH: "/usr/bin:/bin:{{ ansible_env.PATH }}"
+          tags: nvm
+
+      when: ansible_facts['os_family'] == "Debian"
+      tags: nvm
+      rescue:
+        - name: Log NVM installation failure
+          debug:
+            msg: "⚠️ NVM installation failed, continuing."
+          tags: nvm
+
+    # 🔹 Configure Immich Upload Service
+    - name: Configure Immich Upload Service
+      block:
+        - name: Ensure backend/log-backup directory exists
+          ansible.builtin.file:
+            path: "{{ lookup('env', 'HOME') }}/git/backend/log-backup/{{ ansible_hostname }}"
+            state: directory
+            mode: '0755'
+            owner: "{{ lookup('env', 'USER') }}"
+          become: false
+          tags: immich
+
+        - name: Create Immich Upload systemd service
+          copy:
+            content: |
+              [Unit]
+              Description=Automatically upload photos from Syncthing
+
+              [Service]
+              ExecStart=/bin/zsh {{ lookup('env', 'HOME') }}/git/tools/immich/immich.sh
+              Restart=always
+              RestartSec=5
+              User={{ lookup('env', 'USER') }}
+              Environment=HOME={{ lookup('env', 'HOME') }}
+              Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ lookup('env', 'HOME') }}/.nvm/versions/node/v20.18.0/bin
+              Environment=NVM_DIR={{ lookup('env', 'HOME') }}/.nvm
+              Environment=ZDOTDIR={{ lookup('env', 'HOME') }}
+              StandardOutput=append:{{ lookup('env', 'HOME') }}/git/backend/log-backup/{{ ansible_hostname }}/immich.log
+              StandardError=append:{{ lookup('env', 'HOME') }}/git/backend/log-backup/{{ ansible_hostname }}/immich.log
+
+              [Install]
+              WantedBy=multi-user.target
+            dest: /etc/systemd/system/immich-upload.service
+            mode: '0644'
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: immich
+
+        - name: Enable Immich Upload service
+          systemd:
+            name: immich-upload
+            enabled: yes
+            daemon_reload: yes
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: immich
+
+      when: ansible_facts['os_family'] == "Debian"
+      tags: immich
+      rescue:
+        - name: Log Immich service configuration failure
+          debug:
+            msg: "⚠️ Immich service configuration failed, continuing."
+          tags: immich
+
+    # 🔹 Start Docker Containers
+    - name: Start Docker Containers
+      block:
+        - name: Check if docker directory exists
+          stat:
+            path: "{{ lookup('env', 'HOME') }}/git/docker"
+          register: docker_dir
+          become: false
+          tags: docker
+
+        - name: Find docker-compose files in docker directory
+          find:
+            paths: "{{ lookup('env', 'HOME') }}/git/docker"
+            patterns:
+              - "docker-compose.yml"
+              - "docker-compose.yaml"
+            file_type: file
+            recurse: yes
+          register: compose_files
+          become: false
+          when: docker_dir.stat.exists
+          tags: docker
+
+        - name: Start Docker containers from compose files
+          shell: |
+            cd "{{ item.dir }}"
+            docker compose up -d
+          args:
+            chdir: "{{ item.dir }}"
+          become: false
+          loop: "{{ compose_files.files | map(attribute='path') | map('dirname') | list | unique }}"
+          when:
+            - docker_dir.stat.exists
+            - compose_files.matched > 0
+          tags: docker
+          ignore_errors: yes
+
+        - name: Note about Docker containers
+          debug:
+            msg: |
+              ℹ️ Docker containers:
+              {% if docker_dir.stat.exists %}
+              - Found docker-compose files in ~/git/docker
+              - Attempted to start containers
+              {% else %}
+              - ~/git/docker directory does not exist, skipping container startup
+              - Containers can be started manually after cloning repos
+              {% endif %}
+          tags: docker
+
+      when: ansible_facts['os_family'] == "Debian"
+      tags: docker
+      rescue:
+        - name: Log Docker container startup failure
+          debug:
+            msg: "⚠️ Docker container startup failed, continuing. Containers can be started manually."
+          tags: docker
+
+    # 🔹 Restore Gitea Repositories (backend and docker) from rainbow
+    - name: Restore Gitea Repositories from rainbow
+      block:
+        - name: Check if backend directory exists
+          stat:
+            path: "{{ lookup('env', 'HOME') }}/git/backend"
+          register: backend_dir
+          become: false
+          tags: gitea-restore
+
+        - name: Check if docker directory exists
+          stat:
+            path: "{{ lookup('env', 'HOME') }}/git/docker"
+          register: docker_dir
+          become: false
+          tags: gitea-restore
+
+        - name: Get rainbow IP from variable or prompt
+          set_fact:
+            rainbow_ip: "{{ rainbow_ip | default('') }}"
+          tags: gitea-restore
+
+        - name: Prompt for rainbow IP if not provided
+          pause:
+            prompt: "Please Enter rainbow's IP address."
+          register: rainbow_ip_input
+          when: rainbow_ip == ''
+          tags: gitea-restore
+
+        - name: Set rainbow IP from input
+          set_fact:
+            rainbow_ip: "{{ rainbow_ip_input.user_input }}"
+          when: rainbow_ip == '' and rainbow_ip_input.user_input is defined
+          tags: gitea-restore
+
+        - name: Fail if rainbow IP is not set
+          fail:
+            msg: "Rainbow IP address is required for gitea-restore"
+          when: rainbow_ip == '' or rainbow_ip is not defined
+          tags: gitea-restore
+
+        - name: Restore backend repository from rainbow
+          ansible.builtin.shell: |
+            rsync -av --exclude='.git' tyler@{{ rainbow_ip }}:~/git/backend/ {{ lookup('env', 'HOME') }}/git/backend/
+          become: false
+          when: not backend_dir.stat.exists
+          tags: gitea-restore
+          ignore_errors: yes
+
+        - name: Restore docker repository from rainbow
+          ansible.builtin.shell: |
+            rsync -av --exclude='.git' --rsync-path="sudo rsync" tyler@{{ rainbow_ip }}:~/git/docker/ {{ lookup('env', 'HOME') }}/git/docker/ || true
+          become: false
+          when: not docker_dir.stat.exists
+          tags: gitea-restore
+          ignore_errors: yes
+
+        - name: Initialize git repo for backend after restore
+          ansible.builtin.shell: |
+            cd {{ lookup('env', 'HOME') }}/git/backend
+            if [ ! -d .git ]; then
+              git init
+              git remote add origin ssh://git@192.168.1.101:222/voice2749/backend.git || true
+              git branch -M master || true
+            else
+              git remote set-url origin ssh://git@192.168.1.101:222/voice2749/backend.git || true
+            fi
+          become: false
+          when: backend_dir.stat.exists
+          tags: gitea-restore
+          ignore_errors: yes
+
+        - name: Initialize git repo for docker after restore
+          ansible.builtin.shell: |
+            cd {{ lookup('env', 'HOME') }}/git/docker
+            if [ ! -d .git ]; then
+              git init
+              git remote add origin ssh://git@192.168.1.101:222/voice2749/docker.git || true
+              git branch -M master || true
+            else
+              git remote set-url origin ssh://git@192.168.1.101:222/voice2749/docker.git || true
+            fi
+          become: false
+          when: docker_dir.stat.exists
+          tags: gitea-restore
+          ignore_errors: yes
+
+        - name: Note about Gitea repositories
+          debug:
+            msg: |
+              ℹ️ Gitea repositories (backend and docker):
+              {% if backend_dir.stat.exists %}
+              - backend directory exists
+              {% else %}
+              - Restored backend from rainbow
+              {% endif %}
+              {% if docker_dir.stat.exists %}
+              - docker directory exists
+              {% else %}
+              - Restored docker from rainbow
+              {% endif %}
+              - After Gitea container is started, you can pull updates with: git pull
+          tags: gitea-restore
+
+      when: ansible_facts['os_family'] == "Debian"
+      tags: gitea-restore
+      rescue:
+        - name: Log Gitea restore failure
+          debug:
+            msg: "⚠️ Failed to restore from rainbow. You may need to manually restore: rsync -av rainbow:~/git/backend ~/git/ && rsync -av rainbow:~/git/docker ~/git/"
+          tags: gitea-restore
+
+    # 🔹 Configure MongoDB Atlas Routing Services (for ProtonVPN split-tunneling)
+    - name: Configure MongoDB Atlas Routing Services
+      block:
+        - name: Install MongoDB routing scripts
+          copy:
+            src: "{{ playbook_dir }}/restore/{{ item }}"
+            dest: "/usr/local/bin/{{ item }}"
+            mode: '0755'
+          loop:
+            - mongodb-routes.sh
+            - mongodb-split-tunnel.sh
+            - mongodb-vpn-watcher.sh
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: mongodb-routes
+
+        - name: Install MongoDB systemd services
+          copy:
+            src: "{{ playbook_dir }}/restore/{{ item }}"
+            dest: "/etc/systemd/system/{{ item }}"
+            mode: '0644'
+          loop:
+            - mongodb-routes-monitor.service
+            - mongodb-split-tunnel.service
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: mongodb-routes
+
+        - name: Enable and start MongoDB routing services
+          systemd:
+            name: "{{ item }}"
+            enabled: yes
+            state: started
+            daemon_reload: yes
+          become: true
+          loop:
+            - mongodb-routes-monitor
+            - mongodb-split-tunnel
+          when: ansible_facts['os_family'] == "Debian"
+          tags: mongodb-routes
+
+        - name: Note about MongoDB Atlas routing
+          debug:
+            msg: |
+              ℹ️ MongoDB Atlas routing services configured:
+              - Installed scripts to /usr/local/bin/
+              - Installed systemd services
+              - Routes MongoDB Atlas IPs (89.192.9.46, 89.192.9.70, 89.192.9.80) to bypass ProtonVPN
+          tags: mongodb-routes
+
+      when: ansible_facts['os_family'] == "Debian"
+      tags: mongodb-routes
+      rescue:
+        - name: Log MongoDB routes configuration failure
+          debug:
+            msg: "⚠️ MongoDB routes configuration failed, continuing."
+          tags: mongodb-routes
+
+    # 🔹 Restore Additional Custom Services
+    - name: Restore Additional Custom Services
+      block:
+        - name: Install additional service scripts
+          copy:
+            src: "{{ playbook_dir }}/restore/{{ item }}"
+            dest: "/usr/local/bin/{{ item }}"
+            mode: '0755'
+          loop:
+            - start-proton-vpnns.sh
+            - vpnns-setup.sh
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: restore-services
+          ignore_errors: yes
+
+        - name: Install additional systemd services
+          copy:
+            src: "{{ playbook_dir }}/restore/{{ item }}"
+            dest: "/etc/systemd/system/{{ item }}"
+            mode: '0644'
+          loop:
+            - hbbr.service
+            - rustdeskrelay.service
+            - rustdesksignal.service
+            - cloudflared-update.service
+            - qbittorrent-vpnns.service
+            - proton-vpnns.service
+            - vpnns-init.service
+            - virtual-gnome.service
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: restore-services
+          ignore_errors: yes
+
+        - name: Create required directories
+          file:
+            path: "{{ item }}"
+            state: directory
+            mode: '0755'
+          loop:
+            - /var/log/rustdesk
+            - /etc/netns/vpnns
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: restore-services
+          ignore_errors: yes
+
+        - name: Note about additional services
+          debug:
+            msg: |
+              ℹ️ Additional custom services restored:
+              - RustDesk services (hbbr, relay, signal)
+              - Cloudflared update service
+              - ProtonVPN namespace services (vpnns-init, proton-vpnns)
+              - qBittorrent VPN namespace service
+              - Virtual GNOME service
+              
+              ⚠️ Manual steps required:
+              - Install RustDesk binaries (hbbr/hbbs) to /usr/local/bin/ or /opt/rustdesk/
+              - Restore /root/.config/rustdesk/id_ed25519 (RustDesk key)
+              - Restore /etc/wireguard/proton.wg (ProtonVPN WireGuard config)
+              - Enable/start services in this order:
+                1. vpnns-init (must be enabled/started first for VPN namespace)
+                2. proton-vpnns (requires vpnns-init)
+                3. qbittorrent-vpnns (requires proton-vpnns)
+                4. rustdeskrelay (if using /opt/rustdesk/hbbr)
+                5. rustdesksignal (if using /opt/rustdesk/hbbs)
+                6. hbbr (if using /usr/local/bin/hbbr)
+                7. cloudflared-update (optional, auto-updates cloudflared)
+                8. virtual-gnome (if using headless GNOME desktop)
+                
+                Example: systemctl enable --now vpnns-init proton-vpnns qbittorrent-vpnns rustdeskrelay rustdesksignal hbbr virtual-gnome
+          tags: restore-services
+
+      when: ansible_facts['os_family'] == "Debian"
+      tags: restore-services
+      rescue:
+        - name: Log restore services failure
+          debug:
+            msg: "⚠️ Restore services configuration failed, continuing."
+          tags: restore-services
+
     # 🔹 Configure .zshrc
     - name: Ensure custom dotfiles config is in .zshrc
       ansible.builtin.blockinfile:
@@ -658,3 +1311,30 @@
           fi
         create: yes
       tags: zshrc
+
+    # 🔹 Configure Neovim
+    - name: Configure Neovim init.lua
+      block:
+        - name: Ensure .config/nvim directory exists
+          ansible.builtin.file:
+            path: "{{ lookup('env', 'HOME') }}/.config/nvim"
+            state: directory
+            mode: '0755'
+            owner: "{{ lookup('env', 'USER') }}"
+          become: false
+          tags: nvim
+
+        - name: Symlink Neovim init.lua configuration
+          ansible.builtin.file:
+            src: "{{ lookup('env', 'HOME') }}/git/dotfiles/.config/nvim/init.lua"
+            dest: "{{ lookup('env', 'HOME') }}/.config/nvim/init.lua"
+            state: link
+            force: yes
+          become: false
+          tags: nvim
+
+      rescue:
+        - name: Log Neovim configuration failure
+          debug:
+            msg: "⚠️ Neovim configuration failed, continuing."
+          tags: nvim

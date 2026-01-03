@@ -1,0 +1,13 @@
+[Unit]
+Description=Setup vpnns namespace and veth
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/vpnns-setup.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+

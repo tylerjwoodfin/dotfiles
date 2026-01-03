@@ -1,0 +1,12 @@
+[Unit]
+Description=RustDesk HBBR (Relay Server)
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/hbbr -k /root/.config/rustdesk/id_ed25519
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+

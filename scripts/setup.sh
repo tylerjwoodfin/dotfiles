@@ -2,10 +2,28 @@
 
 # Get the directory of the script
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/.setup_config"
 
 # Debug function
 debug() {
     echo "DEBUG: $1"
+}
+
+# Function to get rainbow IP from config or prompt user
+get_rainbow_ip() {
+    if [ -f "$CONFIG_FILE" ]; then
+        source "$CONFIG_FILE"
+    fi
+    
+    if [ -z "$RAINBOW_IP" ]; then
+        echo "Enter rainbow's IP address (or hostname):"
+        read -r RAINBOW_IP
+        echo "RAINBOW_IP=\"$RAINBOW_IP\"" > "$CONFIG_FILE"
+        echo "Saved rainbow IP to $CONFIG_FILE"
+    fi
+    
+    export RAINBOW_IP
+    echo "$RAINBOW_IP"
 }
 
 # Detect OS type
@@ -113,6 +131,17 @@ if [ ! -f "$SETUP_YML" ]; then
     exit 1
 fi
 
+# Add .setup_config to .gitignore if it doesn't exist
+if [ -f "$SCRIPT_DIR/../.gitignore" ]; then
+    if ! grep -q "^scripts/.setup_config$" "$SCRIPT_DIR/../.gitignore" 2>/dev/null; then
+        echo "scripts/.setup_config" >> "$SCRIPT_DIR/../.gitignore"
+    fi
+elif [ -f "$SCRIPT_DIR/.gitignore" ]; then
+    if ! grep -q "^\.setup_config$" "$SCRIPT_DIR/.gitignore" 2>/dev/null; then
+        echo ".setup_config" >> "$SCRIPT_DIR/.gitignore"
+    fi
+fi
+
 # Define checklist items with filtering based on PLATFORM
 OPTIONS=()
 
@@ -131,12 +160,21 @@ OPTIONS+=("ssh" "Setup SSH (does not overwrite existing keys)" OFF)
 OPTIONS+=("git" "Setup Git (user email, .gitignore, etc.)" OFF)
 OPTIONS+=("zsh" "Set the default shell to ZSH" OFF)
 OPTIONS+=("zshrc" "Add common.zsh to .zshrc" OFF)
+OPTIONS+=("nvim" "Symlink Neovim init.lua configuration" OFF)
 
 # Optional services
 OPTIONS+=("pihole" "Install Pihole (overwrites!)" OFF)
 OPTIONS+=("python" "Install Cabinet and Remindmail via Pipx" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("copyq" "Ubuntu: Install CopyQ (clipboard manager)" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("fail2ban" "Ubuntu: Install and configure Fail2Ban" OFF)
+[[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("ollama" "Ubuntu: Install Ollama and configure service" OFF)
+[[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("cloudflared" "Ubuntu: Install Cloudflared and configure service" OFF)
+[[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("nvm" "Ubuntu: Install NVM and Node.js v20.18.0" OFF)
+[[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("immich" "Ubuntu: Configure Immich upload service" OFF)
+[[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("docker" "Ubuntu: Start Docker containers from ~/git/docker" OFF)
+[[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("gitea-restore" "Ubuntu: Restore backend and docker repos from rainbow" OFF)
+[[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("mongodb-routes" "Ubuntu: Configure MongoDB Atlas routing (for ProtonVPN)" OFF)
+[[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("restore-services" "Ubuntu: Restore additional custom services (RustDesk, VPN, etc.)" OFF)
 
 # Additional setup
 OPTIONS+=("downloads" "Open external app download links" OFF)
@@ -183,8 +221,22 @@ if [[ "$SELECTED" == *"clone"* ]]; then
     fi
 fi
 
+# Get rainbow IP if gitea-restore tag is selected
+RAINBOW_IP=""
+if [[ "$SELECTED" == *"gitea-restore"* ]]; then
+    RAINBOW_IP=$(get_rainbow_ip)
+    export RAINBOW_IP
+fi
+
 # Run Ansible playbook with selected tags
-ansible-playbook "$SETUP_YML" --tags="$SELECTED_TAGS" --ask-become-pass
+echo ""
+echo "🔐 You will be prompted for your sudo password (for tasks requiring root privileges)"
+echo ""
+if [ -n "$RAINBOW_IP" ]; then
+    ansible-playbook "$SETUP_YML" --tags="$SELECTED_TAGS" --ask-become-pass -e "rainbow_ip=$RAINBOW_IP"
+else
+    ansible-playbook "$SETUP_YML" --tags="$SELECTED_TAGS" --ask-become-pass
+fi
 
 echo "Ansible Setup complete ✅"
 

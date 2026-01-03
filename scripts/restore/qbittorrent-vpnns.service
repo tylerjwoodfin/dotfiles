@@ -1,0 +1,16 @@
+[Unit]
+Description=qBittorrent in vpnns (ProtonVPN)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=tyler
+ExecStart=/usr/bin/ip netns exec vpnns /usr/bin/qbittorrent-nox
+Restart=on-failure
+RestartSec=5s
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_SYS_ADMIN
+AmbientCapabilities=CAP_NET_ADMIN CAP_SYS_ADMIN
+
+[Install]
+WantedBy=multi-user.target
+
