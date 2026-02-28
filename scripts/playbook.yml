@@ -499,6 +499,45 @@
           tags: python
 
 
+    # 🔹 Configure iTerm2 (macOS only)
+    - name: Configure iTerm2 to use custom preferences folder
+      block:
+        - name: Install iTerm2 via Homebrew
+          homebrew_cask:
+            name: iterm2
+            state: present
+          become: false
+          tags: iterm2
+
+        - name: Check if iTerm2 plist is a symlink (old stow setup)
+          ansible.builtin.stat:
+            path: "{{ lookup('env', 'HOME') }}/Library/Preferences/com.googlecode.iterm2.plist"
+          register: iterm2_plist_stat
+          become: false
+          tags: iterm2
+
+        - name: Remove old iTerm2 plist symlink so bootstrap can be created
+          ansible.builtin.file:
+            path: "{{ lookup('env', 'HOME') }}/Library/Preferences/com.googlecode.iterm2.plist"
+            state: absent
+          when: iterm2_plist_stat.stat.exists and iterm2_plist_stat.stat.islnk
+          become: false
+          tags: iterm2
+
+        - name: Configure iTerm2 custom preferences folder
+          ansible.builtin.shell: |
+            defaults write com.googlecode.iterm2 PrefsCustomFolder -string "{{ lookup('env', 'HOME') }}/git/dotfiles/iterm2"
+            defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+          become: false
+          tags: iterm2
+      when: ansible_facts['os_family'] == "Darwin"
+      tags: iterm2
+      rescue:
+        - name: Log iTerm2 configuration failure
+          debug:
+            msg: "⚠️ iTerm2 configuration failed, continuing."
+          tags: iterm2
+
     # 🔹 MacOS Defaults
     - name: Apply MacOS defaults
       block:
@@ -840,7 +879,7 @@
               ⚠️ IMPORTANT: Cloudflared configuration required:
               - Edit /etc/systemd/system/cloudflared.service and replace YOUR_TOKEN_HERE with your tunnel token
               - OR if using config files, restore /etc/cloudflared/*.yml config files
-              - Template services (cloudflared@gitea.service, cloudflared@immich.service) require config files in /etc/cloudflared/
+              - Template services (cloudflared@gitea.service, cloudflared@immich.service, cloudflared@affine.service) require config files in /etc/cloudflared/
           tags: cloudflared
 
         - name: Enable Cloudflared service (user must configure token first)
@@ -936,9 +975,9 @@
     # 🔹 Configure Immich Upload Service
     - name: Configure Immich Upload Service
       block:
-        - name: Ensure backend/log-backup directory exists
+        - name: Ensure syncthing/log directory exists
           ansible.builtin.file:
-            path: "{{ lookup('env', 'HOME') }}/git/backend/log-backup/{{ ansible_hostname }}"
+            path: "{{ lookup('env', 'HOME') }}/syncthing/log"
             state: directory
             mode: '0755'
             owner: "{{ lookup('env', 'USER') }}"
@@ -960,8 +999,8 @@
               Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ lookup('env', 'HOME') }}/.nvm/versions/node/v20.18.0/bin
               Environment=NVM_DIR={{ lookup('env', 'HOME') }}/.nvm
               Environment=ZDOTDIR={{ lookup('env', 'HOME') }}
-              StandardOutput=append:{{ lookup('env', 'HOME') }}/git/backend/log-backup/{{ ansible_hostname }}/immich.log
-              StandardError=append:{{ lookup('env', 'HOME') }}/git/backend/log-backup/{{ ansible_hostname }}/immich.log
+              StandardOutput=append:{{ lookup('env', 'HOME') }}/syncthing/log/immich.log
+              StandardError=append:{{ lookup('env', 'HOME') }}/syncthing/log/immich.log
 
               [Install]
               WantedBy=multi-user.target
