@@ -112,6 +112,56 @@ def get_newest_mtime(directory):
     return newest
 
 
+def configure_iterm2():
+    """
+    Configure iTerm2 to load preferences from ~/git/dotfiles/iterm2.
+    Uses iTerm2's supported custom preferences folder (not symlinked plist).
+    Only runs on macOS (Darwin).
+    """
+    if os.uname().sysname != "Darwin":
+        return None
+
+    iterm2_prefs_dir = str(DOTFILES / "iterm2")
+    if not (DOTFILES / "iterm2").exists():
+        return None
+
+    # Remove symlink if present (migration from old stow-based setup)
+    plist_path = HOME / "Library" / "Preferences" / "com.googlecode.iterm2.plist"
+    if plist_path.exists() and plist_path.is_symlink():
+        plist_path.unlink()
+
+    try:
+        subprocess.run(
+            [
+                "defaults",
+                "write",
+                "com.googlecode.iterm2",
+                "PrefsCustomFolder",
+                "-string",
+                iterm2_prefs_dir,
+            ],
+            check=True,
+            capture_output=True,
+        )
+        subprocess.run(
+            [
+                "defaults",
+                "write",
+                "com.googlecode.iterm2",
+                "LoadPrefsFromCustomFolder",
+                "-bool",
+                "true",
+            ],
+            check=True,
+            capture_output=True,
+        )
+        print("✓ iTerm2 configured to load preferences from ~/git/dotfiles/iterm2")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"✗ Failed to configure iTerm2: {e}")
+        return False
+
+
 def sync_bettertouchtool():
     """Bidirectionally sync BetterTouchTool settings based on which is newer."""
     hostname = os.uname().nodename
@@ -197,6 +247,9 @@ def main():
             print(f"  {f}")
     else:
         print("No conflicts found. Stow completed cleanly.")
+
+    # Configure iTerm2 custom preferences folder (macOS only)
+    configure_iterm2()
 
     # Sync BetterTouchTool settings if on icecream
     sync_bettertouchtool()
