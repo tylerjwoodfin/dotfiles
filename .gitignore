@@ -63,6 +63,12 @@ cache.json
 /cypress/
 /test_coverage/
 
+# BetterTouchTool SQLite databases (synced via apply_stow, not tracked)
+**/BetterTouchTool/btt_data_store*
+**/BetterTouchTool/*-shm
+**/BetterTouchTool/*-wal
+**/BetterTouchTool/*_tmp_backup*
+
 # security
 *.pem
 *.key
