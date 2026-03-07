@@ -506,7 +506,6 @@ l() {
     fi
 }
 
-
 # These are now functions, not aliases
 alias rmmsl='rmm --later' # remind later
 alias rmme='remind --edit' # edit reminders
@@ -540,6 +539,9 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
+
+# fix VS Code terminal shortcut issue - https://github.com/microsoft/vscode-docs/issues/5221
+set -o emacs
 
 # source other files - keep on the bottom
 for opt in "${DOTFILES_OPTS[@]}"; do
