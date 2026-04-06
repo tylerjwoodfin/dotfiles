@@ -400,12 +400,24 @@
           tags: clone
 
         - name: Clone repositories using SSH
-          ansible.builtin.shell: >
-            UserName=tylerjwoodfin;
-            curl -s https://api.github.com/users/$UserName/repos?per_page=1000 |
-            jq -r '.[] | select(.archived == false) | .ssh_url' | xargs -I {} git clone {}
+          ansible.builtin.shell: |
+            set -euo pipefail
+            UserName=tylerjwoodfin
+            GIT_DIR="{{ lookup('env', 'HOME') }}/git"
+            cd "$GIT_DIR"
+            urls="$(curl -fsSL "https://api.github.com/users/${UserName}/repos?per_page=100" | jq -r '.[] | select(.archived == false) | .ssh_url')"
+            while IFS= read -r url; do
+              [ -z "$url" ] && continue
+              name="${url##*/}"
+              name="${name%.git}"
+              if [ -d "$name" ]; then
+                echo "Skipping existing clone: $name"
+                continue
+              fi
+              git clone "$url"
+            done <<< "$urls"
           args:
-            chdir: "{{ lookup('env', 'HOME') }}/git"
+            executable: /bin/bash
           become: false
           tags: clone
 
