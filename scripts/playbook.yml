@@ -211,7 +211,7 @@
               - firefox
               - zettlr
               - syncthing
-              - notion
+              - affine
               - itsycal
               - hiddenbar
               - rustdesk
@@ -336,6 +336,23 @@
             state: directory
             mode: '0700'
             owner: "{{ lookup('env', 'USER') }}"
+          become: false
+          tags: ssh, clone
+
+        - name: Fetch GitHub SSH host keys
+          ansible.builtin.command: ssh-keyscan -T 10 -t rsa,ecdsa,ed25519 github.com
+          register: github_host_keys
+          changed_when: false
+          failed_when: github_host_keys.rc != 0
+          become: false
+          tags: ssh, clone
+
+        - name: Add GitHub SSH host keys to known_hosts
+          ansible.builtin.known_hosts:
+            path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
+            name: "{{ item.split()[0] }}"
+            key: "{{ item }}"
+          loop: "{{ github_host_keys.stdout_lines | reject('equalto', '') | select('match', '^[a-zA-Z0-9._-]+ ') | list }}"
           become: false
           tags: ssh, clone
 
@@ -612,7 +629,7 @@
             content: |
               # this file is empty.
               # authorized public keys are stored in ~/git/backend/authorized_keys.md.
-              # For instructions, see `NOTION/Docs/selfhosted/ssh and sftp for cloud and rainbow` for instructions.
+              # For instructions, see `Affine/Docs/selfhosted/ssh and sftp for cloud and rainbow` for instructions.
               # this notice was updated on 2025-10-07
             dest: "{{ lookup('env', 'HOME') }}/.ssh/authorized_keys"
             mode: '0644'
