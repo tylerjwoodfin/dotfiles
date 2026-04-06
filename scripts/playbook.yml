@@ -80,6 +80,10 @@
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          register: brew_cli_install
+          retries: 20
+          delay: 10
+          until: brew_cli_install is succeeded
       when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
       tags: cli
       rescue:
@@ -230,12 +234,20 @@
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          register: brew_gui_casks
+          retries: 20
+          delay: 10
+          until: brew_gui_casks is succeeded
           tags: gui
 
         - name: Install Docker Desktop for MacOS
           shell: brew install --cask docker
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          register: brew_docker_desktop
+          retries: 20
+          delay: 10
+          until: brew_docker_desktop is succeeded
           tags: gui
 
         - name: Configure NoTunes to replace Apple Music with Spotify
@@ -478,6 +490,10 @@
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          register: brew_pipx_install
+          retries: 20
+          delay: 10
+          until: brew_pipx_install is skipped or brew_pipx_install is succeeded
           tags: python
 
         - name: Install pipx via APT
@@ -537,6 +553,10 @@
             name: iterm2
             state: present
           become: false
+          register: brew_iterm2_cask
+          retries: 20
+          delay: 10
+          until: brew_iterm2_cask is succeeded
           tags: iterm2
 
         - name: Check if iTerm2 plist is a symlink (old stow setup)
