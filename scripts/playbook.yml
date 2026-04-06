@@ -45,10 +45,11 @@
     - name: Install Homebrew (macOS)
       block:
         - name: Install Homebrew
+          # Homebrew's install.sh explicitly requires Bash (not zsh).
           shell: >
-            /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           args:
-            creates: /usr/local/bin/brew
+            creates: "{{ '/opt/homebrew/bin/brew' if ansible_architecture == 'arm64' else '/usr/local/bin/brew' }}"
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
           tags: homebrew
