@@ -583,10 +583,24 @@
       vars:
         git: "{{ lookup('env', 'HOME') }}/git"
       block:
+        - name: Check for tools githooks apply script
+          ansible.builtin.stat:
+            path: "{{ git }}/tools/githooks/apply_pre-push.sh"
+          register: githooks_apply_prepush
+          become: false
+          tags: git
+
+        - name: Warn if tools repo is not cloned (githooks skipped)
+          ansible.builtin.debug:
+            msg: |
+              ⚠️ The tools repo does not appear to be cloned yet: {{ git }}/tools/githooks/apply_pre-push.sh is missing.
+              Skipping Apply Pre-push hooks. Clone tools into {{ git }}/tools (e.g. setup.sh with clone after GitHub SSH works), then re-run with --tags=git.
+          when: not githooks_apply_prepush.stat.exists
+          tags: git
+
         - name: Apply Pre-push hooks
-          shell: zsh {{ git }}/tools/githooks/apply_pre-push.sh
-          args:
-            executable: /bin/zsh
+          ansible.builtin.command: zsh "{{ git }}/tools/githooks/apply_pre-push.sh"
+          when: githooks_apply_prepush.stat.exists
           become: false
           tags: git
 
