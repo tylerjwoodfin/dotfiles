@@ -45,10 +45,11 @@
     - name: Install Homebrew (macOS)
       block:
         - name: Install Homebrew
+          # Homebrew's install.sh explicitly requires Bash (not zsh).
           shell: >
-            /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           args:
-            creates: /usr/local/bin/brew
+            creates: "{{ '/opt/homebrew/bin/brew' if ansible_architecture == 'arm64' else '/usr/local/bin/brew' }}"
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
           tags: homebrew
@@ -79,6 +80,10 @@
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          register: brew_cli_install
+          retries: 20
+          delay: 10
+          until: brew_cli_install is succeeded
       when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
       tags: cli
       rescue:
@@ -210,7 +215,7 @@
               - firefox
               - zettlr
               - syncthing
-              - notion
+              - affine
               - itsycal
               - hiddenbar
               - rustdesk
@@ -229,12 +234,20 @@
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          register: brew_gui_casks
+          retries: 20
+          delay: 10
+          until: brew_gui_casks is succeeded
           tags: gui
 
         - name: Install Docker Desktop for MacOS
           shell: brew install --cask docker
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          register: brew_docker_desktop
+          retries: 20
+          delay: 10
+          until: brew_docker_desktop is succeeded
           tags: gui
 
         - name: Configure NoTunes to replace Apple Music with Spotify
@@ -338,6 +351,23 @@
           become: false
           tags: ssh, clone
 
+        - name: Fetch GitHub SSH host keys
+          ansible.builtin.command: ssh-keyscan -T 10 -t rsa,ecdsa,ed25519 github.com
+          register: github_host_keys
+          changed_when: false
+          failed_when: github_host_keys.rc != 0
+          become: false
+          tags: ssh, clone
+
+        - name: Add GitHub SSH host keys to known_hosts
+          ansible.builtin.known_hosts:
+            path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
+            name: "{{ item.split()[0] }}"
+            key: "{{ item }}"
+          loop: "{{ github_host_keys.stdout_lines | reject('equalto', '') | select('match', '^[a-zA-Z0-9._-]+ ') | list }}"
+          become: false
+          tags: ssh, clone
+
         - name: Generate SSH key if it doesn't exist
           ansible.builtin.command: "ssh-keygen -t rsa -b 4096 -f {{ lookup('env', 'HOME') }}/.ssh/id_rsa -N ''"
           args:
@@ -382,12 +412,24 @@
           tags: clone
 
         - name: Clone repositories using SSH
-          ansible.builtin.shell: >
-            UserName=tylerjwoodfin;
-            curl -s https://api.github.com/users/$UserName/repos?per_page=1000 |
-            jq -r '.[] | select(.archived == false) | .ssh_url' | xargs -I {} git clone {}
+          ansible.builtin.shell: |
+            set -euo pipefail
+            UserName=tylerjwoodfin
+            GIT_DIR="{{ lookup('env', 'HOME') }}/git"
+            cd "$GIT_DIR"
+            urls="$(curl -fsSL "https://api.github.com/users/${UserName}/repos?per_page=100" | jq -r '.[] | select(.archived == false) | .ssh_url')"
+            while IFS= read -r url; do
+              [ -z "$url" ] && continue
+              name="${url##*/}"
+              name="${name%.git}"
+              if [ -d "$name" ]; then
+                echo "Skipping existing clone: $name"
+                continue
+              fi
+              git clone "$url"
+            done <<< "$urls"
           args:
-            chdir: "{{ lookup('env', 'HOME') }}/git"
+            executable: /bin/bash
           become: false
           tags: clone
 
@@ -448,6 +490,10 @@
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
+          register: brew_pipx_install
+          retries: 20
+          delay: 10
+          until: brew_pipx_install is skipped or brew_pipx_install is succeeded
           tags: python
 
         - name: Install pipx via APT
@@ -507,6 +553,10 @@
             name: iterm2
             state: present
           become: false
+          register: brew_iterm2_cask
+          retries: 20
+          delay: 10
+          until: brew_iterm2_cask is succeeded
           tags: iterm2
 
         - name: Check if iTerm2 plist is a symlink (old stow setup)
@@ -565,10 +615,24 @@
       vars:
         git: "{{ lookup('env', 'HOME') }}/git"
       block:
+        - name: Check for tools githooks apply script
+          ansible.builtin.stat:
+            path: "{{ git }}/tools/githooks/apply_pre-push.sh"
+          register: githooks_apply_prepush
+          become: false
+          tags: git
+
+        - name: Warn if tools repo is not cloned (githooks skipped)
+          ansible.builtin.debug:
+            msg: |
+              ⚠️ The tools repo does not appear to be cloned yet: {{ git }}/tools/githooks/apply_pre-push.sh is missing.
+              Skipping Apply Pre-push hooks. Clone tools into {{ git }}/tools (e.g. setup.sh with clone after GitHub SSH works), then re-run with --tags=git.
+          when: not githooks_apply_prepush.stat.exists
+          tags: git
+
         - name: Apply Pre-push hooks
-          shell: zsh {{ git }}/tools/githooks/apply_pre-push.sh
-          args:
-            executable: /bin/zsh
+          ansible.builtin.command: zsh "{{ git }}/tools/githooks/apply_pre-push.sh"
+          when: githooks_apply_prepush.stat.exists
           become: false
           tags: git
 
@@ -611,7 +675,7 @@
             content: |
               # this file is empty.
               # authorized public keys are stored in ~/git/backend/authorized_keys.md.
-              # For instructions, see `NOTION/Docs/selfhosted/ssh and sftp for cloud and rainbow` for instructions.
+              # For instructions, see `Affine/Docs/selfhosted/ssh and sftp for cloud and rainbow` for instructions.
               # this notice was updated on 2025-10-07
             dest: "{{ lookup('env', 'HOME') }}/.ssh/authorized_keys"
             mode: '0644'

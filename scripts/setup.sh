@@ -65,15 +65,26 @@ add_homebrew_to_path() {
 
 # Function to install Homebrew if missing
 install_homebrew() {
-    if ! command_exists brew; then
-        echo "Homebrew is not installed."
-        echo "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || { echo "Failed to install Homebrew."; exit 1; }
-        add_homebrew_to_path
-    else
-        debug "Homebrew is already installed at $(which brew)"
-        add_homebrew_to_path
+    # macOS: brew is often not on PATH in scripts (only loaded from login shells via
+    # ~/.zprofile). Check the standard prefixes before calling the installer.
+    if [[ "$PLATFORM" == "MacOS" ]]; then
+        if [[ -x /opt/homebrew/bin/brew ]] || [[ -x /usr/local/bin/brew ]]; then
+            add_homebrew_to_path
+            debug "Homebrew is already installed at $(command -v brew)"
+            return 0
+        fi
     fi
+
+    if command_exists brew; then
+        debug "Homebrew is already installed at $(command -v brew)"
+        [[ "$PLATFORM" == "MacOS" ]] && add_homebrew_to_path
+        return 0
+    fi
+
+    echo "Homebrew is not installed."
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || { echo "Failed to install Homebrew."; exit 1; }
+    add_homebrew_to_path
 }
 
 # Function to install whiptail if missing

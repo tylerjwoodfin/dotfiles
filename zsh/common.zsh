@@ -48,7 +48,7 @@ PROMPT='%m -> %1~%F{green}${vcs_info_msg_0_:+(${vcs_info_msg_0_})}%F{white}$ '
 
 # NNN configuration
 if [[ " ${DOTFILES_OPTS[@]} " =~ " nnn " ]]; then
-    BOOKMARKS_FILE="$HOME/.config/nnn/bookmarks.md"
+    BOOKMARKS_FILE="$HOME/syncthing/network/bookmarks.md"
 
     # Generate NNN_BMS variable from the file with $HOME expansion
     if [[ -f "$BOOKMARKS_FILE" ]]; then
