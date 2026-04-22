@@ -141,7 +141,6 @@
               - pylint
               - qbittorrent-nox
               - transmission-daemon
-              - plexmediaserver
               - redis-server
               - openvpn
               - wireguard
@@ -223,6 +222,7 @@
               - wireguard
               - cursor
               - maccy
+              - mongodb-compass
               - itsycal
               - spotify
               - soulseek
@@ -943,7 +943,7 @@
               ⚠️ IMPORTANT: Cloudflared configuration required:
               - Edit /etc/systemd/system/cloudflared.service and replace YOUR_TOKEN_HERE with your tunnel token
               - OR if using config files, restore /etc/cloudflared/*.yml config files
-              - Template services (cloudflared@gitea.service, cloudflared@immich.service, cloudflared@affine.service) require config files in /etc/cloudflared/
+              - Template services (cloudflared@gitea.service, cloudflared@immich.service, cloudflared@affine.service, cloudflared@vaultwarden.service) require config files in /etc/cloudflared/
           tags: cloudflared
 
         - name: Enable Cloudflared service (user must configure token first)
@@ -1101,6 +1101,23 @@
           become: false
           tags: docker
 
+        - name: Seed Vaultwarden .env from example if missing
+          ansible.builtin.shell: |
+            set -e
+            VW_DIR="{{ lookup('env', 'HOME') }}/git/docker/vaultwarden"
+            if [ -d "$VW_DIR" ] && [ -f "$VW_DIR/.env.example" ] && [ ! -f "$VW_DIR/.env" ]; then
+              cp "$VW_DIR/.env.example" "$VW_DIR/.env"
+              chmod 600 "$VW_DIR/.env"
+              echo CHANGED
+            fi
+          args:
+            executable: /bin/bash
+          become: false
+          when: docker_dir.stat.exists
+          tags: docker
+          register: vw_seed
+          changed_when: "'CHANGED' in vw_seed.stdout"
+
         - name: Find docker-compose files in docker directory
           find:
             paths: "{{ lookup('env', 'HOME') }}/git/docker"
@@ -1116,10 +1133,10 @@
 
         - name: Start Docker containers from compose files
           shell: |
-            cd "{{ item.dir }}"
+            cd "{{ item }}"
             docker compose up -d
           args:
-            chdir: "{{ item.dir }}"
+            chdir: "{{ item }}"
           become: false
           loop: "{{ compose_files.files | map(attribute='path') | map('dirname') | list | unique }}"
           when:
