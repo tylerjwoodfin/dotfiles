@@ -9,3 +9,23 @@ https://raw.githubusercontent.com/gijsdev/ublock-hide-yt-shorts/master/list.txt
 ||accounts.google.com/gsi/style
 ||apis.google.com/js/platform.js
 ||accounts.google.com/o/oauth2/*
+
+! Jun 22, 2025 https://www.youtube.com
+www.youtube.com##.ytp-ce-element-show.ytp-ce-size-853.ytp-ce-bottom-right-quad.ytp-ce-large-round.ytp-ce-video.ytp-ce-element
+www.youtube.com##.ytp-ce-element-show.ytp-ce-size-853.ytp-ce-top-left-quad.ytp-ce-medium-round.ytp-ce-channel-this.ytp-ce-channel.ytp-ce-element
+www.youtube.com##.ytp-ce-element-show.ytp-ce-size-853.ytp-ce-bottom-left-quad.ytp-ce-large-round.ytp-ce-video.ytp-ce-element
+
+! Jun 24, 2025 https://www.redfin.com
+||accounts.google.com/gsi/iframe/select$subdocument
+
+! Oct 15, 2025 https://soundcloud.com
+soundcloud.com##.g-backdrop-filter-grayscale.showBackground.modalWhiteout.g-z-index-overlay.g-opacity-transition.g-z-index-modal-background.modal
+
+! Dec 30, 2025 https://www.washingtonpost.com
+www.washingtonpost.com##.center.brad-4.relative.border-box
+
+! Mar 15, 2026 https://www.youtube.com
+www.youtube.com##.ytp-ce-size-853.ytp-ce-top-left-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-video.ytp-ce-element
+
+! May 3, 2026 https://www.youtube.com
+www.youtube.com###foreground-content
