@@ -291,7 +291,7 @@ cheat() {
 
 # Remind functions
 # First unalias all functions that might conflict with aliases
-unalias rmm rmmt rmmy rmmty rmml plex shorten 2>/dev/null || true
+unalias rmm rmmt rmmy rmmty rmml plex shorten taiga 2>/dev/null || true
 
 # reminder
 rmm() {
@@ -400,6 +400,25 @@ rmml() {
 # download yt to plex
 plex() {
     python3 ~/git/tools/youtube/main.py video "$@" -d ~/syncthing/video/YouTube
+}
+
+# Taiga Kanban user story (leading words = subject; same --flag handling style as rmm)
+taiga() {
+    local -a title_parts=()
+    local -a extra=()
+    for arg in "$@"; do
+        if [[ ${#extra[@]} -gt 0 || "$arg" == --* ]]; then
+            extra+=("$arg")
+        else
+            title_parts+=("$arg")
+        fi
+    done
+    local title="${title_parts[*]}"
+    if [[ -n "$title" ]]; then
+        python3 ~/git/tools/taiga/main.py --name "$title" --description "$title" "${extra[@]}"
+    else
+        python3 ~/git/tools/taiga/main.py "${extra[@]}"
+    fi
 }
 
 # Ollama
