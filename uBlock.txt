@@ -30,3 +30,5 @@ www.youtube.com##.ytp-ce-size-853.ytp-ce-top-left-quad.ytp-ce-large-round.ytp-ce
 ! May 3, 2026 https://www.youtube.com
 www.youtube.com###foreground-content
 www.youtube.com##ytd-rich-section-renderer.ytd-rich-grid-renderer.style-scope > .ytd-rich-section-renderer.style-scope
+www.youtube.com##.ytp-ce-size-1280.ytp-ce-bottom-right-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-playlist.ytp-ce-element
+www.youtube.com##.ytp-ce-size-1280.ytp-ce-bottom-left-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-playlist.ytp-ce-element
