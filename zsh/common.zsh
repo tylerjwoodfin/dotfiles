@@ -291,7 +291,7 @@ cheat() {
 
 # Remind functions
 # First unalias all functions that might conflict with aliases
-unalias rmm rmmt rmmy rmmty rmml plex shorten taiga 2>/dev/null || true
+unalias rmm rmmt rmmy rmmty rmml plex shorten taiga mp3 2>/dev/null || true
 
 # reminder
 rmm() {
@@ -504,6 +504,11 @@ alias lifelog='python3 ~/git/tools/lifelog/main.py' # log event
 alias foodlog='python3 ~/git/tools/foodlog/main.py' # log food
 alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
 
+# Navidrome library: yt-dlp → ~/syncthing/music/inbox (see docker/music-stack)
+mp3() {
+    command "$HOME/git/docker/music-stack/scripts/mp3" "$@"
+}
+
 # launcher function
 unalias l 2>/dev/null || true
 l() {
@@ -537,7 +542,7 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
         "diary" "turn" "notes" "docs" "work" "n" "v" "one-hour-of-distraction" \
-        "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "taiga"
+        "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "taiga" "mp3"
     )
 
     for cmd in "${cloud_commands[@]}"; do
