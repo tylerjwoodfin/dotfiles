@@ -37,3 +37,4 @@ www.youtube.com##.ytp-ce-size-1280.ytp-ce-bottom-left-quad.ytp-ce-large-round.yt
 www.youtube.com##.ytp-ce-size-1280.ytp-ce-top-right-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-playlist.ytp-ce-element
 www.youtube.com##.ytp-ce-size-1280.ytp-ce-top-left-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-video.ytp-ce-element
 www.youtube.com###foreground-content
+www.youtube.com##.ytp-ce-element-show.ytp-ce-size-1280.ytp-ce-bottom-right-quad.ytp-ce-large-round.ytp-ce-video.ytp-ce-element
