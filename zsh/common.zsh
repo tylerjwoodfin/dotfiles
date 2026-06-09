@@ -503,6 +503,7 @@ alias bluesky='python3 ~/git/tools/bluesky/main.py' # start post
 alias lifelog='python3 ~/git/tools/lifelog/main.py' # log event
 alias foodlog='python3 ~/git/tools/foodlog/main.py' # log food
 alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
+alias backloggist='python3 ~/git/backloggist/automation/fixer.py' # taiga ticket fixer
 
 # Navidrome library: yt-dlp → ~/syncthing/music/inbox (see docker/music-stack)
 mp3() {
@@ -542,7 +543,8 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
         "diary" "turn" "notes" "docs" "work" "n" "v" "one-hour-of-distraction" \
-        "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "taiga" "mp3"
+        "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "taiga" "mp3" \
+        "backloggist"
     )
 
     for cmd in "${cloud_commands[@]}"; do
