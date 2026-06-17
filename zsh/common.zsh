@@ -377,9 +377,9 @@ rmm() {
     eval $cmd_string
 }
 
-# reminder for tomorrow
+# reminder for tomorrow (saved); call remind directly so commas in titles work
 rmmty() {
-    rmm --save --when "tomorrow" --title "$@"
+    remind --save --title "$*" --when "tomorrow"
 }
 
 # reminder for tomorrow
