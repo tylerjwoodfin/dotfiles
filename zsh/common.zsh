@@ -46,6 +46,74 @@ setopt PROMPT_SUBST
 
 PROMPT='%m -> %1~%F{green}${vcs_info_msg_0_:+(${vcs_info_msg_0_})}%F{white}$ '
 
+# ----------------------
+# AUTOTAB (history Tab completion)
+# ----------------------
+# Tab fills the current line from the most recent matching shell history entry
+# (e.g. `git co` + Tab -> `git commit -am "Fixes"`). Press Tab again to cycle
+# older matches with the same prefix; falls back to normal completion when none.
+
+HISTFILE=${HISTFILE:-$HOME/.zsh_history}
+HISTSIZE=${HISTSIZE:-50000}
+SAVEHIST=${SAVEHIST:-50000}
+setopt EXTENDED_HISTORY INC_APPEND_HISTORY SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_REDUCE_BLANKS
+
+autoload -Uz compinit
+compinit -C
+
+autotab_command_from_fc_line() {
+  local line="$1" cmd="$1"
+  if [[ "$line" == *";"* ]]; then
+    cmd="${line#*;}"
+  elif [[ $line =~ '^[[:space:]]*[0-9]+[[:space:]]+(.*)$' ]]; then
+    cmd="$match[1]"
+  else
+    return 1
+  fi
+  print -r -- "$cmd"
+}
+
+autotab() {
+  emulate -L zsh
+  local prefix="$LBUFFER"
+
+  if [[ -z "$prefix" ]]; then
+    zle expand-or-complete
+    return
+  fi
+
+  if [[ "$AUTOTAB_PREFIX" != "$prefix" ]]; then
+    typeset -g AUTOTAB_PREFIX="$prefix"
+    typeset -g AUTOTAB_INDEX=0
+    typeset -ga AUTOTAB_MATCHES
+    AUTOTAB_MATCHES=()
+
+    local line cmd
+    local -a hist_lines
+    hist_lines=(${(f)"$(fc -l 1 2>/dev/null)"})
+    local i
+    for (( i = $#hist_lines; i >= 1; i-- )); do
+      cmd="$(autotab_command_from_fc_line "${hist_lines[i]}")" || continue
+      [[ "$cmd" == "$prefix"* ]] && AUTOTAB_MATCHES+=("$cmd")
+    done
+  fi
+
+  if (( ${#AUTOTAB_MATCHES[@]} == 0 )); then
+    zle expand-or-complete
+    return
+  fi
+
+  (( AUTOTAB_INDEX = (AUTOTAB_INDEX % ${#AUTOTAB_MATCHES[@]}) + 1 ))
+  BUFFER="${AUTOTAB_MATCHES[AUTOTAB_INDEX]}"
+  CURSOR=$#BUFFER
+  zle redisplay
+}
+
+zle -N autotab
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+
 # NNN configuration
 if [[ " ${DOTFILES_OPTS[@]} " =~ " nnn " ]]; then
     BOOKMARKS_FILE="$HOME/syncthing/network/bookmarks.md"
@@ -619,6 +687,7 @@ fi
 
 # fix VS Code terminal shortcut issue - https://github.com/microsoft/vscode-docs/issues/5221
 set -o emacs
+bindkey '^I' autotab
 
 # source other files - keep on the bottom
 for opt in "${DOTFILES_OPTS[@]}"; do
