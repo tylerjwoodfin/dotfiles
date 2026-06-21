@@ -144,6 +144,51 @@ function gbr() {
   echo "Release branch '$release_branch' created and pushed successfully."
 }
 
+# pull every git repo in ~/git to latest main
+function pullall() {
+  local git_root="$HOME/git"
+
+  for repo_dir in "$git_root"/*(N/); do
+    [[ -d "$repo_dir/.git" ]] || continue
+
+    local repo_name="${repo_dir:t}"
+    local branch
+    branch=$(command git -C "$repo_dir" symbolic-ref --short HEAD 2>/dev/null) || {
+      echo "Error: ~/git/${repo_name} cannot be pulled because it is not on a branch. Exiting."
+      return 1
+    }
+
+    if [[ -n $(command git -C "$repo_dir" status --porcelain) ]]; then
+      echo "Error: ~/git/${repo_name} cannot be pulled because there are changes not yet committed in ${branch}. Exiting."
+      return 1
+    fi
+
+    local unpushed=0
+    if command git -C "$repo_dir" rev-parse --abbrev-ref @{u} >/dev/null 2>&1; then
+      unpushed=$(command git -C "$repo_dir" rev-list --count @{u}..HEAD 2>/dev/null || echo 0)
+    elif [[ "$branch" != "main" ]] && command git -C "$repo_dir" rev-parse --verify main >/dev/null 2>&1; then
+      unpushed=$(command git -C "$repo_dir" rev-list --count main..HEAD 2>/dev/null || echo 0)
+    fi
+
+    if [[ $unpushed -gt 0 ]]; then
+      echo "Error: ~/git/${repo_name} cannot be pulled because there are unpushed commits in ${branch}. Exiting."
+      return 1
+    fi
+
+    if ! command git -C "$repo_dir" checkout main 2>/dev/null; then
+      echo "Error: ~/git/${repo_name} cannot be pulled because checkout main failed. Exiting."
+      return 1
+    fi
+
+    if ! command git -C "$repo_dir" pull origin main; then
+      echo "Error: ~/git/${repo_name} cannot be pulled because git pull failed. Exiting."
+      return 1
+    fi
+
+    echo "Pulled ~/git/${repo_name}"
+  done
+}
+
 # git create and push tag
 function gtag() {
   tag="$1"
