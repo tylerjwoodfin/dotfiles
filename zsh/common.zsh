@@ -185,6 +185,8 @@ function pullall() {
       return 1
     fi
 
+    ( cd "$repo_dir" && setopt aliases && gclean )
+
     echo "Pulled ~/git/${repo_name}"
   done
 }
