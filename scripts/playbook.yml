@@ -1458,3 +1458,34 @@
           debug:
             msg: "⚠️ Neovim configuration failed, continuing."
           tags: nvim
+
+    # 🔹 Stow dotfiles + Cursor skills/rules
+    - name: Symlink dotfiles with stow
+      ansible.builtin.command:
+        cmd: python3 "{{ lookup('env', 'HOME') }}/git/dotfiles/scripts/apply_stow.py"
+      become: false
+      tags: stow
+
+    - name: Link Cursor Taiga-ticket skill and workspace rules
+      block:
+        - name: Ensure ~/git workspace exists
+          ansible.builtin.file:
+            path: "{{ lookup('env', 'HOME') }}/git"
+            state: directory
+            mode: "0755"
+          tags: cursor
+
+        - name: Link Cursor skills and rules from dotfiles
+          ansible.builtin.command:
+            cmd: bash "{{ lookup('env', 'HOME') }}/git/dotfiles/scripts/link_cursor_rules.sh"
+          environment:
+            DOTFILES: "{{ lookup('env', 'HOME') }}/git/dotfiles"
+            GIT_ROOT: "{{ lookup('env', 'HOME') }}/git"
+          become: false
+          tags: cursor
+
+      rescue:
+        - name: Log Cursor skill/rule link failure
+          debug:
+            msg: "⚠️ Cursor skill/rule linking failed, continuing."
+          tags: cursor

@@ -192,6 +192,7 @@ OPTIONS+=("downloads" "Open external app download links" OFF)
 OPTIONS+=("borg" "Set BorgBackup passphrase" OFF)
 OPTIONS+=("clone" "Clone all GitHub repositories (run SEPARATELY after SSH!)" OFF)
 OPTIONS+=("stow" "Run Stow to symlink dotfiles" OFF)
+OPTIONS+=("cursor" "Link Cursor Taiga-ticket skill and ~/git rules" OFF)
 
 SELECTED=$(whiptail --title "Select Setup Options" --checklist \
 "Choose items to install (use Space to select, Enter to confirm):" 20 78 15 \
@@ -262,10 +263,7 @@ if [[ "$SELECTED" == *"borg"* ]]; then
     "$SCRIPT_DIR/borg_passphrase.sh"
 fi
 
-if [[ "$SELECTED" == *"stow"* ]]; then
-    echo "Running Stow to symlink dotfiles..."
-    python3 "$SCRIPT_DIR/apply_stow.py"
-fi
+# Stow and Cursor linking run via Ansible tags (stow / cursor) in playbook.yml
 
 # Final instructions
 if [[ "$SELECTED" == *"ssh"* ]]; then

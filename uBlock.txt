@@ -41,3 +41,4 @@ www.youtube.com##.ytp-ce-element-show.ytp-ce-size-1280.ytp-ce-bottom-right-quad.
 
 ! June 8, 2026
 ||accounts.google.com/gsi/iframe/select
+www.youtube.com##ytd-rich-section-renderer.ytd-rich-grid-renderer.style-scope > .ytd-rich-section-renderer.style-scope

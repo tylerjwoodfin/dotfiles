@@ -1,0 +1,15 @@
+---
+description: Taiga ticket branch names, commit messages, and PR conventions for ~/git
+alwaysApply: true
+---
+
+# Taiga tickets (TJW)
+
+When implementing a Taiga user story in `~/git`:
+
+- Branch: `{feat|fix|docs|chore|refactor|test|task}/TJW-###-short-slug` (infer prefix from ticket text).
+- Commit messages must start with `TJW-###:`.
+- One PR per modified repository; link all PRs in the Taiga comment when done.
+- Prefer the repo explicitly named in the ticket (`~/git/foo`) over multi-repo exploration.
+- After implementation, move the card to **Testing** unless the user specifies another column.
+- Use the **taiga-ticket** skill for the full fetch → implement → PR → Taiga workflow.
