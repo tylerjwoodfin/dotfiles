@@ -154,7 +154,7 @@ function pullall() {
     local repo_name="${repo_dir:t}"
     local branch
     branch=$(command git -C "$repo_dir" symbolic-ref --short HEAD 2>/dev/null) || {
-      echo "Error: ~/git/${repo_name} cannot be pulled because it is not on a branch. Exiting."
+      echo "Error: ~/git/${repo_name} cannot be pulled because it is not on a branch."
       return 1
     }
 
@@ -166,12 +166,14 @@ function pullall() {
     local unpushed=0
     if command git -C "$repo_dir" rev-parse --abbrev-ref @{u} >/dev/null 2>&1; then
       unpushed=$(command git -C "$repo_dir" rev-list --count @{u}..HEAD 2>/dev/null || echo 0)
+    elif command git -C "$repo_dir" rev-parse --verify "origin/${branch}" >/dev/null 2>&1; then
+      unpushed=$(command git -C "$repo_dir" rev-list --count "origin/${branch}..HEAD" 2>/dev/null || echo 0)
     elif [[ "$branch" != "main" ]] && command git -C "$repo_dir" rev-parse --verify main >/dev/null 2>&1; then
       unpushed=$(command git -C "$repo_dir" rev-list --count main..HEAD 2>/dev/null || echo 0)
     fi
 
     if [[ $unpushed -gt 0 ]]; then
-      echo "Error: ~/git/${repo_name} cannot be pulled because there are unpushed commits in ${branch}. Exiting."
+      echo "Error: ~/git/${repo_name} cannot be pulled because ${branch} has ${unpushed} commit(s) not on its remote. Exiting."
       return 1
     fi
 
@@ -185,7 +187,9 @@ function pullall() {
       return 1
     fi
 
-    ( cd "$repo_dir" && setopt aliases && gclean )
+    command git -C "$repo_dir" branch --merged \
+      | command egrep -v '(^\*|master|dev|main)' \
+      | xargs -r git -C "$repo_dir" branch -d
 
     echo "Pulled ~/git/${repo_name}"
   done
@@ -533,7 +537,7 @@ alias gcm='git commit -m' # git commit
 alias gch='git fetch && git checkout' # git fetch/checkout
 alias gb='git checkout -b' # git new branch
 alias gs='git status' # git status
-alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs git branch -d' # remove old branches
+alias gclean='git branch --merged | egrep -v "(^\*|master|dev|main)" | xargs -r git branch -d' # remove old branches
 alias gd='git diff' # git diff
 alias gdd='git diff develop' # git diff develop
 alias gp='git pull' # git pull
