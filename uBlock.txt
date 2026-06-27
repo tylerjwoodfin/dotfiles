@@ -10,11 +10,6 @@ https://raw.githubusercontent.com/gijsdev/ublock-hide-yt-shorts/master/list.txt
 ||apis.google.com/js/platform.js
 ||accounts.google.com/o/oauth2/*
 
-! Jun 22, 2025 https://www.youtube.com
-www.youtube.com##.ytp-ce-element-show.ytp-ce-size-853.ytp-ce-bottom-right-quad.ytp-ce-large-round.ytp-ce-video.ytp-ce-element
-www.youtube.com##.ytp-ce-element-show.ytp-ce-size-853.ytp-ce-top-left-quad.ytp-ce-medium-round.ytp-ce-channel-this.ytp-ce-channel.ytp-ce-element
-www.youtube.com##.ytp-ce-element-show.ytp-ce-size-853.ytp-ce-bottom-left-quad.ytp-ce-large-round.ytp-ce-video.ytp-ce-element
-
 ! Jun 24, 2025 https://www.redfin.com
 ||accounts.google.com/gsi/iframe/select$subdocument
 
@@ -24,21 +19,14 @@ soundcloud.com##.g-backdrop-filter-grayscale.showBackground.modalWhiteout.g-z-in
 ! Dec 30, 2025 https://www.washingtonpost.com
 www.washingtonpost.com##.center.brad-4.relative.border-box
 
-! Mar 15, 2026 https://www.youtube.com
-www.youtube.com##.ytp-ce-size-853.ytp-ce-top-left-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-video.ytp-ce-element
-
-! May 3, 2026 https://www.youtube.com
+! YouTube
 www.youtube.com###foreground-content
 www.youtube.com##ytd-rich-section-renderer.ytd-rich-grid-renderer.style-scope > .ytd-rich-section-renderer.style-scope
-www.youtube.com##.ytp-ce-size-1280.ytp-ce-bottom-right-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-playlist.ytp-ce-element
-www.youtube.com##.ytp-ce-size-1280.ytp-ce-bottom-left-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-playlist.ytp-ce-element
-www.youtube.com##.ytp-ce-size-1280.ytp-ce-bottom-left-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-video.ytp-ce-element
-www.youtube.com##.ytp-ce-size-1280.ytp-ce-bottom-left-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-video.ytp-ce-element
-www.youtube.com##.ytp-ce-size-1280.ytp-ce-top-right-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-playlist.ytp-ce-element
-www.youtube.com##.ytp-ce-size-1280.ytp-ce-top-left-quad.ytp-ce-large-round.ytp-ce-element-show.ytp-ce-video.ytp-ce-element
-www.youtube.com###foreground-content
 www.youtube.com##.ytp-ce-element-show.ytp-ce-size-1280.ytp-ce-bottom-right-quad.ytp-ce-large-round.ytp-ce-video.ytp-ce-element
-
-! June 8, 2026
-||accounts.google.com/gsi/iframe/select
 www.youtube.com##ytd-rich-section-renderer.ytd-rich-grid-renderer.style-scope > .ytd-rich-section-renderer.style-scope
+
+! YouTube End Cards
+www.youtube.com##.ytp-ce-element
+www.youtube.com##.ytp-ce-covering-overlay
+
+||accounts.google.com/gsi/iframe/select
