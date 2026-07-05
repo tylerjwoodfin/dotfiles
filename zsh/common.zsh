@@ -34,12 +34,17 @@ fi
 # Git configuration
 git config --global push.default current
 
-# show git branch info in prompt
-autoload -Uz vcs_info
-precmd() { vcs_info } # launcher-hidden
-
-# Format the vcs_info_msg_0_ variable
-zstyle ':vcs_info:git:*' formats '%b'
+# show git branch info in prompt (skip when vcs_info module isn't installed, e.g. iSH)
+() {
+  local dir
+  for dir in $fpath; do
+    [[ -r "$dir/vcs_info" ]] || continue
+    autoload -Uz vcs_info
+    precmd() { vcs_info } # launcher-hidden
+    zstyle ':vcs_info:git:*' formats '%b'
+    break
+  done
+}
 
 # Set up the prompt (with git branch name)
 setopt PROMPT_SUBST
