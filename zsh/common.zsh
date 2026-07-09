@@ -621,8 +621,10 @@ alias lofi='zsh ~/git/tools/lofi.sh' # 🎧
 alias bluesky='python3 ~/git/tools/bluesky/main.py' # start post
 alias lifelog='python3 ~/git/tools/lifelog/main.py' # log event
 alias foodlog='python3 ~/git/tools/foodlog/main.py' # log food
+alias milestone='python3 ~/git/tools/milestone/main.py' # log milestone
 alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
 alias backloggist='python3 ~/git/backloggist/automation/fixer.py' # taiga ticket fixer
+alias syncsure='~/git/docker/sure.am/scripts/sync-category-rules.sh'
 
 # Navidrome library: yt-dlp → ~/syncthing/music/inbox (see docker/music-stack)
 mp3() {
