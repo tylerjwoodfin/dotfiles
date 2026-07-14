@@ -1091,6 +1091,75 @@
             msg: "⚠️ Immich service configuration failed, continuing."
           tags: immich
 
+    # 🔹 Configure video-to-cloud Service
+    - name: Configure video-to-cloud Service
+      block:
+        - name: Ensure syncthing/log directory exists
+          ansible.builtin.file:
+            path: "{{ lookup('env', 'HOME') }}/syncthing/log"
+            state: directory
+            mode: '0755'
+            owner: "{{ lookup('env', 'USER') }}"
+          become: false
+          tags: video-to-cloud
+
+        - name: Ensure video-to-cloud watch and dest directories exist
+          ansible.builtin.file:
+            path: "{{ item }}"
+            state: directory
+            mode: '0755'
+            owner: "{{ lookup('env', 'USER') }}"
+          loop:
+            - "{{ lookup('env', 'HOME') }}/syncthing/documents/video-to-cloud"
+            - "{{ lookup('env', 'HOME') }}/syncthing/video"
+          become: false
+          tags: video-to-cloud
+
+        - name: Create video-to-cloud systemd service
+          copy:
+            content: |
+              [Unit]
+              Description=Move Syncthing video-to-cloud drops into the video library
+              After=network-online.target
+              Wants=network-online.target
+
+              [Service]
+              Type=simple
+              ExecStart=/usr/bin/python3 {{ lookup('env', 'HOME') }}/git/tools/video_to_cloud/main.py
+              Restart=always
+              RestartSec=5
+              User={{ lookup('env', 'USER') }}
+              Environment=HOME={{ lookup('env', 'HOME') }}
+              Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:{{ lookup('env', 'HOME') }}/.local/bin
+              StandardOutput=append:{{ lookup('env', 'HOME') }}/syncthing/log/video-to-cloud.log
+              StandardError=append:{{ lookup('env', 'HOME') }}/syncthing/log/video-to-cloud.log
+
+              [Install]
+              WantedBy=multi-user.target
+            dest: /etc/systemd/system/video-to-cloud.service
+            mode: '0644'
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: video-to-cloud
+
+        - name: Enable video-to-cloud service
+          systemd:
+            name: video-to-cloud
+            enabled: yes
+            state: started
+            daemon_reload: yes
+          become: true
+          when: ansible_facts['os_family'] == "Debian"
+          tags: video-to-cloud
+
+      when: ansible_facts['os_family'] == "Debian"
+      tags: video-to-cloud
+      rescue:
+        - name: Log video-to-cloud service configuration failure
+          debug:
+            msg: "⚠️ video-to-cloud service configuration failed, continuing."
+          tags: video-to-cloud
+
     # 🔹 Start Docker Containers
     - name: Start Docker Containers
       block:
