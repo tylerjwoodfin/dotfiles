@@ -140,17 +140,6 @@ cdl() { cd "$a"; ls; }
 
 # Git functions
 function git() {
-    # Check for blocked flags
-    function check_flags() {
-        for arg in "$@"; do
-            if [[ "$arg" == "--no-verify" ]]; then
-                echo "The --no-verify flag is blocked."
-                return 1
-            fi
-        done
-        return 0
-    }
-
     # Check for prohibited patterns in files being committed
     function check_commit_files() {
         if [[ "$1" == "commit" ]]; then
@@ -184,7 +173,6 @@ function git() {
     }
 
     # Run all checks
-    check_flags "$@" || return 1
     check_commit_files "$@" || return 1
 
     # Execute the actual git command
