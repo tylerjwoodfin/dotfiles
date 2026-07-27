@@ -617,6 +617,7 @@ alias foodlog='python3 ~/git/tools/foodlog/main.py' # log food
 alias milestone='python3 ~/git/tools/milestone/main.py' # log milestone
 alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
 alias backloggist='python3 ~/git/backloggist/automation/fixer.py' # taiga ticket fixer
+alias amazon='python3 ~/git/tools/amazon/main.py' # amazon order (playwright)
 alias syncsure='~/git/docker/sure.am/scripts/sync-category-rules.sh'
 
 # Navidrome library: yt-dlp → ~/syncthing/music/inbox (see docker/music-stack)
