@@ -59,7 +59,7 @@ Example Cabinet config:
     },
     "export": {
       "common": {
-        "notes": "$HOME/syncthing/md/notes"
+        "notes": "$HOME/syncthing/notes"
       }
     }
   }
