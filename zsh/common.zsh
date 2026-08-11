@@ -6,10 +6,10 @@
 
 # Directory paths
 setopt cdablevars
-export notes=$HOME/syncthing/md/notes
-export docs=$HOME/syncthing/md/docs
-export work=$HOME/syncthing/md/work
-export workt=$HOME/syncthing/md/work/todo.md
+export notes=$HOME/syncthing/notes
+export docs=$HOME/syncthing/notes/docs
+export work=$HOME/syncthing/notes/work
+export workt=$HOME/syncthing/notes/work/todo.md
 export logpath=$HOME/syncthing/log
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
 
@@ -607,9 +607,9 @@ alias gp='git pull' # git pull
 alias diary='python3 ~/git/tools/diary/main.py' # diary
 alias yt='python3 ~/git/tools/youtube/main.py' # youtube downloader
 alias pitest='python3 ~/git/testfolder/test.py' # test python
-alias notes='nnn ~/syncthing/md/notes' # open notes
-alias docs='nnn ~/syncthing/md/docs' # open docs
-alias work='nnn ~/syncthing/md/work' # open work
+alias notes='nnn ~/syncthing/notes' # open notes
+alias docs='nnn ~/syncthing/notes/docs' # open docs
+alias work='nnn ~/syncthing/notes/work' # open work
 alias lofi='zsh ~/git/tools/lofi.sh' # 🎧
 alias bluesky='python3 ~/git/tools/bluesky/main.py' # start post
 alias lifelog='python3 ~/git/tools/lifelog/main.py' # log event
