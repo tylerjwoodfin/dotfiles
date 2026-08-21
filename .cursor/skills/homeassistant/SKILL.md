@@ -1,9 +1,10 @@
 ---
 name: homeassistant
 description: >-
-  Access and update Tyler's Home Assistant (dashboards, entities, Lovelace)
-  via the REST/WebSocket API. Use when the user mentions Home Assistant, HA,
-  Lovelace, dashboards, or homeassistant.local / 192.168.1.25:8123.
+  Access and update Tyler's Home Assistant (dashboards, entities, Lovelace,
+  automations, helpers) via the REST/WebSocket API. Use when the user mentions
+  Home Assistant, HA, Lovelace, dashboards, automations, or
+  homeassistant.local / 192.168.1.25:8123.
 ---
 
 # Home Assistant
@@ -38,6 +39,50 @@ export HA_URL="http://192.168.1.25:8123"
 
 Smoke test: `GET $HA_URL/api/` with `Authorization: Bearer $HA_TOKEN` → 200.
 
+System Python often lacks `websockets`. Use a venv when you need the WebSocket
+API (`python3 -m venv /tmp/ha-venv && /tmp/ha-venv/bin/pip install websockets`).
+
+## REST vs WebSocket
+
+| Task | How |
+|------|-----|
+| States, history, logbook | REST `/api/states`, `/api/history/period/{iso_start}`, `/api/logbook/{iso_start}` |
+| Automation config | REST `/api/config/automation/config/{id}` — `{id}` is `attributes.id`, **not** the entity_id |
+| Lovelace | WebSocket only (`/api/lovelace/*` REST is 404) |
+| Helpers (`timer`, `input_boolean`) | WebSocket `timer/create`, `input_boolean/create` |
+| Automation traces | WebSocket `trace/list` (`item_id` = automation unique id). REST `/api/trace/list/…` is 404 |
+
+## Automations
+
+The config key is `attributes.id` on `GET /api/states/automation.<slug>` (a
+numeric timestamp like `1763529213229`, or a string like
+`dehumidifier_max_runtime`). Using the entity slug (`dehumidifier`) returns
+**404**.
+
+```bash
+GET  $HA_URL/api/config/automation/config/{id}
+POST $HA_URL/api/config/automation/config/{id}   # full JSON body → {"result":"ok"}, reloads
+```
+
+This install uses the 2024.8+ schema: `triggers` / `conditions` / `actions`.
+
+## Helpers
+
+WebSocket after auth:
+
+- Create: `timer/create` (`name`, `duration` e.g. `"0:30:00"`, optional `icon`,
+  `restore`) or `input_boolean/create` (`name`, optional `icon`)
+- Delete: `timer/delete` with **`timer_id`**, `input_boolean/delete` with
+  **`input_boolean_id`** (the helper unique_id / slug). `item_id` is rejected.
+
+## Traces
+
+```json
+{"type": "trace/list", "domain": "automation", "item_id": "<attributes.id>"}
+```
+
+`item_id` is the same config id as automations above, not `automation.foo`.
+
 ## Editing Lovelace dashboards
 
 REST `/api/lovelace/*` returns 404 on this install. Use the **WebSocket** API:
@@ -48,8 +93,7 @@ REST `/api/lovelace/*` returns 404 on this install. Use the **WebSocket** API:
 4. `lovelace/config` (optional `url_path`) → full config
 5. Mutate JSON → `lovelace/config/save` with `config`
 
-Overview dashboard is storage-mode (`url_path` `lovelace` / default). Prefer a
-venv with `websockets` if the system Python lacks it (`python3 -m venv …`).
+Overview dashboard is storage-mode (`url_path` `lovelace` / default).
 
 ### PoC note
 
@@ -61,4 +105,5 @@ venv with `websockets` if the system Python lacks it (`python3 -m venv …`).
 
 - Prefer IP over `.local` unless the user is on the LAN with working mDNS.
 - Do not invent SSH/Samba access; API only unless the user opens another path.
-- Keep dashboard edits minimal and confirm after `lovelace/config/save`.
+- Keep dashboard and automation edits minimal; confirm after
+  `lovelace/config/save` or the automation POST.
