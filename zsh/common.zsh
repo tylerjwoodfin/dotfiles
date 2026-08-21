@@ -514,8 +514,13 @@ plex() {
     python3 ~/git/tools/youtube/main.py video "$@" -d ~/syncthing/video/YouTube
 }
 
-# Taiga Kanban user story (leading words = subject; same --flag handling style as rmm)
+# Taiga Kanban: `taiga ls` lists tickets; other args create a user story
 taiga() {
+    if [[ "$1" == "ls" ]]; then
+        shift
+        python3 ~/git/tools/taiga/ticket.py ls "$@"
+        return
+    fi
     local -a title_parts=()
     local -a extra=()
     for arg in "$@"; do
