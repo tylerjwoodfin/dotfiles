@@ -29,7 +29,7 @@ stow --target=$HOME .
 ```
 
 ## uBlock Origin
-- add `https://raw.githubusercontent.com/tylerjwoodfin/dotfiles/refs/heads/main/uBlock.txt` to uBlock Origin's custom filter list.
+Custom filter lists are LAN-hosted (not in this public repo).
 
 ## zsh
 - add to `~/.zshrc`:
