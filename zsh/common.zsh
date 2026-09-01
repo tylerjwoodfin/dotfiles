@@ -6,10 +6,10 @@
 
 # Directory paths
 setopt cdablevars
-export notes=$HOME/syncthing/md/notes
-export docs=$HOME/syncthing/md/docs
-export work=$HOME/syncthing/md/work
-export workt=$HOME/syncthing/md/work/todo.md
+export notes=$HOME/syncthing/notes
+export docs=$HOME/syncthing/notes/docs
+export work=$HOME/syncthing/notes/work
+export workt=$HOME/syncthing/notes/work/todo.md
 export logpath=$HOME/syncthing/log
 export log=$logpath/cabinet/$(date +%Y-%m-%d)/LOG_DAILY_$(date +%Y-%m-%d).log
 
@@ -34,12 +34,17 @@ fi
 # Git configuration
 git config --global push.default current
 
-# show git branch info in prompt
-autoload -Uz vcs_info
-precmd() { vcs_info } # launcher-hidden
-
-# Format the vcs_info_msg_0_ variable
-zstyle ':vcs_info:git:*' formats '%b'
+# show git branch info in prompt (skip when vcs_info module isn't installed, e.g. iSH)
+() {
+  local dir
+  for dir in $fpath; do
+    [[ -r "$dir/vcs_info" ]] || continue
+    autoload -Uz vcs_info
+    precmd() { vcs_info } # launcher-hidden
+    zstyle ':vcs_info:git:*' formats '%b'
+    break
+  done
+}
 
 # Set up the prompt (with git branch name)
 setopt PROMPT_SUBST
@@ -140,17 +145,6 @@ cdl() { cd "$a"; ls; }
 
 # Git functions
 function git() {
-    # Check for blocked flags
-    function check_flags() {
-        for arg in "$@"; do
-            if [[ "$arg" == "--no-verify" ]]; then
-                echo "The --no-verify flag is blocked."
-                return 1
-            fi
-        done
-        return 0
-    }
-
     # Check for prohibited patterns in files being committed
     function check_commit_files() {
         if [[ "$1" == "commit" ]]; then
@@ -184,7 +178,6 @@ function git() {
     }
 
     # Run all checks
-    check_flags "$@" || return 1
     check_commit_files "$@" || return 1
 
     # Execute the actual git command
@@ -521,8 +514,13 @@ plex() {
     python3 ~/git/tools/youtube/main.py video "$@" -d ~/syncthing/video/YouTube
 }
 
-# Taiga Kanban user story (leading words = subject; same --flag handling style as rmm)
+# Taiga Kanban: `taiga ls` lists tickets; other args create a user story
 taiga() {
+    if [[ "$1" == "ls" ]]; then
+        shift
+        python3 ~/git/tools/taiga/ticket.py ls "$@"
+        return
+    fi
     local -a title_parts=()
     local -a extra=()
     for arg in "$@"; do
@@ -614,9 +612,9 @@ alias gp='git pull' # git pull
 alias diary='python3 ~/git/tools/diary/main.py' # diary
 alias yt='python3 ~/git/tools/youtube/main.py' # youtube downloader
 alias pitest='python3 ~/git/testfolder/test.py' # test python
-alias notes='nnn ~/syncthing/md/notes' # open notes
-alias docs='nnn ~/syncthing/md/docs' # open docs
-alias work='nnn ~/syncthing/md/work' # open work
+alias notes='nnn ~/syncthing/notes' # open notes
+alias docs='nnn ~/syncthing/notes/docs' # open docs
+alias work='nnn ~/syncthing/notes/work' # open work
 alias lofi='zsh ~/git/tools/lofi.sh' # 🎧
 alias bluesky='python3 ~/git/tools/bluesky/main.py' # start post
 alias lifelog='python3 ~/git/tools/lifelog/main.py' # log event
@@ -624,6 +622,7 @@ alias foodlog='python3 ~/git/tools/foodlog/main.py' # log food
 alias milestone='python3 ~/git/tools/milestone/main.py' # log milestone
 alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
 alias backloggist='python3 ~/git/backloggist/automation/fixer.py' # taiga ticket fixer
+alias amazon='python3 ~/git/tools/amazon/main.py' # amazon order (playwright)
 alias syncsure='~/git/docker/sure.am/scripts/sync-category-rules.sh'
 
 # Navidrome library: yt-dlp → ~/syncthing/music/inbox (see docker/music-stack)

@@ -7,9 +7,10 @@ alwaysApply: true
 
 When implementing a Taiga user story in `~/git`:
 
-- Branch: `{feat|fix|docs|chore|refactor|test|task}/TJW-###-short-slug` (infer prefix from ticket text).
+- Use the **taiga-ticket** skill (`~/git/tools/taiga/ticket.py` for fetch/finish — not backloggist).
+- Branch: `{feat|fix|docs|chore|refactor|test|task}/TJW-###-short-slug` (infer prefix from ticket text). Honor repo `AGENTS.md` when it defines a different branch/PR flow.
 - Commit messages must start with `TJW-###:`.
 - One PR per modified repository; link all PRs in the Taiga comment when done.
 - Prefer the repo explicitly named in the ticket (`~/git/foo`) over multi-repo exploration.
 - After implementation, move the card to **Testing** unless the user specifies another column.
-- Use the **taiga-ticket** skill for the full fetch → implement → PR → Taiga workflow.
+- Use `gh` (`~/.local/bin/gh`); if auth fails, run `python3 ~/git/tools/github/ensure_gh_auth.py`.
