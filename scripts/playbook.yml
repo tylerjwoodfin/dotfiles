@@ -249,18 +249,6 @@
           until: brew_docker_desktop is succeeded
           tags: gui
 
-        - name: Uninstall Maccy, Caffeine, and NoTunes (replaced by Vorssaint)
-          homebrew_cask:
-            name:
-              - maccy
-              - caffeine
-              - notunes
-            state: absent
-          become: false
-          when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
-          failed_when: false
-          tags: gui
-
         - name: Configure Vorssaint (clipboard history, Music-to-Spotify, launch at login)
           shell: |
             defaults write com.vorssaint.utils clipboardHistoryEnabled -bool true
