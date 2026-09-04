@@ -214,7 +214,6 @@
               - firefox
               - zettlr
               - syncthing
-              - affine
               - itsycal
               - hiddenbar
               - rustdesk
@@ -946,7 +945,7 @@
               ⚠️ IMPORTANT: Cloudflared configuration required:
               - Edit /etc/systemd/system/cloudflared.service and replace YOUR_TOKEN_HERE with your tunnel token
               - OR if using config files, restore /etc/cloudflared/*.yml config files
-              - Template services (cloudflared@gitea.service, cloudflared@immich.service, cloudflared@affine.service, cloudflared@vaultwarden.service) require config files in /etc/cloudflared/
+              - Template services (cloudflared@gitea.service, cloudflared@immich.service, cloudflared@vaultwarden.service) require config files in /etc/cloudflared/
           tags: cloudflared
 
         - name: Enable Cloudflared service (user must configure token first)
