@@ -221,7 +221,7 @@
               - bettertouchtool
               - wireguard
               - cursor
-              - maccy
+              - vorssaint
               - mongodb-compass
               - itsycal
               - spotify
@@ -230,7 +230,6 @@
               - zoom
               - libreoffice
               - protonvpn
-              - notunes
             state: present
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
@@ -250,8 +249,12 @@
           until: brew_docker_desktop is succeeded
           tags: gui
 
-        - name: Configure NoTunes to replace Apple Music with Spotify
-          shell: defaults write digital.twisted.noTunes replacement /Applications/Spotify.app
+        - name: Configure Vorssaint (clipboard history, Music-to-Spotify, launch at login)
+          shell: |
+            defaults write com.vorssaint.utils clipboardHistoryEnabled -bool true
+            defaults write com.vorssaint.utils musicBlockEnabled -bool true
+            defaults write com.vorssaint.utils musicBlockReplacementPath -string /Applications/Spotify.app
+            defaults write com.vorssaint.utils launchAtLoginWanted -bool true
           become: false
           when: ansible_facts['os_family'] == "Darwin" or ansible_facts['os_family'] == "MacOS" or ansible_facts['os_family'] == "macOS"
           tags: gui
