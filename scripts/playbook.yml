@@ -663,11 +663,43 @@
     # 🔹 Configure SSH Authorized Keys
     - name: Apply the shared authorized_keys file
       block:
+        - name: Install sshd drop-in for key-only auth
+          ansible.builtin.copy:
+            dest: /etc/ssh/sshd_config.d/200-homelab.conf
+            mode: "0644"
+            content: |
+              # Key-only SSH. Public keys live in ~/git/backend/authorized_keys.md
+              PubkeyAuthentication yes
+              PasswordAuthentication no
+              KbdInteractiveAuthentication no
+              AuthorizedKeysFile %h/git/backend/authorized_keys.md
+          become: true
+          when: ansible_facts['os_family'] in ["Darwin", "Debian"]
+          tags: ssh
+
         - name: Update sshd_config with authorized_keys file path
           ansible.builtin.lineinfile:
             path: /etc/ssh/sshd_config
             regexp: '^AuthorizedKeysFile'
-            line: "AuthorizedKeysFile %h/.ssh/authorized_keys {{ lookup('env', 'HOME') }}/git/backend/authorized_keys.md"
+            line: "AuthorizedKeysFile %h/git/backend/authorized_keys.md"
+            state: present
+          become: true
+          tags: ssh
+
+        - name: Disable SSH password authentication
+          ansible.builtin.lineinfile:
+            path: /etc/ssh/sshd_config
+            regexp: '^#?PasswordAuthentication'
+            line: "PasswordAuthentication no"
+            state: present
+          become: true
+          tags: ssh
+
+        - name: Disable SSH keyboard-interactive authentication
+          ansible.builtin.lineinfile:
+            path: /etc/ssh/sshd_config
+            regexp: '^#?KbdInteractiveAuthentication'
+            line: "KbdInteractiveAuthentication no"
             state: present
           become: true
           tags: ssh
@@ -741,6 +773,12 @@
             state: restarted
           become: true
           when: ansible_facts['os_family'] == "Debian"
+          tags: ssh
+
+        - name: Reload SSH service (macOS)
+          command: launchctl kickstart -k system/com.openssh.sshd
+          become: true
+          when: ansible_facts['os_family'] == "Darwin"
           tags: ssh
 
       rescue:
