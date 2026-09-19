@@ -8,6 +8,10 @@
 | `cursor/rules/` | `~/git/.cursor/rules/` | Workspace rules (when root is `~/git`) |
 | `openclaw/workspace/` | `~/.openclaw/workspace/` | OpenClaw agent markdown + skills |
 
+Operator docs for the homelab live outside this repo at
+`~/syncthing/notes/docs/selfhosted/`. The **selfhosted-docs** Cursor rule
+(and OpenClaw `AGENTS.md`) tell agents to consult that folder.
+
 ## Install
 
 **One command (any machine):**
