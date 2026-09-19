@@ -28,6 +28,18 @@ cd ~/git/dotfiles
 stow --target=$HOME .
 ```
 
+## AI skills / rules (Cursor + OpenClaw)
+
+Versioned under `.cursor/skills/`, `cursor/rules/`, and `openclaw/workspace/`.
+Stow cannot adopt those live trees, so apply with:
+
+```bash
+bash ~/git/dotfiles/scripts/link_ai_markdown.sh
+```
+
+Or ask Cursor: *symlink the AI markdown files from dotfiles*. Details:
+[cursor/README.md](cursor/README.md), [openclaw/README.md](openclaw/README.md).
+
 ## uBlock Origin
 Custom filter lists are LAN-hosted (not in this public repo).
 

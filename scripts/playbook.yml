@@ -1568,14 +1568,14 @@
             msg: "⚠️ Neovim configuration failed, continuing."
           tags: nvim
 
-    # 🔹 Stow dotfiles + Cursor skills/rules
+    # 🔹 Stow dotfiles + Cursor/OpenClaw AI markdown
     - name: Symlink dotfiles with stow
       ansible.builtin.command:
         cmd: python3 "{{ lookup('env', 'HOME') }}/git/dotfiles/scripts/apply_stow.py"
       become: false
       tags: stow
 
-    - name: Link Cursor Taiga-ticket skill and workspace rules
+    - name: Link Cursor + OpenClaw AI markdown from dotfiles
       block:
         - name: Ensure ~/git workspace exists
           ansible.builtin.file:
@@ -1584,17 +1584,21 @@
             mode: "0755"
           tags: cursor
 
-        - name: Link Cursor skills and rules from dotfiles
+        - name: Symlink AI skills/rules/workspace markdown
           ansible.builtin.command:
-            cmd: bash "{{ lookup('env', 'HOME') }}/git/dotfiles/scripts/link_cursor_rules.sh"
+            cmd: bash "{{ lookup('env', 'HOME') }}/git/dotfiles/scripts/link_ai_markdown.sh"
           environment:
             DOTFILES: "{{ lookup('env', 'HOME') }}/git/dotfiles"
             GIT_ROOT: "{{ lookup('env', 'HOME') }}/git"
           become: false
-          tags: cursor
+          tags:
+            - cursor
+            - openclaw
 
       rescue:
-        - name: Log Cursor skill/rule link failure
+        - name: Log AI markdown link failure
           debug:
-            msg: "⚠️ Cursor skill/rule linking failed, continuing."
-          tags: cursor
+            msg: "⚠️ AI markdown linking (Cursor/OpenClaw) failed, continuing."
+          tags:
+            - cursor
+            - openclaw
