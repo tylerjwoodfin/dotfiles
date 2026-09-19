@@ -254,8 +254,10 @@ def main():
     # Sync BetterTouchTool settings if on icecream
     sync_bettertouchtool()
 
-    # Cursor skills + workspace rules (see dotfiles/cursor/README.md)
-    link_script = DOTFILES / "scripts" / "link_cursor_rules.sh"
+    # Cursor + OpenClaw AI markdown (see cursor/README.md, openclaw/README.md)
+    link_script = DOTFILES / "scripts" / "link_ai_markdown.sh"
+    if not link_script.is_file():
+        link_script = DOTFILES / "scripts" / "link_cursor_rules.sh"
     if link_script.is_file():
         subprocess.run(["bash", str(link_script)], check=False)
 
