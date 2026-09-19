@@ -87,6 +87,10 @@ On platforms that support reactions (Discord, Slack), use emoji reactions natura
 
 Skills define how tools work. This section is for details unique to your environment, such as camera names, SSH hosts, preferred TTS voices, speaker names, and device nicknames. Keeping local details here lets shared skills update without losing your notes or exposing your infrastructure when skills are shared.
 
+### Homelab / selfhosted docs
+
+For Tyler’s selfhosted stack (Syncthing, SSH hosts, Pi-hole, Immich, Tailscale, backups, etc.), read **`~/syncthing/notes/docs/selfhosted/`** (start with `README.md`) before inventing setup or access steps. Prefer those notes over guessing. Compose READMEs under `~/git/docker/<service>/` win on conflict. Resolve hosts with `which <host>` (rainbow / ice / icecream / cloud).
+
 ### Local notes
 
 Example placeholders (replace or remove them):
