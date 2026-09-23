@@ -11,7 +11,7 @@ Agent-facing OpenClaw markdown lives here and is **symlinked** into
 | `workspace/SOUL.md` | `~/.openclaw/workspace/SOUL.md` | Persona |
 | `workspace/IDENTITY.md` | `~/.openclaw/workspace/IDENTITY.md` | Name / vibe |
 | `workspace/USER.md` | `~/.openclaw/workspace/USER.md` | Stable user directives |
-| `workspace/skills/*` | `~/.openclaw/workspace/skills/*` | OpenClaw skills (diary, food, …) |
+| `workspace/skills/*` | `~/.openclaw/workspace/skills/*` | OpenClaw skills (diary, food, amazon-grocery, …) |
 
 **Not versioned here:** `DREAMS.md`, `MEMORY.md`, `memory/`, runtime config under
 `~/.openclaw/openclaw.json` (secrets).
