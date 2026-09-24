@@ -1,6 +1,6 @@
 # Ticket implementation template
 
-Use this checklist for every Taiga ticket implementation.
+Use this checklist for every ticket implementation.
 
 ## Understand
 
@@ -26,7 +26,7 @@ Use this checklist for every Taiga ticket implementation.
 - [ ] Commit: `TJW-###: <summary>`
 - [ ] Push branch
 - [ ] Open GitHub PR with Summary + Test plan
-- [ ] Comment on Taiga with PR link; move to `Testing` (or configured column)
+- [ ] Comment on the ticket with the PR link; move it to `Testing` (or the column the user named)
 
 ## PR body template
 
