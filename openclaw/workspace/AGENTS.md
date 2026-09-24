@@ -127,6 +127,16 @@ Meal logging is owned by the `food` plugin (`~/git/tools/openclaw/food`) and the
 - Source of truth: `python3 ~/git/tools/foodlog/main.py`.
 - Prefer the cloud default model for the main Telegram session. A pinned local 26B model disables automatic fallbacks and is a common cause of food-log timeouts.
 
+## Word recall (Telegram)
+
+Definition quizzes are owned by the `words` plugin (`~/git/tools/openclaw/words`). Do **not** quiz words in the main agent turn.
+
+- `/words` or `/recall` asks for the word matching a definition. `/words add word — definition` adds a card. `/words list` shows the deck. `/words skip` drops the open quiz.
+- A short reply while a quiz is waiting is graded by the plugin. Other chats are not answers.
+- **Never claim a word was added, graded, or moved** unless the plugin returned that action.
+- The list is `~/syncthing/notes/words_to_remember.md`. Three correct recalls move a word under `## Completed`.
+- `word-recall-tick` may send one quiz between 5pm and 9pm Pacific, then waits 2–4 days. Completed words come back about every three weeks. An empty list gets one college-level word chosen and added.
+
 ## Automations and heartbeat
 
 Do **not** proactively check email, calendar, social mentions, or weather on heartbeat polls. Those checks only happen when Tyler explicitly asks, or when a dedicated automation job he created says so.

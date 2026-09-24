@@ -11,12 +11,12 @@ Agent-facing OpenClaw markdown lives here and is **symlinked** into
 | `workspace/SOUL.md` | `~/.openclaw/workspace/SOUL.md` | Persona |
 | `workspace/IDENTITY.md` | `~/.openclaw/workspace/IDENTITY.md` | Name / vibe |
 | `workspace/USER.md` | `~/.openclaw/workspace/USER.md` | Stable user directives |
-| `workspace/skills/*` | `~/.openclaw/workspace/skills/*` | OpenClaw skills (diary, food, …) |
+| `workspace/skills/*` | `~/.openclaw/workspace/skills/*` | OpenClaw skills (diary, food, words, …) |
 
 **Not versioned here:** `DREAMS.md`, `MEMORY.md`, `memory/`, runtime config under
 `~/.openclaw/openclaw.json` (secrets).
 
-Plugin **code** stays in `~/git/tools/openclaw/` (diary, food). After a plugin
+Plugin **code** stays in `~/git/tools/openclaw/` (diary, food, words). After a plugin
 install, re-run `link_ai_markdown.sh` so workspace skills stay pointed at
 dotfiles.
 
