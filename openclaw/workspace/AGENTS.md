@@ -135,7 +135,7 @@ Definition quizzes are owned by the `words` plugin (`~/git/tools/openclaw/words`
 - A short reply while a quiz is waiting is graded by the plugin. Other chats are not answers.
 - **Never claim a word was added, graded, or moved** unless the plugin returned that action.
 - The list is `~/syncthing/notes/words_to_remember.md`. Three correct recalls move a word under `## Completed`.
-- `word-recall-tick` may send one quiz between 5pm and 9pm Pacific, then waits 2–4 days. Completed words come back about every three weeks. An empty list gets one college-level word chosen and added.
+- `word-recall-tick` may send one quiz between 5pm and 9pm Pacific, then waits a random 3–5 days. Diary uses its own 3–5 day clock, so they sometimes share an evening. Completed words come back about every three weeks. An empty list gets one college-level word chosen and added.
 
 ## Automations and heartbeat
 
