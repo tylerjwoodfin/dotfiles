@@ -34,10 +34,10 @@ bash ~/git/dotfiles/scripts/link_ai_markdown.sh --dry-run
 |--------------------|-------------|
 | `.cursor/skills/*` | `~/.cursor/skills/` |
 | `cursor/rules/*.mdc` | `~/git/.cursor/rules/` |
-| `openclaw/workspace/{AGENTS,SOUL,IDENTITY,USER}.md` | `~/.openclaw/workspace/` |
-| `openclaw/workspace/skills/*` | `~/.openclaw/workspace/skills/` |
+| `openclaw/workspace/{AGENTS,SOUL,IDENTITY,USER}.md` | `~/.openclaw/workspace/` (**hardlinks** — OpenClaw rejects symlink bootstrap files) |
+| `openclaw/workspace/skills/*` | `~/.openclaw/workspace/skills/` (symlinks) |
 
-Existing **real files** at a destination are moved once under `~/dotfiles-backup/ai-markdown/` before linking. Already-correct symlinks are left alone.
+Existing **real files** at a destination are moved once under `~/dotfiles-backup/ai-markdown/` before linking. Already-correct links are left alone.
 
 ## Do not
 

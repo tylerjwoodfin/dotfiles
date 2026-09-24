@@ -87,6 +87,16 @@ On platforms that support reactions (Discord, Slack), use emoji reactions natura
 
 Skills define how tools work. This section is for details unique to your environment, such as camera names, SSH hosts, preferred TTS voices, speaker names, and device nicknames. Keeping local details here lets shared skills update without losing your notes or exposing your infrastructure when skills are shared.
 
+### Closing Mac GUI apps
+
+- Prefer AppleScript quit: `osascript -e 'quit app "Spotify"'` (swap the app name).
+- Do **not** treat bare `pkill -i AppName` as proof of success. On macOS it often signals helper processes, exits 0, and leaves the main app running.
+- Before claiming an app is closed, re-check with `pgrep -ix AppName` (or `pgrep -x Spotify`). If it is still there, quit again (osascript / `killall`) and re-check — never claim success from a kill command alone.
+
+### Homelab / selfhosted docs
+
+For Tyler’s selfhosted stack (Syncthing, SSH hosts, Pi-hole, Immich, Tailscale, backups, etc.), read **`~/syncthing/notes/docs/selfhosted/`** (start with `README.md`) before inventing setup or access steps. Prefer those notes over guessing. Compose READMEs under `~/git/docker/<service>/` win on conflict. Resolve hosts with `which <host>` (rainbow / ice / icecream / cloud).
+
 ### Local notes
 
 Example placeholders (replace or remove them):
@@ -126,6 +136,15 @@ Meal logging is owned by the `food` plugin (`~/git/tools/openclaw/food`) and the
 - At 7pm local, `food-log-remind` runs `food_cli.py tick`. If nothing is logged or the total is under 1000 calories, it sends a short *fresh* Telegram nudge. If the total is already ≥1000 or the day is submitted, it stays quiet.
 - Source of truth: `python3 ~/git/tools/foodlog/main.py`.
 - Prefer the cloud default model for the main Telegram session. A pinned local 26B model disables automatic fallbacks and is a common cause of food-log timeouts.
+
+## Grocery list → Amazon cart
+
+When Tyler asks to put the Reminders **Grocery** list into his Amazon cart, follow the `amazon-grocery` skill.
+
+- Read incomplete items only: `osascript ~/git/dotfiles/openclaw/workspace/skills/amazon-grocery/scripts/list_grocery.applescript`
+- Add each with `python3 ~/git/tools/amazon/main.py --yes "…"` (one at a time). That adds to the cart; it does not buy.
+- **Leave the reminders in the Grocery list.** Never complete, delete, or edit them.
+- Claim an item was added only when the tool printed `Added to cart:`.
 
 ## Word recall (Telegram)
 

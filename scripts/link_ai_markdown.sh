@@ -74,11 +74,30 @@ backup_if_real() {
 
 link_path() {
   local src="$1" dest="$2"
+  # mode: symlink (default) | hardlink — OpenClaw rejects symlink bootstrap files
+  local mode="${3:-symlink}"
   if [[ ! -e "$src" ]]; then
     echo "skip missing source: $src" >&2
     return 0
   fi
   run mkdir -p "$(dirname "$dest")"
+  if [[ "$mode" == "hardlink" ]]; then
+    if [[ -e "$dest" && ! -L "$dest" ]]; then
+      local src_inode dest_inode
+      src_inode="$(stat -f '%i' "$src" 2>/dev/null || true)"
+      dest_inode="$(stat -f '%i' "$dest" 2>/dev/null || true)"
+      if [[ -n "$src_inode" && "$src_inode" == "$dest_inode" ]]; then
+        echo "ok $dest (hardlink)"
+        return 0
+      fi
+      backup_if_real "$dest"
+    elif [[ -L "$dest" ]]; then
+      run rm -f "$dest"
+    fi
+    run ln -f "$src" "$dest"
+    echo "hardlinked $dest -> $src"
+    return 0
+  fi
   if [[ -e "$dest" || -L "$dest" ]]; then
     if [[ -L "$dest" ]]; then
       local current
@@ -135,9 +154,11 @@ OC_SRC="$DOTFILES/openclaw/workspace"
 OC_DEST="$OPENCLAW_HOME/workspace"
 if [[ -d "$OC_SRC" ]]; then
   run mkdir -p "$OC_DEST"
+  # Hardlink bootstrap files: OpenClaw refuses symlink path components for
+  # AGENTS/SOUL/IDENTITY/USER (logs: "symlink path component not allowed").
   for name in AGENTS.md SOUL.md IDENTITY.md USER.md; do
     if [[ -f "$OC_SRC/$name" ]]; then
-      link_path "$OC_SRC/$name" "$OC_DEST/$name"
+      link_path "$OC_SRC/$name" "$OC_DEST/$name" hardlink
     fi
   done
   echo "==> OpenClaw workspace skills"
