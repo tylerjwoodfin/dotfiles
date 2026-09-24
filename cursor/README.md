@@ -50,7 +50,7 @@ Skills load from `~/.cursor/skills/`. Rules apply when the workspace root is
 backloggist tjw-242
 ```
 
-or `implement TJW-242` → **taiga-ticket** skill.
+or `implement TJW-242` → **vikunja-ticket** skill.
 
 ```text
 symlink the AI markdown files from dotfiles

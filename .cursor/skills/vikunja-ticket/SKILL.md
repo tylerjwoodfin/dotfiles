@@ -1,22 +1,23 @@
 ---
-name: taiga-ticket
+name: vikunja-ticket
 description: >-
-  Implement Taiga tickets (TJW-###) for Tyler's ~/git workspace: fetch ticket
-  from Taiga, pick repo, branch, implement, test, commit, push, open GitHub PR,
-  update Taiga. Use when the user says backloggist, tjw-###, TJW-###, implement
-  taiga ticket, or fix taiga ticket.
+  Implement tickets (TJW-###) for Tyler's ~/git workspace: fetch the ticket
+  from Vikunja, pick repo, branch, implement, test, commit, push, open a
+  GitHub PR, and update Vikunja. Use when the user says tjw-###, TJW-###,
+  implement ticket, fix ticket, v, or v.tyler.cloud.
 ---
 
-# Taiga ticket workflow (Cursor-native)
+# Ticket workflow (Vikunja)
 
-You implement the ticket directly in the repo. Do **not** import `backloggist`
-or `automation.*` — that package is gone. Use `~/git/tools/taiga/ticket.py`.
+Vikunja at `https://v.tyler.cloud` is the TJW board. Implement the ticket
+directly in the repo. Use `~/git/tools/vikunja/ticket.py`. `v` creates a ticket;
+this skill loads and finishes existing ones.
 
 ## When to use
 
-- `backloggist tjw-242` / `backloggist TJW-242`
 - `implement TJW-242` / `fix tjw-242`
-- Any request to implement a Taiga user story by ref
+- Any request to implement a ticket by ref
+- `v new …` creates a ticket on the TJW board
 
 ## Configuration (Cabinet)
 
@@ -24,37 +25,22 @@ Read via `cabinet --get` / life-ops `cabinet_get` (never print secrets):
 
 | Key | Purpose |
 |-----|---------|
-| `taiga.api_root` | Direct taiga-back API (`http://<bridge-ip>:8000/api/v1`) |
-| `taiga.auth_token` | Application token (colon-separated) or JWT |
+| `vikunja.api_root` | Direct API, `http://127.0.0.1:3456/api/v1` (bypasses Authentik) |
+| `vikunja.api_token` | Bearer token for the CLI user |
+| `vikunja.base_url` | Public UI, `https://v.tyler.cloud` |
 | `backloggist.github_token` | GitHub PAT with `repo` (also used by `gh auth`) |
-| `backloggist.taiga_human_review_status` | Kanban column after fix (default: `Testing`) |
 
-**Stale Docker IPs:** Bridge IPs change when Taiga containers recreate.
-`ticket.py` probes Cabinet `taiga.api_root`, then discovers
-`taiga-docker-taiga-back-1` via `docker inspect`, then falls back to
-`taiga.base_url`. A working root is written back to Cabinet automatically.
-Do **not** hard-code `172.25.0.*` in scripts.
+After a fix, move the card to **Testing** unless the user names another column.
 
-Auth: JWT → `Bearer`; application tokens → `Application` (see
-`~/git/tools/taiga/main.py`).
+Do not call `https://v.tyler.cloud/api/v1` from scripts. Authentik sits in front
+of that host. The loopback root above is the stable one.
 
 ## Workflow
 
 ### 1. Load the ticket
 
 ```bash
-python3 ~/git/tools/taiga/ticket.py get TJW-242
-```
-
-If attachments are listed, download them:
-
-```bash
-cd ~/git/tools/taiga && python3 -c "
-from ticket import TaigaClient
-c = TaigaClient()
-t = c.get_ticket('TJW-242')
-print(c.download_attachments(t, '/tmp/tjw-242'))
-"
+python3 ~/git/tools/vikunja/ticket.py get TJW-242
 ```
 
 ### 2. Choose repository
@@ -114,12 +100,12 @@ If the repo's `AGENTS.md` says to target a release branch, set `--base` accordin
 
 GitHub owner default: `tylerjwoodfin`.
 
-### 7. Update Taiga
+### 7. Update the ticket
 
-Move ticket to human-review column and comment with PR link(s):
+Move the ticket to **Testing** and comment with PR link(s):
 
 ```bash
-python3 ~/git/tools/taiga/ticket.py finish TJW-242 --comment "$(cat <<'EOF'
+python3 ~/git/tools/vikunja/ticket.py finish TJW-242 --comment "$(cat <<'EOF'
 Fixed by **Cursor**.
 
 Pull requests:
@@ -131,12 +117,12 @@ EOF
 ## Dry-run / plan-only
 
 If the user says "plan" or "dry-run", fetch the ticket and outline the approach
-without pushing or updating Taiga unless they ask to proceed.
+without pushing or updating the ticket unless they ask to proceed.
 
 ## Do not
 
 - Import `backloggist` / `automation` (removed).
 - Shell out to `codex exec`.
+- Print `vikunja.api_token` or other Cabinet secrets.
 - Skip tests when the repo has them.
-- Hard-code Docker bridge IPs for Taiga.
-- Push or update Taiga without user approval on ambiguous tickets.
+- Push or update the ticket without user approval on ambiguous tickets.
