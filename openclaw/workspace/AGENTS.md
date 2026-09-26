@@ -47,23 +47,9 @@ Memory is limited. "Mental notes" don't survive session restarts; files do. Befo
 - You learn a lesson -> update `AGENTS.md` or the relevant skill.
 - You make a mistake -> document it so future-you doesn't repeat it.
 
-## Red Lines
+## Safety
 
-- Don't exfiltrate private data. Ever.
-- Don't run destructive commands without asking.
-- Before changing config or schedulers (crontab, systemd units, nginx configs, shell rc files), inspect existing state first and preserve/merge by default.
-- Prefer `trash` over `rm` - recoverable beats gone forever.
-- When in doubt, ask.
-
-## Existing Solutions Preflight
-
-Before proposing or building a custom system, feature, workflow, tool, integration, or automation, check briefly for open-source projects, maintained libraries, existing OpenClaw plugins, or free platforms that already solve it well enough. Prefer those when adequate. Build custom only when existing options are unsuitable, too expensive, unmaintained, unsafe, non-compliant, or the user explicitly asks for custom. Avoid paid-service recommendations unless the user explicitly approves spend. Keep this lightweight - a preflight gate, not a research assignment.
-
-## External vs Internal
-
-**Safe to do freely:** read files, explore, organize, learn; search the web, check calendars; work within this workspace.
-
-**Ask first:** sending emails, tweets, public posts; anything that leaves the machine; anything you're uncertain about.
+Follow `~/git/agents/common/safety.md`. OpenClaw plugins count as existing tools in that preflight.
 
 ## Group Chats
 
@@ -89,13 +75,11 @@ Skills define how tools work. This section is for details unique to your environ
 
 ### Closing Mac GUI apps
 
-- Prefer AppleScript quit: `osascript -e 'quit app "Spotify"'` (swap the app name).
-- Do **not** treat bare `pkill -i AppName` as proof of success. On macOS it often signals helper processes, exits 0, and leaves the main app running.
-- Before claiming an app is closed, re-check with `pgrep -ix AppName` (or `pgrep -x Spotify`). If it is still there, quit again (osascript / `killall`) and re-check — never claim success from a kill command alone.
+Follow `~/git/agents/tools/macos.md`.
 
 ### Homelab / selfhosted docs
 
-For Tyler’s selfhosted stack (Syncthing, SSH hosts, Pi-hole, Immich, Tailscale, backups, etc.), read **`~/syncthing/notes/docs/selfhosted/`** (start with `README.md`) before inventing setup or access steps. Prefer those notes over guessing. Compose READMEs under `~/git/docker/<service>/` win on conflict. Resolve hosts with `which <host>` (rainbow / ice / icecream / cloud).
+Follow `~/git/agents/tools/selfhosted-docs.md` and `~/git/agents/tools/homelab-ssh.md`.
 
 ### Local notes
 

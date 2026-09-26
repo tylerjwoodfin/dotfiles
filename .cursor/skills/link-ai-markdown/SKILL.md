@@ -9,11 +9,11 @@ description: >-
 
 # Link AI markdown from dotfiles
 
-Canonical sources live in **`~/git/dotfiles`**. Live paths are symlinks.
+Reusable instruction text lives in **`~/git/agents`**. This repo owns the Cursor and OpenClaw adapters and the linker. Live paths are symlinks to those adapters.
 
 ## Do this
 
-1. Confirm the repo exists (`~/git/dotfiles`). If missing, clone it first (Tyler's GitHub: `tylerjwoodfin/dotfiles`).
+1. Confirm both repos exist. If missing, clone them first (Tyler's GitHub: `tylerjwoodfin/dotfiles`, `tylerjwoodfin/agents`). `agents` must be at `~/git/agents`.
 2. Run:
 
 ```bash

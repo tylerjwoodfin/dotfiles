@@ -1,7 +1,10 @@
 # OpenClaw workspace (versioned in dotfiles)
 
-Agent-facing OpenClaw markdown lives here and is **symlinked** into
+OpenClaw bootstrap files and plugin skills live here and are linked into
 `~/.openclaw/workspace/` by `scripts/link_ai_markdown.sh`.
+
+Reusable instructions (safety, homelab docs, host SSH, closing Mac apps) live in
+`~/git/agents`. `workspace/AGENTS.md` points at those files and does not copy them.
 
 ## Layout
 
