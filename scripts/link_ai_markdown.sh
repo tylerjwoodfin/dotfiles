@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Symlink Cursor + OpenClaw AI skills/rules/workspace markdown from ~/git/dotfiles.
+# Symlink Cursor + OpenClaw adapters from ~/git/dotfiles.
+# Instruction text lives in ~/git/agents. Adapters point at that checkout.
 #
 # Usage (any machine with the repo checked out):
 #   bash ~/git/dotfiles/scripts/link_ai_markdown.sh
@@ -10,6 +11,7 @@
 set -euo pipefail
 
 DOTFILES="${DOTFILES:-$HOME/git/dotfiles}"
+AGENTS_REPO="${AGENTS_REPO:-$HOME/git/agents}"
 GIT_ROOT="${GIT_ROOT:-$HOME/git}"
 OPENCLAW_HOME="${OPENCLAW_HOME:-$HOME/.openclaw}"
 BACKUP_DIR="${AI_MARKDOWN_BACKUP:-$HOME/dotfiles-backup/ai-markdown}"
@@ -19,7 +21,8 @@ usage() {
   cat <<'EOF'
 Usage: link_ai_markdown.sh [--dry-run] [--help]
 
-Symlinks versioned AI markdown from DOTFILES into the live Cursor/OpenClaw paths.
+Symlinks Cursor/OpenClaw adapters from DOTFILES into the live paths.
+Instruction text is read from AGENTS_REPO (default: ~/git/agents).
 
   Cursor skills   $DOTFILES/.cursor/skills/*  ->  ~/.cursor/skills/
   Cursor rules    $DOTFILES/cursor/rules/*.mdc ->  $GIT_ROOT/.cursor/rules/
@@ -29,6 +32,7 @@ Symlinks versioned AI markdown from DOTFILES into the live Cursor/OpenClaw paths
 
 Env:
   DOTFILES           default: ~/git/dotfiles
+  AGENTS_REPO        default: ~/git/agents
   GIT_ROOT           default: ~/git
   OPENCLAW_HOME      default: ~/.openclaw
   AI_MARKDOWN_BACKUP default: ~/dotfiles-backup/ai-markdown
@@ -45,6 +49,12 @@ done
 
 if [[ ! -d "$DOTFILES" ]]; then
   echo "error: DOTFILES not found: $DOTFILES" >&2
+  exit 1
+fi
+
+if [[ ! -d "$AGENTS_REPO/common" || ! -d "$AGENTS_REPO/tools" ]]; then
+  echo "error: agents repo not found at $AGENTS_REPO" >&2
+  echo "Clone https://github.com/tylerjwoodfin/agents to ~/git/agents" >&2
   exit 1
 fi
 

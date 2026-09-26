@@ -28,16 +28,21 @@ cd ~/git/dotfiles
 stow --target=$HOME .
 ```
 
-## AI skills / rules (Cursor + OpenClaw)
+## AI instructions
 
-Versioned under `.cursor/skills/`, `cursor/rules/`, and `openclaw/workspace/`.
-Stow cannot adopt those live trees, so apply with:
+Reusable agent instructions live in [`~/git/agents`](https://github.com/tylerjwoodfin/agents). This repo owns local setup: Cursor and OpenClaw adapters, symlinks, shell config, and bootstrap scripts. Adapters point at `agents`. They do not copy the instruction text.
+
+```text
+agents → dotfiles installs/adapts → Cursor / OpenClaw
+```
+
+Stow cannot adopt the live Cursor and OpenClaw trees, so apply adapters with:
 
 ```bash
 bash ~/git/dotfiles/scripts/link_ai_markdown.sh
 ```
 
-Or ask Cursor: *symlink the AI markdown files from dotfiles*. Details:
+That requires `~/git/agents` to be checked out. Or ask Cursor: *symlink the AI markdown files from dotfiles*. Details:
 [cursor/README.md](cursor/README.md), [openclaw/README.md](openclaw/README.md).
 
 ## uBlock Origin

@@ -1,16 +1,14 @@
-# Cursor + OpenClaw AI config (versioned in dotfiles)
+# Cursor adapters
+
+Reusable instruction text lives in `~/git/agents`. Files here tell Cursor when to load those instructions and how to call Cursor-only tools (MCP discovery, skill triggers, always-on rules).
 
 ## Layout
 
 | Path in dotfiles | Installed to | Purpose |
 |------------------|--------------|---------|
-| `.cursor/skills/` | `~/.cursor/skills/` | Cursor Agent skills |
-| `cursor/rules/` | `~/git/.cursor/rules/` | Workspace rules (when root is `~/git`) |
-| `openclaw/workspace/` | `~/.openclaw/workspace/` | OpenClaw agent markdown + skills |
-
-Operator docs for the homelab live outside this repo at
-`~/syncthing/notes/docs/selfhosted/`. The **selfhosted-docs** Cursor rule
-(and OpenClaw `AGENTS.md`) tell agents to consult that folder.
+| `.cursor/skills/` | `~/.cursor/skills/` | Cursor skill adapters. Each `SKILL.md` points at `~/git/agents` |
+| `cursor/rules/` | `~/git/.cursor/rules/` | Always-on Cursor rules that point at `~/git/agents` |
+| `openclaw/workspace/` | `~/.openclaw/workspace/` | OpenClaw workspace adapter (see [../openclaw/README.md](../openclaw/README.md)) |
 
 ## Install
 
@@ -19,6 +17,8 @@ Operator docs for the homelab live outside this repo at
 ```bash
 bash ~/git/dotfiles/scripts/link_ai_markdown.sh
 ```
+
+`~/git/agents` must already be checked out. The linker does not copy instruction text.
 
 **Cursor chat:** *symlink the AI markdown files from dotfiles* (runs the
 `link-ai-markdown` skill → same script).
@@ -47,10 +47,10 @@ Skills load from `~/.cursor/skills/`. Rules apply when the workspace root is
 ## Usage
 
 ```text
-backloggist tjw-242
+implement TJW-242
 ```
 
-or `implement TJW-242` → **vikunja-ticket** skill.
+→ **vikunja-ticket** adapter, which follows `~/git/agents/tools/vikunja-ticket.md`.
 
 ```text
 symlink the AI markdown files from dotfiles
