@@ -10,7 +10,7 @@ metadata:
     "openclaw":
       {
         "emoji": "🎬",
-        "requires": { "bins": ["python3", "ssh"] },
+        "requires": { "bins": ["python3"] },
       },
   }
 ---
