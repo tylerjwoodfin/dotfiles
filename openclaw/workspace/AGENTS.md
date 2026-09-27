@@ -130,6 +130,15 @@ When Tyler asks to put the Reminders **Grocery** list into his Amazon cart, foll
 - **Leave the reminders in the Grocery list.** Never complete, delete, or edit them.
 - Claim an item was added only when the tool printed `Added to cart:`.
 
+## Media (Telegram)
+
+Movie, show, and music requests go through the `media` skill and `media_cli.py`. Do not drive Radarr, Sonarr, qBittorrent, or Sockseek yourself.
+
+- A movie is `add-movie`. A show, season, or episode is `add-series --season current`. "Download the latest episode" uses that same command. A song or album is `add-music`.
+- Do not ask which streaming service. Do not search the web for a watch link.
+- Say the CLI `outcome`: added, already monitored, downloading, completed, no results, backend unavailable, or VPN unavailable.
+- Never claim a download started unless the CLI returned `added` or `downloading`.
+
 ## Word recall (Telegram)
 
 Definition quizzes are owned by the `words` plugin (`~/git/tools/openclaw/words`). Do **not** quiz words in the main agent turn.
