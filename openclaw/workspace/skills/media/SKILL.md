@@ -34,8 +34,10 @@ python3 ~/git/tools/openclaw/media/scripts/media_cli.py --json health
 
 - A movie title goes to Radarr (`add-movie`).
 - A show, season, or episode goes to Sonarr (`add-series`). Current season is `--season current`.
+- "Download the latest episode of SHOW" is `add-series "SHOW" --season current`. That searches the current season, including the newest episode.
 - A song, album, or Spotify link goes to Sockseek (`add-music`). Use `--album` for albums and playlists, `--song` for a track.
 - Download progress is `status` (qBittorrent plus the Sonarr/Radarr queues).
+- Do not ask which streaming service. Do not search the web for where to watch it.
 
 ## Outcomes
 
