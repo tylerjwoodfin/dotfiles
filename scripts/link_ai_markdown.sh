@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Symlink Cursor + OpenClaw AI skills/rules/workspace markdown from ~/git/dotfiles.
+# Symlink Cursor + OpenClaw adapters from ~/git/dotfiles.
+# Instruction text lives in ~/git/agents. Adapters point at that checkout.
 #
 # Usage (any machine with the repo checked out):
 #   bash ~/git/dotfiles/scripts/link_ai_markdown.sh
@@ -10,6 +11,7 @@
 set -euo pipefail
 
 DOTFILES="${DOTFILES:-$HOME/git/dotfiles}"
+AGENTS_REPO="${AGENTS_REPO:-$HOME/git/agents}"
 GIT_ROOT="${GIT_ROOT:-$HOME/git}"
 OPENCLAW_HOME="${OPENCLAW_HOME:-$HOME/.openclaw}"
 BACKUP_DIR="${AI_MARKDOWN_BACKUP:-$HOME/dotfiles-backup/ai-markdown}"
@@ -19,7 +21,8 @@ usage() {
   cat <<'EOF'
 Usage: link_ai_markdown.sh [--dry-run] [--help]
 
-Symlinks versioned AI markdown from DOTFILES into the live Cursor/OpenClaw paths.
+Symlinks Cursor/OpenClaw adapters from DOTFILES into the live paths.
+Instruction text is read from AGENTS_REPO (default: ~/git/agents).
 
   Cursor skills   $DOTFILES/.cursor/skills/*  ->  ~/.cursor/skills/
   Cursor rules    $DOTFILES/cursor/rules/*.mdc ->  $GIT_ROOT/.cursor/rules/
@@ -29,6 +32,7 @@ Symlinks versioned AI markdown from DOTFILES into the live Cursor/OpenClaw paths
 
 Env:
   DOTFILES           default: ~/git/dotfiles
+  AGENTS_REPO        default: ~/git/agents
   GIT_ROOT           default: ~/git
   OPENCLAW_HOME      default: ~/.openclaw
   AI_MARKDOWN_BACKUP default: ~/dotfiles-backup/ai-markdown
@@ -45,6 +49,12 @@ done
 
 if [[ ! -d "$DOTFILES" ]]; then
   echo "error: DOTFILES not found: $DOTFILES" >&2
+  exit 1
+fi
+
+if [[ ! -d "$AGENTS_REPO/common" || ! -d "$AGENTS_REPO/tools" ]]; then
+  echo "error: agents repo not found at $AGENTS_REPO" >&2
+  echo "Clone https://github.com/tylerjwoodfin/agents to ~/git/agents" >&2
   exit 1
 fi
 
@@ -74,28 +84,32 @@ backup_if_real() {
 
 link_path() {
   local src="$1" dest="$2"
-  # mode: symlink (default) | hardlink — OpenClaw rejects symlink bootstrap files
+  # mode: symlink (default) | copy
+  # OpenClaw bootstrap files must be regular files. It rejects symlinks
+  # ("symlink path component not allowed") and hardlinks
+  # ("path must not be hardlinked").
   local mode="${3:-symlink}"
   if [[ ! -e "$src" ]]; then
     echo "skip missing source: $src" >&2
     return 0
   fi
   run mkdir -p "$(dirname "$dest")"
-  if [[ "$mode" == "hardlink" ]]; then
+  if [[ "$mode" == "copy" ]]; then
     if [[ -e "$dest" && ! -L "$dest" ]]; then
       local src_inode dest_inode
       src_inode="$(stat -f '%i' "$src" 2>/dev/null || true)"
       dest_inode="$(stat -f '%i' "$dest" 2>/dev/null || true)"
       if [[ -n "$src_inode" && "$src_inode" == "$dest_inode" ]]; then
-        echo "ok $dest (hardlink)"
-        return 0
+        # Replace a hardlink with an independent copy of the same bytes.
+        run rm -f "$dest"
+      else
+        backup_if_real "$dest"
       fi
-      backup_if_real "$dest"
     elif [[ -L "$dest" ]]; then
       run rm -f "$dest"
     fi
-    run ln -f "$src" "$dest"
-    echo "hardlinked $dest -> $src"
+    run cp -p "$src" "$dest"
+    echo "copied $dest"
     return 0
   fi
   if [[ -e "$dest" || -L "$dest" ]]; then
@@ -154,11 +168,10 @@ OC_SRC="$DOTFILES/openclaw/workspace"
 OC_DEST="$OPENCLAW_HOME/workspace"
 if [[ -d "$OC_SRC" ]]; then
   run mkdir -p "$OC_DEST"
-  # Hardlink bootstrap files: OpenClaw refuses symlink path components for
-  # AGENTS/SOUL/IDENTITY/USER (logs: "symlink path component not allowed").
+  # Regular copies: the gateway rejects both symlinks and hardlinks.
   for name in AGENTS.md SOUL.md IDENTITY.md USER.md; do
     if [[ -f "$OC_SRC/$name" ]]; then
-      link_path "$OC_SRC/$name" "$OC_DEST/$name" hardlink
+      link_path "$OC_SRC/$name" "$OC_DEST/$name" copy
     fi
   done
   echo "==> OpenClaw workspace skills"

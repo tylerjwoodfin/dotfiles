@@ -47,23 +47,9 @@ Memory is limited. "Mental notes" don't survive session restarts; files do. Befo
 - You learn a lesson -> update `AGENTS.md` or the relevant skill.
 - You make a mistake -> document it so future-you doesn't repeat it.
 
-## Red Lines
+## Safety
 
-- Don't exfiltrate private data. Ever.
-- Don't run destructive commands without asking.
-- Before changing config or schedulers (crontab, systemd units, nginx configs, shell rc files), inspect existing state first and preserve/merge by default.
-- Prefer `trash` over `rm` - recoverable beats gone forever.
-- When in doubt, ask.
-
-## Existing Solutions Preflight
-
-Before proposing or building a custom system, feature, workflow, tool, integration, or automation, check briefly for open-source projects, maintained libraries, existing OpenClaw plugins, or free platforms that already solve it well enough. Prefer those when adequate. Build custom only when existing options are unsuitable, too expensive, unmaintained, unsafe, non-compliant, or the user explicitly asks for custom. Avoid paid-service recommendations unless the user explicitly approves spend. Keep this lightweight - a preflight gate, not a research assignment.
-
-## External vs Internal
-
-**Safe to do freely:** read files, explore, organize, learn; search the web, check calendars; work within this workspace.
-
-**Ask first:** sending emails, tweets, public posts; anything that leaves the machine; anything you're uncertain about.
+Follow `~/git/agents/common/safety.md`. OpenClaw plugins count as existing tools in that preflight.
 
 ## Group Chats
 
@@ -89,13 +75,11 @@ Skills define how tools work. This section is for details unique to your environ
 
 ### Closing Mac GUI apps
 
-- Prefer AppleScript quit: `osascript -e 'quit app "Spotify"'` (swap the app name).
-- Do **not** treat bare `pkill -i AppName` as proof of success. On macOS it often signals helper processes, exits 0, and leaves the main app running.
-- Before claiming an app is closed, re-check with `pgrep -ix AppName` (or `pgrep -x Spotify`). If it is still there, quit again (osascript / `killall`) and re-check — never claim success from a kill command alone.
+Follow `~/git/agents/tools/macos.md`.
 
 ### Homelab / selfhosted docs
 
-For Tyler’s selfhosted stack (Syncthing, SSH hosts, Pi-hole, Immich, Tailscale, backups, etc.), read **`~/syncthing/notes/docs/selfhosted/`** (start with `README.md`) before inventing setup or access steps. Prefer those notes over guessing. Compose READMEs under `~/git/docker/<service>/` win on conflict. Resolve hosts with `which <host>` (rainbow / ice / icecream / cloud).
+Follow `~/git/agents/tools/selfhosted-docs.md` and `~/git/agents/tools/homelab-ssh.md`.
 
 ### Local notes
 
@@ -145,6 +129,25 @@ When Tyler asks to put the Reminders **Grocery** list into his Amazon cart, foll
 - Add each with `python3 ~/git/tools/amazon/main.py --yes "…"` (one at a time). That adds to the cart; it does not buy.
 - **Leave the reminders in the Grocery list.** Never complete, delete, or edit them.
 - Claim an item was added only when the tool printed `Added to cart:`.
+
+## Media (Telegram)
+
+Movie, show, and music requests go through the `media` skill and `media_cli.py`. Do not drive Radarr, Sonarr, qBittorrent, or Sockseek yourself.
+
+- A movie is `add-movie`. A show, season, or episode is `add-series --season current`. "Download the latest episode" uses that same command. A song or album is `add-music`.
+- Do not ask which streaming service. Do not search the web for a watch link.
+- Say the CLI `outcome`: added, already monitored, downloading, completed, no results, backend unavailable, or VPN unavailable.
+- Never claim a download started unless the CLI returned `added` or `downloading`.
+
+## Word recall (Telegram)
+
+Definition quizzes are owned by the `words` plugin (`~/git/tools/openclaw/words`). Do **not** quiz words in the main agent turn.
+
+- `/words` or `/recall` asks for the word matching a definition. `/words add word — definition` adds a card. `/words list` shows the deck. `/words skip` drops the open quiz.
+- A short reply while a quiz is waiting is graded by the plugin. Other chats are not answers.
+- **Never claim a word was added, graded, or moved** unless the plugin returned that action.
+- The list is `~/syncthing/notes/words_to_remember.md`. Three correct recalls move a word under `## Completed`.
+- `word-recall-tick` may send one quiz between 5pm and 9pm Pacific, then waits a random 3–5 days. Diary uses its own 3–5 day clock, so they sometimes share an evening. Completed words come back about every three weeks. An empty list gets one college-level word chosen and added.
 
 ## Automations and heartbeat
 

@@ -9,11 +9,11 @@ description: >-
 
 # Link AI markdown from dotfiles
 
-Canonical sources live in **`~/git/dotfiles`**. Live paths are symlinks.
+Reusable instruction text lives in **`~/git/agents`**. This repo owns the Cursor and OpenClaw adapters and the linker. Live paths are symlinks to those adapters.
 
 ## Do this
 
-1. Confirm the repo exists (`~/git/dotfiles`). If missing, clone it first (Tyler's GitHub: `tylerjwoodfin/dotfiles`).
+1. Confirm both repos exist. If missing, clone them first (Tyler's GitHub: `tylerjwoodfin/dotfiles`, `tylerjwoodfin/agents`). `agents` must be at `~/git/agents`.
 2. Run:
 
 ```bash
@@ -34,7 +34,7 @@ bash ~/git/dotfiles/scripts/link_ai_markdown.sh --dry-run
 |--------------------|-------------|
 | `.cursor/skills/*` | `~/.cursor/skills/` |
 | `cursor/rules/*.mdc` | `~/git/.cursor/rules/` |
-| `openclaw/workspace/{AGENTS,SOUL,IDENTITY,USER}.md` | `~/.openclaw/workspace/` (**hardlinks** — OpenClaw rejects symlink bootstrap files) |
+| `openclaw/workspace/{AGENTS,SOUL,IDENTITY,USER}.md` | `~/.openclaw/workspace/` (regular copies — OpenClaw rejects symlink and hardlink bootstrap files) |
 | `openclaw/workspace/skills/*` | `~/.openclaw/workspace/skills/` (symlinks) |
 
 Existing **real files** at a destination are moved once under `~/dotfiles-backup/ai-markdown/` before linking. Already-correct links are left alone.

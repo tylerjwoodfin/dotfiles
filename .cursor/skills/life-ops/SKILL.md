@@ -6,28 +6,8 @@ description: >-
   config, save a reminder, log food, add a milestone, or search Immich photos.
 ---
 
-# Life-ops MCP
+# Life-ops (Cursor)
 
-Prefer the **life-ops** MCP server tools over inventing `python ~/git/tools/...` or `cabinet` one-liners.
+Follow `~/git/agents/tools/life-ops.md`.
 
-## Discover tools first
-
-Call `GetMcpTools` for server `life-ops` (or pattern `life.?ops|cabinet_get|remind_save`) before `CallMcpTool`.
-
-## Tools
-
-| Tool | When |
-|------|------|
-| `cabinet_get` | Read config/data by path (`quality.cloud`, `vikunja.base_url`, …). Secrets are redacted. |
-| `cabinet_put` | Write a string value. Do **not** put secrets unless the user explicitly provides them. |
-| `remind_save` | Schedule a reminder (`title`, `when`, optional `notes`/`tags`). |
-| `foodlog_add` | Log food with known calories (`food`, `calories`). Do not prompt interactively. |
-| `milestone_add` | Append to `milestones.md` for current year/month. |
-| `immich_search` | Search photos. Requires Cabinet `immich.api_url` + `immich.api_key`. |
-
-## Rules
-
-- Never print Cabinet tokens, passwords, or API keys into chat.
-- If Immich is unconfigured, tell the user to set the two Cabinet keys (see `~/git/tools/lifeops-mcp/README.md`) instead of guessing URLs.
-- For Vikunja ticket implementation, keep using the **vikunja-ticket** skill; life-ops does not replace it.
-- Foodlog without calories: ask the user for a calorie number (or look up from conversation) — do not run the interactive foodlog CLI.
+Discover tools before calling them. Call `GetMcpTools` for server `life-ops` (or pattern `life.?ops|cabinet_get|remind_save`), then `CallMcpTool`.
