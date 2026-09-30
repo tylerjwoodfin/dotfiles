@@ -85,58 +85,66 @@ Example Cabinet config:
 
 # launcher.py
 
-An interactive TUI launcher for zsh functions and aliases from `common.zsh`.
-`
+Command picker for zsh functions and aliases. With no arguments it opens a Textual TUI. With arguments it prints a command for the shell to run, which works over SSH.
+
 ## Features
 
-- **Fuzzy Search**: Type to search through functions and aliases
-- **Interactive Navigation**: Use arrow keys to navigate through results
-- **Performance Optimized**: Caches parsed commands for fast startup
-- **Rich TUI**: Beautiful terminal interface with syntax highlighting
+- Fuzzy search over functions, aliases, descriptions, categories, and host
+- Preview pane with the full command and host (`local` or `cloud`)
+- Categories: `git`, `life-ops`, `docker`, `network` (`git: status` filters to one)
+- Recent commands and favorites (`ctrl+f`)
+- `# launcher-hidden` commands stay hidden until `ctrl+h`
+- Prompted actions: `remind`, `foodlog`, `milestone`, `diary`, `v` (Vikunja), `cdd` (docker project)
+- No match offers an optional cabbie row, labeled as an AI path
+- `not-cloud` and `phone` overlays show the cloud wrapper; `network` adds SSH hosts
 
 ## Usage
 
-Run the launcher with:
 ```bash
 l
+l remind milk tomorrow
+l foodlog pizza 800
+l v buy milk
+l cdd plex
+l --cabbie show disk free
 ```
 
 Or directly:
+
 ```bash
 python3 ~/git/dotfiles/launcher.py
 ```
 
 ## Controls
 
-- **Type**: Start typing to search for commands
-- **↑/↓**: Navigate through results (up to 3 shown)
-- **Enter**: Execute the selected command
-- **Ctrl+C**: Exit the launcher
+- **Type**: search. Prefixes: `git:`, `life-ops:`, `docker:`, `network:`
+- **↑/↓**: move the highlight (works while the search box is focused)
+- **Enter**: run the command, or prompt for arguments
+- **Esc**: back out of a prompt, or quit
+- **ctrl+h**: show or hide `# launcher-hidden` commands
+- **ctrl+f**: toggle a favorite
+- **ctrl+c**: quit
 
 ## Installation
 
-The launcher requires Python packages that are automatically installed when you run it for the first time:
+```bash
+pip install -r ~/git/dotfiles/requirements.txt
+```
 
-- `rich` - For the TUI interface
-- `fuzzywuzzy` - For fuzzy search
-- `python-Levenshtein` - For improved fuzzy search performance
+- `textual` — TUI
+- `fuzzywuzzy` — fuzzy search
+- `python-Levenshtein` — faster fuzzy scoring
 
 ## How it Works
 
-1. Parses `common.zsh` to extract functions and aliases
-2. Extracts comments above each function/alias as descriptions
-3. Caches the parsed data for fast subsequent launches
-4. Provides fuzzy search over command names and descriptions
-5. Executes selected commands in the current shell context
-
-## Performance
-
-- **Caching**: Commands are cached in `~/.cache/launcher_cache.pkl`
-- **Fast Search**: Uses substring matching first, then fuzzy matching
-- **Optimized Parsing**: Only re-parses when the zsh file changes
+1. Parses `zsh/common.zsh` and every overlay `DOTFILES_OPTS` sources
+2. Uses the comment above a function, or the inline comment on an alias, as the description
+3. Rewrites `not-cloud` / `phone` commands so the preview shows `cloud <name>`
+4. Caches the parse in `~/.cache/launcher_cache.pkl` until any sourced file or the opts change
+5. Writes the chosen command to a temp file; `l()` evals it in the current shell
 
 ## Notes
 
-- The launcher excludes itself (`l` alias) from the results
-- Commands are executed by sourcing the zsh file and running the function/alias
-- The launcher works with both functions and aliases defined in `common.zsh`
+- The launcher excludes itself (`l`)
+- Favorites and recents live in `~/.cache/launcher_usage.pkl`
+- Non-interactive `l <words>` does not call cabbie unless you pass `--cabbie`
