@@ -325,6 +325,32 @@ class LauncherTests(unittest.TestCase):
             self.assertFalse(cmd.raw_command.startswith("export"))
             self.assertNotIn("TOKEN", cmd.name)
 
+    def test_legacy_cmd_file_argument_opens_the_picker(self):
+        """``l`` used to pass the temp path as the only argument."""
+        cmd_file = self.tmp / "legacy-cmd"
+        cmd_file.write_text("", encoding="utf-8")
+        launched = {}
+
+        def fake_tui(commands, usage, docker_root):
+            launched["commands"] = commands
+            return "echo ok"
+
+        previous_cache = os.environ.get("LAUNCHER_CACHE")
+        previous_opts = os.environ.get("LAUNCHER_DOTFILES_OPTS")
+        previous_tui = launcher.launch_tui
+        os.environ["LAUNCHER_CACHE"] = str(self.tmp / "legacy.pkl")
+        os.environ["LAUNCHER_DOTFILES_OPTS"] = "common"
+        launcher.launch_tui = fake_tui
+        try:
+            code = launcher.main([str(cmd_file)])
+        finally:
+            launcher.launch_tui = previous_tui
+            self._restore_env("LAUNCHER_CACHE", previous_cache)
+            self._restore_env("LAUNCHER_DOTFILES_OPTS", previous_opts)
+        self.assertEqual(code, 0)
+        self.assertIn("commands", launched)
+        self.assertEqual(cmd_file.read_text(encoding="utf-8"), "echo ok")
+
     def test_main_writes_command_file(self):
         """`l gs` writes the alias body for the shell wrapper."""
         cache = self.tmp / "main-cache.pkl"

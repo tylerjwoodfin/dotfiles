@@ -23,8 +23,11 @@ import re
 import shlex
 import subprocess
 import sys
+import warnings
 from dataclasses import dataclass
 from pathlib import Path
+
+warnings.filterwarnings("ignore", category=UserWarning, module=r"fuzzywuzzy")
 
 try:
     from fuzzywuzzy import fuzz, process  # pyright: ignore[reportMissingImports]
@@ -1243,9 +1246,23 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def adopt_legacy_cmd_file(args: argparse.Namespace) -> argparse.Namespace:
+    """Treat a lone temp-file argument as ``--cmd-file``.
+
+    Shells that have not re-sourced ``l()`` still call ``launcher.py "$cmd_file"``.
+    """
+    if args.cmd_file or args.cabbie or len(args.words) != 1:
+        return args
+    candidate = Path(args.words[0])
+    if candidate.is_file():
+        args.cmd_file = str(candidate)
+        args.words = []
+    return args
+
+
 def main(argv: list[str] | None = None) -> int:
     """Parse zsh, then open the TUI or resolve a non-interactive command."""
-    args = parse_args(argv)
+    args = adopt_legacy_cmd_file(parse_args(argv))
     opts = load_opts()
     root = Path(__file__).resolve().parent
     files = discover_sources(root, opts)
