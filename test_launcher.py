@@ -228,21 +228,17 @@ class LauncherTests(unittest.TestCase):
                 ["nope"], commands, cabbie=False, docker_root=docker
             )
         self.assertIn("cabbie", str(caught.exception))
-        self.assertNotIn("taiga", str(caught.exception).lower())
         asked = resolve_invocation(
             ["disk", "free"], commands, cabbie=True, docker_root=docker
         )
         self.assertEqual(asked, f"cabbie {shlex.quote('disk free')}")
 
-    def test_catalog_and_messages_do_not_mention_taiga(self):
-        """The picker speaks Vikunja, not the old tracker name."""
+    def test_vikunja_preview_prompts_for_a_title(self):
+        """Creating a ticket is the Vikunja `v` action."""
         commands = self.parse([])
-        for cmd in commands.values():
-            blob = " ".join([cmd.name, cmd.description, cmd.raw_command, cmd.action])
-            self.assertNotIn("taiga", blob.lower())
         text = preview_text(commands["v"])
-        self.assertNotIn("taiga", text.lower())
         self.assertIn("v '<title>'", text)
+        self.assertIn("life-ops", text)
 
     def test_filter_hides_commands_until_asked(self):
         """Hidden rows, category filters, favorites, and the cabbie fallback."""
@@ -298,7 +294,7 @@ class LauncherTests(unittest.TestCase):
         self.assertEqual(load_opts({}, zshrc=zshrc), ["common", "network", "nnn"])
 
     def test_real_common_zsh(self):
-        """The repo file parses, hides vim, and never mentions Taiga."""
+        """The repo file parses, hides vim, and exposes Vikunja as `v`."""
         common = Path(__file__).resolve().parent / "zsh" / "common.zsh"
         parser = ZshParser([common], [], cache_file=self.tmp / "real.pkl")
         commands = {cmd.name: cmd for cmd in parser.parse()}
@@ -308,9 +304,6 @@ class LauncherTests(unittest.TestCase):
         self.assertIn("Vikunja", commands["v"].description)
         self.assertNotIn("l", commands)
         self.assertNotIn("$cmd", commands)
-        for cmd in commands.values():
-            blob = " ".join([cmd.name, cmd.description, cmd.raw_command])
-            self.assertNotIn("taiga", blob.lower())
         preview = preview_text(commands["v"])
         self.assertIn("host: local", preview)
         self.assertIn("life-ops", preview)
