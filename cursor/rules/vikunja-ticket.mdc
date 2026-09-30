@@ -1,0 +1,8 @@
+---
+description: Vikunja TJW ticket branch names, commit messages, and PR conventions for ~/git
+alwaysApply: true
+---
+
+# TJW tickets (Vikunja)
+
+Follow `~/git/agents/tools/vikunja-ticket.md` and `~/git/agents/tools/vikunja-ticket-template.md`.
