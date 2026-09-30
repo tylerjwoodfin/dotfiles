@@ -193,7 +193,7 @@ OPTIONS+=("downloads" "Open external app download links" OFF)
 OPTIONS+=("borg" "Set BorgBackup passphrase" OFF)
 OPTIONS+=("clone" "Clone all GitHub repositories (run SEPARATELY after SSH!)" OFF)
 OPTIONS+=("stow" "Run Stow to symlink dotfiles" OFF)
-OPTIONS+=("cursor" "Link Cursor Taiga-ticket skill and ~/git rules" OFF)
+OPTIONS+=("cursor" "Link Cursor Vikunja-ticket skill and ~/git rules" OFF)
 
 SELECTED=$(whiptail --title "Select Setup Options" --checklist \
 "Choose items to install (use Space to select, Enter to confirm):" 20 78 15 \

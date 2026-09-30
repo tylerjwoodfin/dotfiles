@@ -403,7 +403,7 @@ cheat() {
 
 # Remind functions
 # First unalias all functions that might conflict with aliases
-unalias rmm rmmt rmmy rmmty rmml plex shorten taiga v mp3 2>/dev/null || true
+unalias rmm rmmt rmmy rmmty rmml plex shorten v mp3 2>/dev/null || true
 
 # reminder
 rmm() {
@@ -538,30 +538,6 @@ v() {
     fi
 }
 
-# Taiga Kanban: `taiga ls` lists tickets; other args create a user story
-taiga() {
-    if [[ "$1" == "ls" ]]; then
-        shift
-        python3 ~/git/tools/taiga/ticket.py ls "$@"
-        return
-    fi
-    local -a title_parts=()
-    local -a extra=()
-    for arg in "$@"; do
-        if [[ ${#extra[@]} -gt 0 || "$arg" == --* ]]; then
-            extra+=("$arg")
-        else
-            title_parts+=("$arg")
-        fi
-    done
-    local title="${title_parts[*]}"
-    if [[ -n "$title" ]]; then
-        python3 ~/git/tools/taiga/main.py --name "$title" --description "$title" "${extra[@]}"
-    else
-        python3 ~/git/tools/taiga/main.py "${extra[@]}"
-    fi
-}
-
 # Ollama
 # run llama model
 llama() {
@@ -645,7 +621,7 @@ alias lifelog='python3 ~/git/tools/lifelog/main.py' # log event
 alias foodlog='python3 ~/git/tools/foodlog/main.py' # log food
 alias milestone='python3 ~/git/tools/milestone/main.py' # log milestone
 alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
-alias backloggist='python3 ~/git/backloggist/automation/fixer.py' # taiga ticket fixer
+alias backloggist='python3 ~/git/backloggist/automation/fixer.py' # vikunja ticket fixer
 alias amazon='python3 ~/git/tools/amazon/main.py' # amazon order (playwright)
 alias syncsure='~/git/docker/sure.am/scripts/sync-category-rules.sh'
 
@@ -687,7 +663,7 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
         "diary" "turn" "notes" "docs" "work" "n" "v" "one-hour-of-distraction" \
-        "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "taiga" "mp3" \
+        "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "mp3" \
         "backloggist" "cabbie" "milestone" "syncsure"
     )
 
