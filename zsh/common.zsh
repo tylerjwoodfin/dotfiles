@@ -633,22 +633,22 @@ mp3() {
 # launcher function
 unalias l 2>/dev/null || true
 l() {
-    # Create a temporary file for the command
-    local cmd_file=$(mktemp)
-    
-    # Run the launcher with the temp file path
-    python3 ~/git/dotfiles/launcher.py "$cmd_file"
-    
-    # Read and execute the command if it exists
+    local cmd_file chosen rc
+    cmd_file=$(mktemp) || return 1
+    LAUNCHER_DOTFILES_OPTS="${(j: :)DOTFILES_OPTS}" \
+        python3 "$HOME/git/dotfiles/launcher.py" --cmd-file "$cmd_file" "$@"
+    rc=$?
     if [[ -f "$cmd_file" && -s "$cmd_file" ]]; then
-        command=$(cat "$cmd_file")
-        rm "$cmd_file"
-        if [[ -n "$command" ]]; then
-            eval "$command"
+        chosen=$(<"$cmd_file")
+        rm -f "$cmd_file"
+        if [[ -n "$chosen" ]]; then
+            eval "$chosen"
+            return $?
         fi
     else
-        rm "$cmd_file"
+        rm -f "$cmd_file"
     fi
+    return $rc
 }
 
 # These are now functions, not aliases
