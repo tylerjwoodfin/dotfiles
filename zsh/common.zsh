@@ -147,33 +147,38 @@ cdl() { cd "$a"; ls; }
 function git() {
     # Check for prohibited patterns in files being committed
     function check_commit_files() {
-        if [[ "$1" == "commit" ]]; then
-            # Determine if -a flag is used
-            local has_a_flag=false
-            for arg in "$@"; do
-                if [[ "$arg" == "-a" ]]; then
-                    has_a_flag=true
-                    break
-                fi
-            done
+        [[ "$1" == "commit" ]] || return 0
 
-            # Get files that would be committed
-            if $has_a_flag; then
-                # Check all modified and staged files (includes -a behavior)
-                files_to_check=$(git diff --name-only)
-            else
-                # Check only staged files
-                files_to_check=$(git diff --cached --name-only)
+        local root
+        root=$(command git rev-parse --show-toplevel 2>/dev/null) || return 0
+
+        # -a, --all, and combined short options such as -am
+        local has_a_flag=false arg
+        for arg in "$@"; do
+            [[ "$arg" == "--" ]] && break
+            if [[ "$arg" == "--all" || "$arg" == "-a" ]]; then
+                has_a_flag=true
+            elif [[ "$arg" == -* && "$arg" != --* && "$arg" == *a* ]]; then
+                has_a_flag=true
             fi
+        done
 
-            # Check each file for "# DEBUG" or "# debug"
-            for file in $files_to_check; do
-                if grep -qE '^\s*# DEBUG|^\s*# debug' "$file"; then
-                    echo "Commit blocked: '$file' contains '# DEBUG' or '# debug'."
-                    return 1
-                fi
-            done
-        fi
+        # NUL-delimited names, read from the repo root. An unquoted
+        # command substitution is one word in zsh, so a plain for-loop
+        # greps a single bogus path whenever more than one file is staged.
+        local file
+        while IFS= read -r -d '' file; do
+            [[ -n "$file" && -f "$root/$file" ]] || continue
+            if grep -qE '^\s*# DEBUG|^\s*# debug' -- "$root/$file"; then
+                echo "Commit blocked: '$file' contains '# DEBUG' or '# debug'."
+                return 1
+            fi
+        done < <(
+            if $has_a_flag; then
+                command git -C "$root" diff --name-only -z
+            fi
+            command git -C "$root" diff --cached --name-only -z
+        )
         return 0
     }
 
