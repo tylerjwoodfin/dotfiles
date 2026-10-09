@@ -688,17 +688,17 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
         "shorten" \
         "diary" "turn" "notes" "docs" "work" "n" "v" "one-hour-of-distraction" \
         "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "taiga" "mp3" \
-        "backloggist" "cabbie" "milestone" "syncsure"
+        "backloggist" "cabbie" "syncsure"
     )
 
-    # Icecream runs the local remindmail install against the Syncthing YAML.
+    # selective additional cloud commands
     () {
         local remind_host="${HOST:-}"
         [[ -z "$remind_host" ]] && remind_host="$(hostname -s 2>/dev/null || hostname)"
         remind_host="${remind_host%%.*}"
-        if [[ "$remind_host" != "icecream" ]]; then
+        if [[ ! " icecream ice " =~ " $remind_host " ]]; then
             cloud_commands+=(
-                "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl"
+                "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "milestone"
             )
         fi
     }
