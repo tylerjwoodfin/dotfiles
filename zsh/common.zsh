@@ -147,33 +147,38 @@ cdl() { cd "$a"; ls; }
 function git() {
     # Check for prohibited patterns in files being committed
     function check_commit_files() {
-        if [[ "$1" == "commit" ]]; then
-            # Determine if -a flag is used
-            local has_a_flag=false
-            for arg in "$@"; do
-                if [[ "$arg" == "-a" ]]; then
-                    has_a_flag=true
-                    break
-                fi
-            done
+        [[ "$1" == "commit" ]] || return 0
 
-            # Get files that would be committed
-            if $has_a_flag; then
-                # Check all modified and staged files (includes -a behavior)
-                files_to_check=$(git diff --name-only)
-            else
-                # Check only staged files
-                files_to_check=$(git diff --cached --name-only)
+        local root
+        root=$(command git rev-parse --show-toplevel 2>/dev/null) || return 0
+
+        # -a, --all, and combined short options such as -am
+        local has_a_flag=false arg
+        for arg in "$@"; do
+            [[ "$arg" == "--" ]] && break
+            if [[ "$arg" == "--all" || "$arg" == "-a" ]]; then
+                has_a_flag=true
+            elif [[ "$arg" == -* && "$arg" != --* && "$arg" == *a* ]]; then
+                has_a_flag=true
             fi
+        done
 
-            # Check each file for "# DEBUG" or "# debug"
-            for file in $files_to_check; do
-                if grep -qE '^\s*# DEBUG|^\s*# debug' "$file"; then
-                    echo "Commit blocked: '$file' contains '# DEBUG' or '# debug'."
-                    return 1
-                fi
-            done
-        fi
+        # NUL-delimited names, read from the repo root. An unquoted
+        # command substitution is one word in zsh, so a plain for-loop
+        # greps a single bogus path whenever more than one file is staged.
+        local file
+        while IFS= read -r -d '' file; do
+            [[ -n "$file" && -f "$root/$file" ]] || continue
+            if grep -qE '^\s*# DEBUG|^\s*# debug' -- "$root/$file"; then
+                echo "Commit blocked: '$file' contains '# DEBUG' or '# debug'."
+                return 1
+            fi
+        done < <(
+            if $has_a_flag; then
+                command git -C "$root" diff --name-only -z
+            fi
+            command git -C "$root" diff --cached --name-only -z
+        )
         return 0
     }
 
@@ -403,7 +408,7 @@ cheat() {
 
 # Remind functions
 # First unalias all functions that might conflict with aliases
-unalias rmm rmmt rmmy rmmty rmml plex shorten taiga v mp3 2>/dev/null || true
+unalias rmm rmmt rmmy rmmty rmml plex shorten v mp3 2>/dev/null || true
 
 # reminder
 rmm() {
@@ -538,30 +543,6 @@ v() {
     fi
 }
 
-# Taiga Kanban: `taiga ls` lists tickets; other args create a user story
-taiga() {
-    if [[ "$1" == "ls" ]]; then
-        shift
-        python3 ~/git/tools/taiga/ticket.py ls "$@"
-        return
-    fi
-    local -a title_parts=()
-    local -a extra=()
-    for arg in "$@"; do
-        if [[ ${#extra[@]} -gt 0 || "$arg" == --* ]]; then
-            extra+=("$arg")
-        else
-            title_parts+=("$arg")
-        fi
-    done
-    local title="${title_parts[*]}"
-    if [[ -n "$title" ]]; then
-        python3 ~/git/tools/taiga/main.py --name "$title" --description "$title" "${extra[@]}"
-    else
-        python3 ~/git/tools/taiga/main.py "${extra[@]}"
-    fi
-}
-
 # Ollama
 # run llama model
 llama() {
@@ -645,7 +626,7 @@ alias lifelog='python3 ~/git/tools/lifelog/main.py' # log event
 alias foodlog='python3 ~/git/tools/foodlog/main.py' # log food
 alias milestone='python3 ~/git/tools/milestone/main.py' # log milestone
 alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
-alias backloggist='python3 ~/git/backloggist/automation/fixer.py' # taiga ticket fixer
+alias backloggist='python3 ~/git/backloggist/automation/fixer.py' # vikunja ticket fixer
 alias amazon='python3 ~/git/tools/amazon/main.py' # amazon order (playwright)
 alias syncsure='~/git/docker/sure.am/scripts/sync-category-rules.sh'
 
@@ -657,22 +638,22 @@ mp3() {
 # launcher function
 unalias l 2>/dev/null || true
 l() {
-    # Create a temporary file for the command
-    local cmd_file=$(mktemp)
-    
-    # Run the launcher with the temp file path
-    python3 ~/git/dotfiles/launcher.py "$cmd_file"
-    
-    # Read and execute the command if it exists
+    local cmd_file chosen rc
+    cmd_file=$(mktemp) || return 1
+    LAUNCHER_DOTFILES_OPTS="${(j: :)DOTFILES_OPTS}" \
+        python3 "$HOME/git/dotfiles/launcher.py" --cmd-file "$cmd_file" "$@"
+    rc=$?
     if [[ -f "$cmd_file" && -s "$cmd_file" ]]; then
-        command=$(cat "$cmd_file")
-        rm "$cmd_file"
-        if [[ -n "$command" ]]; then
-            eval "$command"
+        chosen=$(<"$cmd_file")
+        rm -f "$cmd_file"
+        if [[ -n "$chosen" ]]; then
+            eval "$chosen"
+            return $?
         fi
     else
-        rm "$cmd_file"
+        rm -f "$cmd_file"
     fi
+    return $rc
 }
 
 # These are now functions, not aliases
@@ -687,7 +668,7 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "shorten" \
         "diary" "turn" "notes" "docs" "work" "n" "v" "one-hour-of-distraction" \
-        "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "taiga" "mp3" \
+        "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "mp3" \
         "backloggist" "cabbie" "syncsure"
     )
 

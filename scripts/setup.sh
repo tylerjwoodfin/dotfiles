@@ -181,7 +181,6 @@ OPTIONS+=("python" "Install Cabinet and Remindmail via Pipx" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("ollama" "Ubuntu: Install Ollama and configure service" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("cloudflared" "Ubuntu: Install Cloudflared and configure service" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("nvm" "Ubuntu: Install NVM and Node.js v20.18.0" OFF)
-[[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("immich" "Ubuntu: Configure Immich upload service" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("video-to-cloud" "Ubuntu: Configure video-to-cloud move service" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("docker" "Ubuntu: Start Docker containers from ~/git/docker" OFF)
 [[ "$PLATFORM" == "Ubuntu" ]] && OPTIONS+=("gitea-restore" "Ubuntu: Restore backend and docker repos from rainbow" OFF)
@@ -193,7 +192,7 @@ OPTIONS+=("downloads" "Open external app download links" OFF)
 OPTIONS+=("borg" "Set BorgBackup passphrase" OFF)
 OPTIONS+=("clone" "Clone all GitHub repositories (run SEPARATELY after SSH!)" OFF)
 OPTIONS+=("stow" "Run Stow to symlink dotfiles" OFF)
-OPTIONS+=("cursor" "Link Cursor Taiga-ticket skill and ~/git rules" OFF)
+OPTIONS+=("cursor" "Link Cursor Vikunja-ticket skill and ~/git rules" OFF)
 
 SELECTED=$(whiptail --title "Select Setup Options" --checklist \
 "Choose items to install (use Space to select, Enter to confirm):" 20 78 15 \
