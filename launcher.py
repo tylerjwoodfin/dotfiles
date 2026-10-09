@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=too-many-lines
 """Command picker for zsh functions, aliases, and a few prompted actions.
 
 Parses ``zsh/common.zsh`` plus whatever ``DOTFILES_OPTS`` sources (network,
@@ -910,6 +911,7 @@ def build_launcher_app():
             self.favorite = favorite
 
         def compose(self) -> ComposeResult:
+            """Render the command name."""
             yield Label(
                 command_label(self.command, favorite=self.favorite), markup=False
             )
@@ -953,6 +955,7 @@ def build_launcher_app():
             self.sub_title = "esc back · ctrl+h hidden · ctrl+f favorite"
 
         def compose(self) -> ComposeResult:
+            """Build the search list, preview, and action form."""
             yield Header()
             yield Input(
                 placeholder="Search — git:, life-ops:, docker:, network:",
@@ -1118,7 +1121,7 @@ def build_launcher_app():
                 self._finish(command, wrap_host(command.host, command.name))
                 return
             if spec.kind == "projects":
-                self._open_projects(command)
+                self._open_projects()
                 return
             self.mode = "form"
             self._pending = command
@@ -1147,7 +1150,7 @@ def build_launcher_app():
 
             self.call_after_refresh(focus_first)
 
-        def _open_projects(self, command: Command) -> None:
+        def _open_projects(self) -> None:
             self.mode = "projects"
             root = self.docker_root
             items = [

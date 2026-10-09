@@ -666,11 +666,23 @@ alias one-hour-of-distraction='python3 /home/tyler/git/tools/pihole/one_hour_of_
 # 'not-cloud' aliases
 if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
-        "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "shorten" \
+        "shorten" \
         "diary" "turn" "notes" "docs" "work" "n" "v" "one-hour-of-distraction" \
         "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "mp3" \
-        "backloggist" "cabbie" "milestone" "syncsure"
+        "backloggist" "cabbie" "syncsure"
     )
+
+    # selective additional cloud commands
+    () {
+        local remind_host="${HOST:-}"
+        [[ -z "$remind_host" ]] && remind_host="$(hostname -s 2>/dev/null || hostname)"
+        remind_host="${remind_host%%.*}"
+        if [[ ! " icecream ice " =~ " $remind_host " ]]; then
+            cloud_commands+=(
+                "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "milestone"
+            )
+        fi
+    }
 
     for cmd in "${cloud_commands[@]}"; do
         alias "$cmd"="cloud $cmd" # launcher-hidden

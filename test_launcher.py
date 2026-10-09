@@ -331,7 +331,7 @@ class LauncherTests(unittest.TestCase):
         cmd_file.write_text("", encoding="utf-8")
         launched = {}
 
-        def fake_tui(commands, usage, docker_root):
+        def fake_tui(commands, _usage, _docker_root):
             launched["commands"] = commands
             return "echo ok"
 
