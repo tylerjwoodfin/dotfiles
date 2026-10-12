@@ -667,8 +667,8 @@ alias one-hour-of-distraction='python3 /home/tyler/git/tools/pihole/one_hour_of_
 if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "shorten" \
-        "diary" "turn" "docs" "work" "n" "v" "one-hour-of-distraction" \
-        "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "mp3" \
+        "diary" "n" "v" "one-hour-of-distraction" \
+        "plex" "bluesky" "mp3" \
         "backloggist" "cabbie" "syncsure"
     )
 
@@ -679,8 +679,8 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
         remind_host="${remind_host%%.*}"
         if [[ ! " icecream ice " =~ " $remind_host " ]]; then
             cloud_commands+=(
-                "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "milestone" \
-                "notes"
+                "remind" "rmm" "rmmst" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "milestone" \
+                "notes" "foodlog" "diary" "docs" "work" "lifelog"
             )
         fi
     }
