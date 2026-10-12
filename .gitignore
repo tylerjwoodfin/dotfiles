@@ -63,11 +63,17 @@ cache.json
 /cypress/
 /test_coverage/
 
-# BetterTouchTool SQLite databases (synced via apply_stow, not tracked)
+# BetterTouchTool live data (synced via apply_stow, not tracked).
+# One-level patterns miss nested files such as AI/Activity/activity.sqlite.
 **/BetterTouchTool/btt_data_store*
-**/BetterTouchTool/*-shm
-**/BetterTouchTool/*-wal
-**/BetterTouchTool/*_tmp_backup*
+**/BetterTouchTool/**/*.sqlite
+**/BetterTouchTool/**/*.sqlite-shm
+**/BetterTouchTool/**/*.sqlite-wal
+**/BetterTouchTool/**/*-shm
+**/BetterTouchTool/**/*-wal
+**/BetterTouchTool/**/*_tmp_backup*
+**/BetterTouchTool/AI/
+**/BetterTouchTool/btt_usage*.plist
 
 # security
 *.pem

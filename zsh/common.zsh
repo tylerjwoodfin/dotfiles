@@ -672,7 +672,7 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
         "backloggist" "cabbie" "syncsure"
     )
 
-    # Ice and icecream keep remindmail and notes local (nnn on the Syncthing tree).
+    # additional cloud commands for ice and icecream
     () {
         local remind_host="${HOST:-}"
         [[ -z "$remind_host" ]] && remind_host="$(hostname -s 2>/dev/null || hostname)"
