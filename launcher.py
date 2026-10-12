@@ -22,6 +22,7 @@ import os
 import pickle
 import re
 import shlex
+import socket
 import subprocess
 import sys
 import warnings
@@ -37,7 +38,7 @@ except ImportError:  # pragma: no cover - dependency is listed in requirements.t
     process = None
 
 
-PARSER_VERSION = "1"
+PARSER_VERSION = "2"
 HIDDEN_MARKERS = {"launcher-hidden", "launcher-hide"}
 RECENT_LIMIT = 20
 
@@ -111,6 +112,8 @@ _FUNCTION = re.compile(
     re.M,
 )
 _CLOUD_ARRAY = re.compile(r"cloud_commands=\((.*?)\)", re.S)
+_CLOUD_APPEND = re.compile(r"cloud_commands\+=\((.*?)\)", re.S)
+LOCAL_SHELL_HOSTS = frozenset({"ice", "icecream"})
 
 
 @dataclass
@@ -215,12 +218,32 @@ def strip_opt_blocks(content: str) -> str:
     return _OPT_BLOCK.sub("\n", content)
 
 
-def cloud_command_names(content: str) -> list[str]:
-    """Names aliased to ``cloud <name>`` when ``not-cloud`` is set."""
+def shell_short_host(environ: dict[str, str] | None = None) -> str:
+    """Short hostname, matching the not-cloud host check in common.zsh."""
+    env = os.environ if environ is None else environ
+    host = env.get("HOST", "").strip()
+    if not host:
+        host = socket.gethostname()
+    return host.split(".", 1)[0]
+
+
+def cloud_command_names(content: str, host: str | None = None) -> list[str]:
+    """Names aliased to ``cloud <name>`` when ``not-cloud`` is set.
+
+    The ``cloud_commands+=`` list (notes, remindmail) is skipped on ice and
+    icecream so those commands stay local.
+    """
     match = _CLOUD_ARRAY.search(content)
     if not match:
         return []
-    return re.findall(r'"([^"]+)"', match.group(1))
+    names = re.findall(r'"([^"]+)"', match.group(1))
+    if host is None:
+        host = shell_short_host()
+    if host not in LOCAL_SHELL_HOSTS:
+        append = _CLOUD_APPEND.search(content)
+        if append:
+            names.extend(re.findall(r'"([^"]+)"', append.group(1)))
+    return names
 
 
 def category_for(cmd: Command) -> str:
@@ -288,11 +311,14 @@ def ensure_actions(commands: dict[str, Command]) -> None:
 
 
 def apply_remote_wrappers(
-    commands: dict[str, Command], common_text: str, opts: set[str]
+    commands: dict[str, Command],
+    common_text: str,
+    opts: set[str],
+    host: str | None = None,
 ) -> None:
     """Honor not-cloud and phone overlays."""
     if "not-cloud" in opts:
-        for name in cloud_command_names(common_text):
+        for name in cloud_command_names(common_text, host):
             mark_cloud(commands, name)
     if "phone" in opts:
         for name in ("cal", "llama"):
@@ -409,9 +435,13 @@ def discover_sources(
     return files
 
 
-def source_signature(files: list[Path], opts: list[str]) -> str:
+def source_signature(files: list[Path], opts: list[str], host: str = "") -> str:
     """Change this whenever parser logic or any sourced file changes."""
-    parts = [f"v={PARSER_VERSION}", "opts=" + ",".join(sorted(opts))]
+    parts = [
+        f"v={PARSER_VERSION}",
+        "opts=" + ",".join(sorted(opts)),
+        f"host={host}",
+    ]
     for path in files:
         if path.exists():
             stat = path.stat()
@@ -429,10 +459,12 @@ class ZshParser:
         files: list[Path],
         opts: list[str],
         cache_file: Path | None = None,
+        host: str | None = None,
     ):
         self.files = files
         self.opts = opts
         self.cache_file = cache_file or default_cache_path()
+        self.host = shell_short_host() if host is None else host
         self.commands: list[Command] = []
 
     def parse(self) -> list[Command]:
@@ -442,7 +474,7 @@ class ZshParser:
         if not self.files[0].exists():
             raise FileNotFoundError(f"Zsh file not found: {self.files[0]}")
 
-        signature = source_signature(self.files, self.opts)
+        signature = source_signature(self.files, self.opts, self.host)
         if self._load_cache(signature):
             return self.commands
 
@@ -456,7 +488,7 @@ class ZshParser:
             for _pos, command in collect_commands(text, source):
                 commands[command.name] = command
 
-        apply_remote_wrappers(commands, common_text, set(self.opts))
+        apply_remote_wrappers(commands, common_text, set(self.opts), self.host)
         ensure_actions(commands)
         for command in commands.values():
             decorate(command)

@@ -667,19 +667,20 @@ alias one-hour-of-distraction='python3 /home/tyler/git/tools/pihole/one_hour_of_
 if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
     cloud_commands=(
         "shorten" \
-        "diary" "turn" "notes" "docs" "work" "n" "v" "one-hour-of-distraction" \
+        "diary" "turn" "docs" "work" "n" "v" "one-hour-of-distraction" \
         "plex" "addjira" "addshopping" "bluesky" "lifelog" "foodlog" "mp3" \
         "backloggist" "cabbie" "syncsure"
     )
 
-    # selective additional cloud commands
+    # additional cloud commands for ice and icecream
     () {
         local remind_host="${HOST:-}"
         [[ -z "$remind_host" ]] && remind_host="$(hostname -s 2>/dev/null || hostname)"
         remind_host="${remind_host%%.*}"
         if [[ ! " icecream ice " =~ " $remind_host " ]]; then
             cloud_commands+=(
-                "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "milestone"
+                "remind" "rmm" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "milestone" \
+                "notes"
             )
         fi
     }

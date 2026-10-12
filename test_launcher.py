@@ -293,6 +293,36 @@ class LauncherTests(unittest.TestCase):
         )
         self.assertEqual(load_opts({}, zshrc=zshrc), ["common", "network", "nnn"])
 
+    def test_notes_stays_local_on_ice_and_icecream(self):
+        """notes is local nnn on ice and icecream, and cloud everywhere else."""
+        common = Path(__file__).resolve().parent / "zsh" / "common.zsh"
+        text = common.read_text(encoding="utf-8")
+        self.assertNotIn("notes", cloud_command_names(text, host="ice"))
+        self.assertNotIn("notes", cloud_command_names(text, host="icecream"))
+        self.assertIn("notes", cloud_command_names(text, host="phone"))
+        for host in ("ice", "icecream"):
+            parser = ZshParser(
+                [common],
+                ["not-cloud"],
+                cache_file=self.tmp / f"notes-{host}.pkl",
+                host=host,
+            )
+            commands = {cmd.name: cmd for cmd in parser.parse()}
+            self.assertEqual(commands["notes"].host, "local")
+            self.assertIn("nnn", commands["notes"].raw_command)
+            self.assertIn("syncthing/notes", commands["notes"].raw_command)
+            self.assertEqual(commands["diary"].host, "cloud")
+            self.assertEqual(commands["remind"].host, "local")
+        remote = ZshParser(
+            [common],
+            ["not-cloud"],
+            cache_file=self.tmp / "notes-phone.pkl",
+            host="phone",
+        )
+        phone = {cmd.name: cmd for cmd in remote.parse()}
+        self.assertEqual(phone["notes"].raw_command, "cloud notes")
+        self.assertEqual(phone["notes"].host, "cloud")
+
     def test_real_common_zsh(self):
         """The repo file parses, hides vim, and exposes Vikunja as `v`."""
         common = Path(__file__).resolve().parent / "zsh" / "common.zsh"
