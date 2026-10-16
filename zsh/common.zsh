@@ -629,6 +629,7 @@ alias cabbie='python3 ~/git/tools/cabbie/main.py' # ai commands
 alias backloggist='python3 ~/git/backloggist/automation/fixer.py' # vikunja ticket fixer
 alias amazon='python3 ~/git/tools/amazon/main.py' # amazon order (playwright)
 alias syncsure='~/git/docker/sure.am/scripts/sync-category-rules.sh'
+alias vocab='python3 ~/git/tools/vocab/main.py' # Cherry vocabulary
 
 # Navidrome library: yt-dlp → ~/syncthing/music/inbox (see docker/music-stack)
 mp3() {
@@ -680,7 +681,7 @@ if [[ " ${DOTFILES_OPTS[@]} " =~ " not-cloud " ]]; then
         if [[ ! " icecream ice " =~ " $remind_host " ]]; then
             cloud_commands+=(
                 "remind" "rmm" "rmmst" "rmmt" "rmmy" "rmmty" "rmml" "rmmsl" "milestone" \
-                "notes" "foodlog" "diary" "docs" "work" "lifelog"
+                "notes" "foodlog" "diary" "docs" "work" "lifelog" "vocab"
             )
         fi
     }
