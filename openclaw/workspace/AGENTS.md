@@ -151,7 +151,7 @@ Definition quizzes are owned by the `words` plugin (`~/git/tools/openclaw/words`
 
 ## Etsy digital products
 
-The passive shop experiment is `~/git/tools/openclaw/etsy`. Follow the `etsy` skill.
+The passive shop experiment is `~/git/etsy`. Follow the `etsy` skill.
 
 - Do not open a shop, publish a listing, buy ads, or pay a fee unless Tyler approved that charge.
 - Do not send a refund, a legal answer, or a promise of compensation.

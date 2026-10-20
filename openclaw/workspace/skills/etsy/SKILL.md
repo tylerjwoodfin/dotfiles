@@ -17,7 +17,7 @@ metadata:
 
 # Etsy digital products
 
-The shop experiment lives in `~/git/tools/openclaw/etsy`. Cherry does not open
+The shop experiment lives in `~/git/etsy`. Cherry does not open
 Etsy in a browser and does not call the Etsy API until Tyler has approved an
 app and the credentials are in Cabinet.
 
@@ -32,10 +32,10 @@ app and the credentials are in Cabinet.
 ## Commands
 
 ```bash
-python3 ~/git/tools/openclaw/etsy/scripts/etsy_cli.py report
-python3 ~/git/tools/openclaw/etsy/scripts/etsy_cli.py tick --dry-run
-python3 ~/git/tools/openclaw/etsy/scripts/etsy_cli.py fees 12
-python3 ~/git/tools/openclaw/etsy/scripts/etsy_cli.py build
+python3 ~/git/etsy/scripts/etsy_cli.py report
+python3 ~/git/etsy/scripts/etsy_cli.py tick --dry-run
+python3 ~/git/etsy/scripts/etsy_cli.py fees 12
+python3 ~/git/etsy/scripts/etsy_cli.py build
 ```
 
 `etsy-business-tick` runs the tick at 8:15am Pacific. Before the experiment
