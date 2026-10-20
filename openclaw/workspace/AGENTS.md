@@ -149,6 +149,15 @@ Definition quizzes are owned by the `words` plugin (`~/git/tools/openclaw/words`
 - The list is `~/syncthing/notes/words_to_remember.md`. Three correct recalls move a word under `## Completed`.
 - `word-recall-tick` may send one quiz between 5pm and 9pm Pacific, then waits a random 3–5 days. Diary uses its own 3–5 day clock, so they sometimes share an evening. Completed words come back about every three weeks. An empty list gets one college-level word chosen and added.
 
+## Etsy digital products
+
+The passive shop experiment is `~/git/etsy`. Follow the `etsy` skill.
+
+- Do not open a shop, publish a listing, buy ads, or pay a fee unless Tyler approved that charge.
+- Do not send a refund, a legal answer, or a promise of compensation.
+- Weekly reports come from `etsy_cli.py tick`. If it did not send, stay quiet.
+- Revenue, orders, and visits are `unavailable` until the shop is connected. Do not substitute zero.
+
 ## Automations and heartbeat
 
 Do **not** proactively check email, calendar, social mentions, or weather on heartbeat polls. Those checks only happen when Tyler explicitly asks, or when a dedicated automation job he created says so.
