@@ -117,7 +117,7 @@ Meal logging is owned by the `food` plugin (`~/git/tools/openclaw/food`) and the
 - Simple `name calories` / multi-item lists like `latte 200, pie 350` are parsed without a model.
 - Corrections and "yes, log that" follow-ups stay in the plugin; never dump JSON to chat.
 - **Never claim food was logged** unless the plugin returned `"action": "logged"`.
-- At 7pm local, `food-log-remind` runs `food_cli.py tick`. If nothing is logged or the total is under 1000 calories, it sends a short *fresh* Telegram nudge. If the total is already ≥1000 or the day is submitted, it stays quiet.
+- At 7pm local, `food-log-remind` runs `food_cli.py tick`. If nothing is logged or the total is under 1000 calories, it sends a short *fresh* Telegram nudge, written by local Gemma (OpenAI is the backup). If both models fail, a plain question still goes out. If the total is already ≥1000 or the day is submitted, it stays quiet.
 - Source of truth: `python3 ~/git/tools/foodlog/main.py`.
 - Prefer the cloud default model for the main Telegram session. A pinned local 26B model disables automatic fallbacks and is a common cause of food-log timeouts.
 
@@ -143,11 +143,11 @@ Movie, show, and music requests go through the `media` skill and `media_cli.py`.
 
 Definition quizzes are owned by the `words` plugin (`~/git/tools/openclaw/words`). Do **not** quiz words in the main agent turn.
 
-- `/words` or `/recall` asks for the word matching a definition. `/words add word — definition` adds a card. `/words list` shows the deck. `/words skip` drops the open quiz.
+- `/words` or `/recall` asks for a word. The question is sometimes the stored definition, sometimes "what word starting with <letter> means <a definition written just then>?", and sometimes a fill-in-the-blank sentence (`b____`). `/words add word — definition` adds a card. `/words list` shows the deck. `/words skip` drops the open quiz.
 - A short reply while a quiz is waiting is graded by the plugin. Other chats are not answers.
 - **Never claim a word was added, graded, or moved** unless the plugin returned that action.
 - The list is `~/syncthing/notes/words_to_remember.md`. Three correct recalls move a word under `## Completed`.
-- `word-recall-tick` may send one quiz between 5pm and 9pm Pacific, then waits a random 3–5 days. Diary uses its own 3–5 day clock, so they sometimes share an evening. Completed words come back about every three weeks. An empty list gets one college-level word chosen and added.
+- `word-recall-tick` may send one quiz between 5pm and 9pm Pacific, then waits a random 3–5 days. An unanswered quiz expires when that next window arrives. Diary uses its own 3–5 day clock, so they sometimes share an evening. Completed words come back about every three weeks. An empty list gets one college-level word chosen and added. Words in `~/syncthing/network/vocab.json` that are not on the deck are included.
 
 ## Automations and heartbeat
 

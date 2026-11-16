@@ -39,4 +39,4 @@ Source of truth: `python3 ~/git/tools/foodlog/main.py`
 3. Freeform meals and corrections use `openclaw infer` with the cloud model, then `foodlog`
 4. "yes, please log that" confirms the last proposed breakdown
 5. Replies are short natural text — never raw JSON
-6. 7pm `food-log-remind` runs `food_cli.py tick` (isolated command, not the main session)
+6. 7pm `food-log-remind` runs `food_cli.py tick` (isolated command, not the main session). The nudge uses local Gemma, then OpenAI. A plain question is sent if both fail, and the tick still exits 0 so the cron job stays enabled.
