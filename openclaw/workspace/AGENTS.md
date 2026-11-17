@@ -106,7 +106,7 @@ Conversational journaling is owned by `diary-llm` (plugin + CLI at `~/git/tools/
 - `/diary` starts or continues a diary session; `/diary done` finishes it.
 - While a diary session is active, the `diary-llm` plugin claims those turns — do not journalize ordinary messages yourself.
 - **Never claim a diary entry was saved** unless `diary-llm done`/`tick` returned `"action": "finalized"` with an `entry_path`. If tools are unavailable, say you could not write the file.
-- Proactive prompts and inactivity finalization run via the `diary-llm-tick` automation.
+- Do not send unsolicited diary prompts. `diary-llm-tick` only finalizes sessions that have gone quiet.
 - Entries land in `~/syncthing/notes/diary/YYYY/MM/`; raw transcripts in `conversations/`.
 
 ## Food (Telegram)
