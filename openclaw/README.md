@@ -14,7 +14,7 @@ Reusable instructions (safety, homelab docs, host SSH, closing Mac apps) live in
 | `workspace/SOUL.md` | `~/.openclaw/workspace/SOUL.md` | Persona |
 | `workspace/IDENTITY.md` | `~/.openclaw/workspace/IDENTITY.md` | Name / vibe |
 | `workspace/USER.md` | `~/.openclaw/workspace/USER.md` | Stable user directives |
-| `workspace/skills/*` | `~/.openclaw/workspace/skills/*` | OpenClaw skills (diary, food, words, amazon-grocery, …) |
+| `workspace/skills/*` | `~/.openclaw/workspace/skills/*` | OpenClaw skills (diary, food, words, amazon-grocery, etsy, …) |
 
 **Not versioned here:** `DREAMS.md`, `MEMORY.md`, `memory/`, runtime config under
 `~/.openclaw/openclaw.json` (secrets).
